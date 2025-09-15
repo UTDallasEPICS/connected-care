@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Karla:wght@340&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@100..900&display=swap");
 @import "tailwindcss";
 
@@ -17,7 +17,7 @@
 	--color-rose: #ea7b7b;
 	--color-blue-green: #85e0c2;
 
-	--font-cormorant-garamond: "Cormorant Garamond", serif;
+	--font-karla: "Karla", sans-serif;
 	--font-sc-encode: "Encode Sans SC", sans-serif;
 }
 
