@@ -601,14 +601,14 @@ const createReportData = async () => {
 };
 
 const sessionTypes = [
-	{ name: "Entrevista inicial", color: "BLUE" },
-	{ name: "Cita de evaluación", color: "GREEN" },
-	{ name: "Aplicación de pruebas diagnósticas", color: "GREEN" },
-	{ name: "Entrega de informe de pruebas diagnósticas", color: "ORANGE" },
-	{ name: "Evaluación de Programa terapéutico", color: "PURPLE" },
-	{ name: "Terapias recurrentes", color: "RED" },
-	{ name: "Consulta psicológica", color: "TEAL" },
-	{ name: "Consulta Sexualidad para Jóvenes con TEA", color: "YELLOW" },
+	{ name: "Initial Interview", color: "BLUE" },
+	{ name: "Evaluation Appointment", color: "GREEN" },
+	{ name: "Diagnostic Test", color: "GREEN" },
+	{ name: "Diagnostic Test Report", color: "ORANGE" },
+	{ name: "Therapeutic Program Evaluation", color: "PURPLE" },
+	{ name: "Recurring Therapy", color: "RED" },
+	{ name: "Psychological Consultation", color: "TEAL" },
+	{ name: "Youth Sexuality Consultation (ASD)", color: "YELLOW" },
 	{ name: "Other", color: "TEAL" },
 	{ name: "IT", color: "GREEN" },
 ];
