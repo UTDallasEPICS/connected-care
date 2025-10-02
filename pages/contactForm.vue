@@ -214,18 +214,48 @@
 											v-model="data.locality"
 										/>
 									</div>
-									<div class="flex flex-col">
-										<label class=""
-											>Country:<span class="text-red-500"
+									<div class="flex flex-col sm:w-1/3">
+										<label class="">
+											Country:<span class="text-red-500"
 												>*</span
-											></label
-										>
-										<input
-											class="input w-70 sm:w-full"
-											type="country"
-											required
+											>
+										</label>
+
+										<Listbox
 											v-model="data.country"
-										/>
+											as="div"
+											class="fill-smoky bg-smoky relative flex w-full flex-col content-start"
+										>
+											<ListboxButton
+												class="flex w-full cursor-pointer items-start px-2"
+											>
+												{{
+													data.country === ""
+														? "Select a country:"
+														: data.country
+												}}
+											</ListboxButton>
+
+											<ListboxOptions
+												as="div"
+												class="bg-blay absolute left-0 mt-1 flex max-h-45 w-full flex-col overflow-y-auto"
+												style="z-index: 10"
+											>
+												<ListboxOption
+													v-for="country in countries"
+													:key="country.cca2"
+													:value="country.name.common"
+													as="div"
+													class="flex w-full cursor-pointer hover:bg-blue-500"
+												>
+													<div class="px-5">
+														{{
+															country.name.common
+														}}
+													</div>
+												</ListboxOption>
+											</ListboxOptions>
+										</Listbox>
 									</div>
 								</div>
 							</div>
@@ -539,6 +569,28 @@ import { $fetch } from "ofetch";
 
 const genders = ["Male", "Female", "Other"];
 const gender = ref("");
+
+import { onMounted } from "vue";
+
+interface Country {
+	name: { common: string };
+	cca2: string;
+}
+const countries = ref<Country[]>([]);
+onMounted(async () => {
+	try {
+		const res = await fetch(
+			"https://restcountries.com/v3.1/all?fields=cca2,name"
+		);
+		const data: Country[] = await res.json();
+
+		countries.value = data.sort((a, b) =>
+			a.name.common.localeCompare(b.name.common)
+		);
+	} catch (err) {
+		console.error("Error fetching countries:", err);
+	}
+});
 
 const insuranceOptions = [
 	"SENASA contributivo",
