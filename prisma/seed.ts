@@ -29,7 +29,7 @@ const specializationIds = [];
 
 const createSpecializations = async () => {
 	for (const specialization of therapistSpecializations) {
-		const { id } = await prisma.specialization.create({
+		const { id } = await prisma.specialization.upsert({
 			data: { name: specialization },
 		});
 		specializationIds.push(id);
