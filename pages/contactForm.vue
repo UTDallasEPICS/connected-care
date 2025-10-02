@@ -414,7 +414,7 @@
 
 						<div class="flex flex-col gap-5">
 							<div class="flex flex-col">
-								<p>Please sumbit any medical records.</p>
+								<p>Please submit any medical records.</p>
 								<label class="">
 									<input
 										v-on:change="handleFileUpload"
@@ -482,7 +482,7 @@
 
 							<div class="">
 								<label class=""
-									>Have you been formally daignosed?</label
+									>Have you been formally diagnosed?</label
 								>
 								<span class="text-red-500">*</span>
 								<div class="flex flex-row gap-5 text-xl">
@@ -731,7 +731,7 @@ async function handleSubmit() {
 		console.log(formData.email);
 		console.log(e.statusMessage + ":");
 		console.log(e.data);
-		alert("Form sumbit encounered an error, check console");
+		alert("Form submit encountered an error, check console");
 	}
 }
 
