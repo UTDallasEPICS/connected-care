@@ -119,7 +119,7 @@
 										></label
 									>
 									<input
-										class="input w-70 sm:w-full"
+										class="input no-calendar w-full sm:w-28"
 										type="date"
 										required
 										v-model="data.DOB"
