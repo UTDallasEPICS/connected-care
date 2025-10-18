@@ -19,7 +19,7 @@
 				class="btn text-nowrap hover:cursor-pointer"
 				@click="showProgressReportModal = true"
 			>
-				Write Progress Report
+				Therapy Notes
 			</button>
 		</div>
 
@@ -76,9 +76,9 @@
 				{{ paid }}
 			</p>
 
-			<!-- Progress Reports (View Only) -->
+			<!-- Therapy Notes (View Only) -->
 			<div class="mt-8">
-				<h2 class="mb-2 text-xl font-semibold">Progress Reports</h2>
+				<h2 class="mb-2 text-xl font-semibold">Therapy Notes</h2>
 				<ul class="list-disc pl-6">
 					<li
 						v-for="(report, index) in profile?.NonEmployee?.Patient
@@ -350,7 +350,7 @@
 			</div>
 		</div>
 
-		<!-- ================= MODAL: Write Progress Report (for Therapist) ================= -->
+		<!-- ================= MODAL: Write Therapy Notes (for Therapist) ================= -->
 		<div
 			v-if="showProgressReportModal"
 			class="fixed inset-0 z-50 flex items-center justify-center"
@@ -368,7 +368,7 @@
 				class="relative z-10 max-h-9/12 w-full max-w-3/12 overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
-				<h2 class="mb-4 text-xl font-bold">Write Progress Report</h2>
+				<h2 class="mb-4 text-xl font-bold">Therapy Notes</h2>
 				<form @submit.prevent="submitProgressReport">
 					<div
 						v-for="(question, index) in progressReportQuestions"
