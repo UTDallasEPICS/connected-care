@@ -12,7 +12,9 @@
 					<button
 						@click="goTo('/scheduleView')"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
-					></button>
+					>
+						<Calendar :size="84" color="black" />
+					</button>
 					<span class="text -sm font-medium">SCHEDULE</span>
 				</div>
 
@@ -21,7 +23,9 @@
 					<button
 						@click="goTo('/viewContactForms')"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
-					></button>
+					>
+						<FileText :size="84" color="black" />
+					</button>
 					<span class="text -sm font-medium"
 						>VIEW NEW<br />
 						CONTACT FORMS</span
@@ -33,7 +37,9 @@
 					<button
 						@click="goTo('/employees')"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
-					></button>
+					>
+						<Users :size="84" color="black" />
+					</button>
 					<span class="text -sm font-medium">VIEW EMPLOYEES</span>
 				</div>
 				<!-- create account -->
@@ -42,7 +48,9 @@
 					<button
 						@click="goTo('/createAccount')"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
-					></button>
+					>
+						<UserPlus :size="84" color="black" />
+					</button>
 					<span class="text -sm font-medium">CREATE ACCOUNT</span>
 				</div>
 			</div>
@@ -53,12 +61,13 @@
 <script lang="ts" setup>
 import { navigateTo, useCookie } from "#imports";
 import { AccessPermission } from "~/permissions";
+import { Calendar, FileText, Users, UserPlus } from "lucide-vue-next";
 
 // Access cookies for authentication / role check
 const access = useCookie("AccessPermission");
 
 // Redirect if not admin
-if (access.value !== AccessPermission.ADMIN) {
+if (!access.value?.[AccessPermission.ADMIN]) {
 	navigateTo("/dashboard");
 }
 
