@@ -33,18 +33,26 @@ import {
 	useFetch,
 	navigateTo,
 } from "#imports";
+import { AccessPermission } from "~/permissions";
 
 const email = ref("");
-
 const userId = useCookie("userId");
+const access = useCookie("AccessPermission");
 
 onMounted(async () => {
 	await $fetch("/api/updatePermissions", {
 		method: "GET",
 	});
 	refreshCookie("AccessPermission");
-	if (userId.value) {
-		await navigateTo("/Dashboard");
+
+	if (userId.value && access.value) {
+		if (access.value[AccessPermission.ADMIN]) {
+			await navigateTo("/admin");
+		} else if (access.value[AccessPermission.PATIENT]) {
+			await navigateTo("/patientDashboard");
+		} else {
+			await navigateTo("/Dashboard");
+		}
 	}
 });
 
