@@ -75,39 +75,6 @@
 				<strong>All Sessions Paid?</strong>
 				{{ paid }}
 			</p>
-
-			<!-- Therapy Notes (View Only) -->
-			<div class="mt-8">
-				<h2 class="mb-2 text-xl font-semibold">Therapy Notes</h2>
-				<ul class="list-disc pl-6">
-					<li
-						v-for="(report, index) in profile?.NonEmployee?.Patient
-							?.ProgressReports"
-						:key="index"
-					>
-						<strong
-							>{{ new Date(report.date).toDateString() }}:</strong
-						>
-						<ul class="pl-6">
-							<li
-								v-for="(question, index) in report?.Questions"
-								:key="index"
-							>
-								{{ index + 1 }}.
-								<strong>{{ question.question }}:</strong>
-								{{ question.answer }}
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<p
-					v-if="
-						!profile?.NonEmployee?.Patient?.ProgressReports.length
-					"
-				>
-					No progress reports available.
-				</p>
-			</div>
 		</section>
 
 		<!-- ================= MODAL: Edit Profile (for Patient/Parent) ================= -->
@@ -370,47 +337,6 @@
 			>
 				<h2 class="mb-4 text-xl font-bold">Therapy Notes</h2>
 				<form @submit.prevent="submitProgressReport">
-					<div
-						v-for="(question, index) in progressReportQuestions"
-						:key="index"
-					>
-						<div
-							class="mb-4 flex w-full flex-col justify-between gap-4"
-						>
-							<div class="flex w-full flex-row">
-								<label class="text-nowrap">
-									Question {{ index + 1 }}
-								</label>
-								<div class="w-full"></div>
-								<button
-									class="cursor-pointer"
-									type="button"
-									@click="removeQuestion(index)"
-								>
-									<X />
-								</button>
-							</div>
-							<input
-								v-model="question.question"
-								placeholder="Question"
-								class="input w-full"
-								required
-							/>
-							<textarea
-								v-model="question.answer"
-								placeholder="Answer"
-								class="input w-full"
-								required
-							/>
-						</div>
-					</div>
-					<button
-						class="bg-smoky mb-4 flex w-full cursor-pointer justify-center"
-						type="button"
-						@click="addQuestion"
-					>
-						<Plus />
-					</button>
 					<!-- Action Buttons -->
 					<div class="flex justify-end space-x-2">
 						<button
@@ -433,7 +359,6 @@
 <script setup lang="ts">
 import { computed, ref, useCookie, useFetch, useRoute } from "#imports";
 import { AccessPermission } from "~/permissions";
-import { Plus, X } from "lucide-vue-next";
 import { $fetch } from "ofetch";
 
 const contactType = ["EMAIL", "PHONE", "WHATS_APP"];
@@ -480,20 +405,6 @@ const paid = computed(() => {
 const showEditModal = ref(false);
 const showProgressReportModal = ref(false);
 
-// Form object for a new progress report (for therapists).
-const progressReportQuestions = ref([{ question: "", answer: "" }]);
-
-function addQuestion() {
-	progressReportQuestions.value.push({ question: "", answer: "" });
-}
-
-function removeQuestion(i) {
-	progressReportQuestions.value.splice(i, 1);
-	if (progressReportQuestions.value.length < 1) {
-		progressReportQuestions.value.push({ question: "", answer: "" });
-	}
-}
-
 // Methods to open/close modals.
 function openEditModal() {
 	// Pre-populate the edit form with current profile data.
@@ -526,8 +437,6 @@ function closeEditModal() {
 
 function closeProgressReportModal() {
 	showProgressReportModal.value = false;
-	// Reset progress report form.
-	progressReportQuestions.value = [{ question: "", answer: "" }];
 }
 
 // Update the profile data from the edit form.
@@ -561,21 +470,5 @@ async function updateProfile() {
 	});
 	getProfile();
 	closeEditModal();
-}
-
-// Submit a new progress report (for therapists).
-async function submitProgressReport() {
-	const date = new Date().toISOString();
-	await $fetch("/api/profile/report", {
-		method: "Post",
-		body: {
-			date: date,
-			pId: uId,
-			questions: progressReportQuestions.value,
-		},
-	});
-
-	getProfile();
-	closeProgressReportModal();
 }
 </script>
