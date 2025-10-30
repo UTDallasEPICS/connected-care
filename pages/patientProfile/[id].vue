@@ -337,6 +337,28 @@
 			>
 				<h2 class="mb-4 text-xl font-bold">Therapy Notes</h2>
 				<form @submit.prevent="submitProgressReport">
+					<div class="mb-4">
+						<label class="mb-1 block font-medium">
+							Session Type <span class="text-red-500">*</span>
+						</label>
+						<select
+							class="input w-full"
+							v-model="selectedSessionType"
+							required
+						>
+							<option value="" disabled>
+								Select a session type
+							</option>
+							<option
+								v-for="(type, index) in therapySessionTypes"
+								:key="index"
+								:value="type"
+							>
+								{{ type }}
+							</option>
+						</select>
+					</div>
+
 					<!-- Action Buttons -->
 					<div class="flex justify-end space-x-2">
 						<button
@@ -366,6 +388,19 @@ const contactType = ["EMAIL", "PHONE", "WHATS_APP"];
 const gender = ["MALE", "FEMALE", "OTHER"];
 
 const access = useCookie("AccessPermission");
+
+const therapySessionTypes = [
+	"Initial Interview",
+	"Evaluation Appointment",
+	"Diagnostic Test",
+	"Diagnostic Test Report",
+	"Therapeutic Program Evaluation",
+	"Recurring Therapy",
+	"Psychological Consultation",
+	"Youth Sexuality Consultation (ASD)",
+	"Other",
+	"IT",
+];
 
 const route = useRoute();
 const uId = route.params.id;
@@ -404,6 +439,8 @@ const paid = computed(() => {
 // Modal control flags.
 const showEditModal = ref(false);
 const showProgressReportModal = ref(false);
+const selectedSessionType = ref("");
+//const therapyNotes = ref("");
 
 // Methods to open/close modals.
 function openEditModal() {
