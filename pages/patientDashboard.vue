@@ -5,7 +5,7 @@
 			<img src="/manos-unidas-logo.jpg" alt="Logo" class="mb-10 w-45" />
 
 			<!-- Buttons -->
-			<div class="cols-4 grid grid-cols-4 gap-8 text-center sm:grid">
+			<div class="cols-2 grid grid-cols-2 gap-8 text-center sm:grid">
 				<!-- view schedule -->
 
 				<div class="flex flex-col items-center">
