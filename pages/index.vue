@@ -43,7 +43,11 @@ onMounted(async () => {
 	await $fetch("/api/updatePermissions", {
 		method: "GET",
 	});
-	refreshCookie("AccessPermission");
+	await refreshCookie("AccessPermission");
+	await refreshCookie("userId");
+
+	console.log("userId:", userId.value);
+	console.log("access cookie value:", access.value);
 
 	if (userId.value && access.value) {
 		if (access.value[AccessPermission.ADMIN]) {

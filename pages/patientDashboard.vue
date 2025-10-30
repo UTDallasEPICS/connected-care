@@ -19,7 +19,7 @@
 				<!-- view profile -->
 				<div class="flex flex-col items-center">
 					<button
-						@click="goTo('/patientProfile')"
+						@click="goTo('/[id]')"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
 					></button>
 					<span class="text -sm font-medium">VIEW PROFILE</span>
@@ -37,7 +37,7 @@ import { AccessPermission } from "~/permissions";
 const access = useCookie("AccessPermission");
 
 // Redirect if not admin
-if (access.value !== AccessPermission.PATIENT) {
+if (!access.value?.[AccessPermission.PATIENT]) {
 	navigateTo("/dashboard");
 }
 
