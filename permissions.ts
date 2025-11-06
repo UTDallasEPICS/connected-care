@@ -24,6 +24,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	scheduleView: AccessPermission.USER,
 	// Patient Pages
 	"myProfile-id": AccessPermission.PATIENT,
+	patientDashboard: AccessPermission.PATIENT,
 	// Parent Pages
 	childSearch: AccessPermission.PARENT,
 	"childProfile-id": AccessPermission.PARENT,
