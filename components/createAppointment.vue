@@ -2,7 +2,7 @@
 	<div>
 		<!-- Button to open modal -->
 		<button class="btn cursor-pointer" @click="showModal = true">
-			Create Appointment
+			{{ $t('Create Appointment') }}
 		</button>
 
 		<!-- Modal -->
@@ -23,7 +23,7 @@
 				class="relative z-10 w-full max-w-md bg-white p-6 shadow-md"
 				@click.stop
 			>
-				<h2 class="mb-4 text-xl font-bold">New Appointment</h2>
+				<h2 class="mb-4 text-xl font-bold">{{ $t('New Appointment') }}</h2>
 
 				<form @submit.prevent="submitForm">
 					<!-- Therapist (required) -->
@@ -37,7 +37,7 @@
 							required
 							class="input w-full"
 						>
-							<option disabled value="">Pick a therapist</option>
+							<option disabled value="">{{ $t('Pick a therapist') }}</option>
 							<option
 								v-for="t in therapistOptions"
 								:key="t.id"
@@ -60,7 +60,7 @@
 							class="input w-full"
 						>
 							<option disabled value="">
-								Pick a session type
+								{{ $t('Pick a session type') }}
 							</option>
 							<option
 								v-for="st in typeOptions"
@@ -76,7 +76,7 @@
 						<!-- Date Picker -->
 						<div class="w-1/2 grow flex-row">
 							<label class="mb-1 block font-medium" for="date"
-								>Date
+								>{{ $t('Date') }}	
 								<span class="text-red-500">*</span>
 							</label>
 							<input
@@ -120,7 +120,7 @@
 					<!-- Max (optional, defaults to 1) -->
 					<div class="mb-4">
 						<label class="mb-1 block font-medium" for="max"
-							>Max Patient Attendance (Min. 1)</label
+							>{{ $t('Max Patient Attendance \(Min. 1\)') }}</label
 						>
 						<input
 							type="number"
@@ -135,7 +135,7 @@
 					<!-- Comments (optional) -->
 					<div class="mb-4">
 						<label class="mb-1 block font-medium" for="comments"
-							>Comments</label
+							>{{ $t('Comments') }}</label
 						>
 						<textarea
 							id="comments"
@@ -152,10 +152,10 @@
 							class="bg-blay cursor-pointer px-2"
 							@click="closeModal"
 						>
-							Cancel
+							{{ $t('Cancel') }}
 						</button>
 						<button type="submit" class="btn cursor-pointer">
-							Save
+							{{ $t('Save') }}
 						</button>
 					</div>
 				</form>
@@ -168,6 +168,9 @@
 import { ref, reactive, computed } from "vue";
 import { useFetch } from "#imports";
 import { reloadNuxtApp } from "#app";
+import { useTranslate } from "~/composables/useLanguage";
+// const { t } = useTranslate();
+// const { $translate } = useNuxtApp()
 
 // Whether to show the modal
 const showModal = ref(false);

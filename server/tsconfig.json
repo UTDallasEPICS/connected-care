@@ -1,3 +1,10 @@
 {
-	"extends": "../.nuxt/tsconfig.server.json"
+	"extends": "../.nuxt/tsconfig.server.json",
+	/*
+	"compilerOptions": {
+		"types": ["@nuxtjs/i18n"]
+	},
+	"vueCompilerOptions": {
+		"plugins": ["@vue/language-plugin-pug"]
+	}*/
 }

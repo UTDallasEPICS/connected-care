@@ -3,6 +3,8 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"i18n:report": "node scripts/i18n-report.js",
+		"predev": "npm run i18n:report",
 		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
@@ -15,9 +17,11 @@
 		"@headlessui/vue": "^1.7.23",
 		"@heroicons/vue": "^2.2.0",
 		"@nuxt/fonts": "^0.11.0",
+		"@nuxtjs/i18n": "^10.2.0",
 		"@prisma/client": "^6.17.0",
 		"@tailwindcss/vite": "^4.0.1",
 		"@vueuse/core": "^13.1.0",
+		"axios": "^1.12.2",
 		"h3": "^1.15.1",
 		"lucide-vue-next": "^0.487.0",
 		"nuxt": "^3.15.4",
@@ -43,7 +47,8 @@
 		"prisma": "^6.17.0",
 		"tsx": "^4.19.2",
 		"typescript": "^5.7.3",
-		"typescript-eslint": "^8.22.0"
+		"typescript-eslint": "^8.22.0",
+		"vue-i18n-extract": "^2.0.7"
 	},
 	"repository": {
 		"type": "git",
