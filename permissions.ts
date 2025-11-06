@@ -36,6 +36,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// User Service Pages
 	// Admin Pages
 	admin: AccessPermission.ADMIN,
+	employeeSearch: AccessPermission.ADMIN,
 };
 
 const apiAccessMap: {
