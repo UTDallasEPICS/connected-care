@@ -20,13 +20,13 @@
 			</div>
 		</div>
 
-		<!-- Patients Table -->
+		<!-- Employees Table -->
 		<table class="w-full table-auto border-collapse">
 			<thead class="bg-gray-100">
 				<tr>
 					<th class="px-4 py-2 text-left">Name</th>
-					<th class="px-4 py-2 text-left">Age</th>
-					<th class="px-4 py-2 text-left">Gender</th>
+					<th class="px-4 py-2 text-left">Type</th>
+					<th class="px-4 py-2 text-left">Email</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -37,12 +37,12 @@
 					class="cursor-pointer border-t hover:bg-gray-100"
 				>
 					<td class="px-4 py-2">{{ user.name }}</td>
-					<td class="px-4 py-2">{{ user.age ?? "—" }}</td>
-					<td class="px-4 py-2">{{ user.gender || "—" }}</td>
+					<td class="px-4 py-2">{{ user.type || "—" }}</td>
+					<td class="px-4 py-2">{{ user.email || "—" }}</td>
 				</tr>
 				<tr v-if="!filteredUsers.length" class="border-t">
 					<td colspan="3" class="px-4 py-2 text-center">
-						No patients found.
+						No employees found.
 					</td>
 				</tr>
 			</tbody>
@@ -61,24 +61,23 @@ import { useFetch, useCookie, navigateTo } from "#imports";
 import { Search } from "lucide-vue-next";
 import { AccessPermission } from "~/permissions";
 
-const userId = useCookie("userId");
-const access = useCookie("AccessPermission");
+// typed cookie: map of permission enum -> boolean, or null when not present
+const access = useCookie<Record<AccessPermission, boolean> | null>(
+	"AccessPermission"
+);
 
 interface User {
-	id: number;
+	id: string;
 	name: string;
-	type: string;
-	age: number | null;
-	gender: string;
+	type: string | null;
+	contactPref: string | null;
+	email: string | null;
 }
 
-const goToProfile = async (id: number) => {
+const goToProfile = async (id: string) => {
 	let name = "bad";
-	if (access.value[AccessPermission.ADMIN]) {
-		name = "childProfile-id";
-	}
-	if (access.value[AccessPermission.ADMIN]) {
-		name = "patientProfile-id";
+	if (access.value?.[AccessPermission.ADMIN]) {
+		name = "employees-id";
 	}
 	await navigateTo({
 		name: name,
@@ -92,23 +91,19 @@ const searchQuery = ref("");
 const { data: usersData, error } = await getUsers();
 
 async function getUsers() {
-	if (access.value[AccessPermission.STAFF]) {
-		return useFetch<User[]>("/api/search/all");
-	}
-	if (access.value[AccessPermission.PARENT]) {
-		return useFetch<User[]>("/api/search/children", {
-			query: { pId: userId },
-		});
+	if (access.value?.[AccessPermission.ADMIN]) {
+		return useFetch<User[]>("/api/search/employees");
 	}
 	return {
 		data: { value: [] },
-		error: "User not authorized to view patients",
+		error: "User not authorized to view employees",
 	};
 }
 
-// Filter patients based on search query
+// Filter Employees on search query
 const filteredUsers = computed(() => {
-	return usersData.value.filter((u) =>
+	const list: User[] = usersData?.value ?? [];
+	return list.filter((u) =>
 		u.name.toLowerCase().includes(searchQuery.value.toLowerCase())
 	);
 });
