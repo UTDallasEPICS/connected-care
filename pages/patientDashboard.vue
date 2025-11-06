@@ -12,18 +12,21 @@
 					<button
 						@click="goTo('/scheduleView')"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
-					></button>
-					<Calendar :size="84" color="black" />
+					>
+						<Calendar :size="84" color="black" />
+					</button>
 					<span class="text -sm font-medium">SCHEDULE</span>
 				</div>
 
 				<!-- view profile -->
 				<div class="flex flex-col items-center">
 					<button
-						@click="goTo('/[id]')"
+						@click="goToProfile"
 						class="flex h-32 w-32 flex-col items-center justify-center rounded-2xl bg-gray-300 p-6 transition hover:bg-gray-400"
-					></button>
-					<User :size="84" color="black" />
+					>
+						<User :size="84" color="black" />
+					</button>
+
 					<span class="text -sm font-medium">VIEW PROFILE</span>
 				</div>
 			</div>
@@ -33,19 +36,26 @@
 
 <script lang="ts" setup>
 import { navigateTo, useCookie } from "#imports";
+import { onMounted } from "vue";
 import { AccessPermission } from "~/permissions";
 import { Calendar, User } from "lucide-vue-next";
 
 // Access cookies for authentication / role check
 const access = useCookie("AccessPermission");
+const userId = useCookie("userId");
 
-// Redirect if not admin
-if (!access.value?.[AccessPermission.PATIENT]) {
-	navigateTo("/dashboard");
-}
+// Redirect if not patient
+onMounted(() => {
+	if (!access.value?.[AccessPermission.PATIENT]) {
+		navigateTo("/dashboard");
+	}
+});
 
 // Navigation helper
 function goTo(path: string) {
 	navigateTo(path);
+}
+function goToProfile() {
+	navigateTo({ name: "myProfile-id", params: { id: userId.value } });
 }
 </script>

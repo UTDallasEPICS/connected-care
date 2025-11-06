@@ -36,8 +36,11 @@ import {
 import { AccessPermission } from "~/permissions";
 
 const email = ref("");
-const userId = useCookie("userId");
+//const userId = useCookie("userId");
+//const access = useCookie("AccessPermission");
+
 const access = useCookie("AccessPermission");
+const userId = useCookie("userId");
 
 onMounted(async () => {
 	await $fetch("/api/updatePermissions", {
@@ -45,9 +48,7 @@ onMounted(async () => {
 	});
 	await refreshCookie("AccessPermission");
 	await refreshCookie("userId");
-
-	console.log("userId:", userId.value);
-	console.log("access cookie value:", access.value);
+	console.log(useCookie("AccessPermission").value);
 
 	if (userId.value && access.value) {
 		if (access.value[AccessPermission.ADMIN]) {
