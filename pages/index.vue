@@ -48,6 +48,10 @@ onMounted(async () => {
 	if (userId.value && access.value) {
 		if (access.value[AccessPermission.ADMIN]) {
 			await navigateTo("/admin");
+		} else if (access.value[AccessPermission.PATIENT]) {
+			await navigateTo("/patientDashboard");
+		} else if (access.value[AccessPermission.USER_SERVICE]) {
+			await navigateTo("/userServiceDashboard");
 		} else {
 			await navigateTo("/Dashboard");
 		}
