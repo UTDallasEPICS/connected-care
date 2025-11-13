@@ -1,13 +1,11 @@
 {
-  "Create Appointment": "Crear cita",
-  "New Appointment": "Nueva cita",
-  "Date": "Fecha",
-  "Pick a therapist": "",
-  "Pick a session type": "",
-  "Max Patient Attendance (Min": {
-    " 1)": ""
-  },
-  "Comments": "",
-  "Cancel": "",
-  "Save": ""
+	"Create Appointment": "Crear cita",
+	"New Appointment": "Nueva cita",
+	"Date": "Fecha",
+	"Pick a therapist": "",
+	"Pick a session type": "",
+	"Max Patient Attendance (Min. 1)": "",
+	"Comments": "",
+	"Cancel": "",
+	"Save": ""
 }

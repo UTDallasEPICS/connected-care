@@ -18,15 +18,23 @@
 		<div class="hidden items-center gap-6 sm:flex">
 			<div class="flex items-center gap-2">
 				<button
-					class="px-2 py-1 rounded text-sm"
-					:class="locale === 'en' ? 'bg-white text-blue-950 font-semibold' : 'bg-blue-900 text-white'"
+					class="rounded px-2 py-1 text-sm"
+					:class="
+						locale === 'en'
+							? 'bg-white font-semibold text-blue-950'
+							: 'bg-blue-900 text-white'
+					"
 					@click="switchLanguage('en')"
 				>
 					EN
 				</button>
 				<button
-					class="px-2 py-1 rounded text-sm"
-					:class="locale === 'es' ? 'bg-white text-blue-950 font-semibold' : 'bg-blue-900 text-white'"
+					class="rounded px-2 py-1 text-sm"
+					:class="
+						locale === 'es'
+							? 'bg-white font-semibold text-blue-950'
+							: 'bg-blue-900 text-white'
+					"
 					@click="switchLanguage('es')"
 				>
 					ES
@@ -84,16 +92,32 @@
 				<nav class="flex grow flex-col">
 					<div class="mb-4 flex justify-end gap-2">
 						<button
-							class="px-2 py-1 rounded text-sm"
-							:class="locale === 'en' ? 'bg-blue-950 text-white font-semibold' : 'bg-gray-200 text-black'"
-							@click="() => { switchLanguage('en'); }"
+							class="rounded px-2 py-1 text-sm"
+							:class="
+								locale === 'en'
+									? 'bg-blue-950 font-semibold text-white'
+									: 'bg-gray-200 text-black'
+							"
+							@click="
+								() => {
+									switchLanguage('en');
+								}
+							"
 						>
 							EN
 						</button>
 						<button
-							class="px-2 py-1 rounded text-sm"
-							:class="locale === 'es' ? 'bg-blue-950 text-white font-semibold' : 'bg-gray-200 text-black'"
-							@click="() => { switchLanguage('es'); }"
+							class="rounded px-2 py-1 text-sm"
+							:class="
+								locale === 'es'
+									? 'bg-blue-950 font-semibold text-white'
+									: 'bg-gray-200 text-black'
+							"
+							@click="
+								() => {
+									switchLanguage('es');
+								}
+							"
 						>
 							ES
 						</button>
@@ -124,7 +148,14 @@
 
 <script setup lang="ts">
 import { X, LogOut, Menu } from "lucide-vue-next";
-import { ref, computed, useCookie, navigateTo, useI18n } from "#imports";
+import {
+	ref,
+	computed,
+	useCookie,
+	navigateTo,
+	useI18n,
+	useLocalePath,
+} from "#imports";
 import { AccessPermission } from "~/permissions";
 
 const localePath = useLocalePath();
@@ -160,15 +191,11 @@ const userLinks = computed(() => {
 		});
 	}
 	if (access.value[AccessPermission.ADMIN]) {
-<<<<<<< Updated upstream
-		legalRoutes.push({ to: { name: "admin" }, label: "Admin" });
+		legalRoutes.push({ to: "admin", label: "Admin" });
 		legalRoutes.push({
-			to: { name: "employeeSearch" },
+			to: "employeeSearch",
 			label: "Employees",
 		});
-=======
-		legalRoutes.push({ to: "admin", label: "Admin" });
->>>>>>> Stashed changes
 	}
 	return legalRoutes;
 });
@@ -178,7 +205,7 @@ function toggleMenu() {
 	isMenuOpen.value = !isMenuOpen.value;
 }
 
-function switchLanguage(code: 'en' | 'es') {
+function switchLanguage(code: "en" | "es") {
 	setLocale(code);
 }
 
