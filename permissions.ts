@@ -34,6 +34,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	viewContactForms: AccessPermission.STAFF,
 	// Therapist Pages
 	// User Service Pages
+	userServiceDashboard: AccessPermission.USER_SERVICE,
 	// Admin Pages
 	admin: AccessPermission.ADMIN,
 	employeeSearch: AccessPermission.ADMIN,

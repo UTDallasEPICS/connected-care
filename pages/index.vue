@@ -44,10 +44,13 @@ onMounted(async () => {
 		method: "GET",
 	});
 	refreshCookie("AccessPermission");
-
 	if (userId.value && access.value) {
 		if (access.value[AccessPermission.ADMIN]) {
 			await navigateTo("/admin");
+		} else if (access.value[AccessPermission.USER_SERVICE]) {
+			await navigateTo("/userServiceDashboard");
+		} else if (access.value[AccessPermission.PATIENT]) {
+			await navigateTo("/patientDashboard");
 		} else {
 			await navigateTo("/Dashboard");
 		}
