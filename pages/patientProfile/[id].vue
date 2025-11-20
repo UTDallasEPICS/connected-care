@@ -129,7 +129,7 @@
 			class="mt-6 rounded border p-4"
 		>
 			<div class="mb-2 flex items-center justify-between">
-				<h2 class="text-xl font-semibold">Therapy Notes</h2>
+				<h2 class="text-xl font-semibold">Therapy Note</h2>
 			</div>
 
 			<div v-if="!therapyNotes.length" class="text-sm text-gray-500">
@@ -843,7 +843,14 @@
 					</p>
 
 					<div v-if="activeNote.objectives?.length">
-						<strong>Objectives worked on:</strong>
+						<strong
+							>Objectives worked on
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(activeNote.objectivesDate)
+								}}) </span
+							>:
+						</strong>
 						<ul class="ml-4 list-disc">
 							<li v-for="o in activeNote.objectives" :key="o.id">
 								<span class="font-semibold">{{
@@ -859,34 +866,90 @@
 						{{ activeNote.otherTherapies }}
 					</p>
 					<p v-if="activeNote.reinforcersUsed">
-						<strong>Reinforcers used:</strong>
+						<strong
+							>Reinforcers used
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(activeNote.reinforcersDate)
+								}}) </span
+							>:
+						</strong>
 						{{ activeNote.reinforcersUsed }}
 					</p>
 					<p v-if="activeNote.familyRecommendations">
-						<strong>Recommendations:</strong>
+						<strong
+							>Recommendations
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(
+										activeNote.familyRecommendationsDate
+									)
+								}}) </span
+							>:
+						</strong>
 						{{ activeNote.familyRecommendations }}
 					</p>
 					<p v-if="activeNote.groupRecommendationParents">
-						<strong>Group recommendation:</strong>
+						<strong>Group recommendation</strong>
 						{{ activeNote.groupRecommendationParents }}
 					</p>
 					<p v-if="activeNote.goalsAchieved">
-						<strong>Goals achieved:</strong>
+						<strong
+							>Goals achieved
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(activeNote.goalsAchievedDate)
+								}}) </span
+							>:
+						</strong>
 						{{ activeNote.goalsAchieved }}
 					</p>
 					<p v-if="activeNote.progressNotes">
-						<strong>Progress notes:</strong>
+						<strong
+							>Progress notes
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(activeNote.progressNotesDate)
+								}}) </span
+							>:
+						</strong>
 						{{ activeNote.progressNotes }}
 					</p>
 					<p v-if="activeNote.nextSessionObjectives">
-						<strong>Next session objectives:</strong>
+						<strong
+							>Next session objectives
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(
+										activeNote.nextSessionObjectivesDate
+									)
+								}}) </span
+							>:
+						</strong>
 						{{ activeNote.nextSessionObjectives }}
 					</p>
 					<p v-if="activeNote.incidents">
-						<strong>Incidents:</strong> {{ activeNote.incidents }}
+						<strong
+							>Incidents
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(activeNote.incidentsDate)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.incidents }}
 					</p>
 					<p v-if="activeNote.generalObservations">
-						<strong>General observations:</strong>
+						<strong
+							>General observations
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(
+										activeNote.generalObservationsDate
+									)
+								}}) </span
+							>:
+						</strong>
 						{{ activeNote.generalObservations }}
 					</p>
 				</div>
