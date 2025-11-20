@@ -457,7 +457,7 @@
 
 							<div class="flex flex-col">
 								<label
-									>Have you been a paitent previously with us?
+									>Have you been a patient previously with us?
 									<span class="text-red-500">*</span>
 								</label>
 								<div class="flex flex-row gap-5 text-xl">
