@@ -125,6 +125,10 @@ const userLinks = computed(() => {
 	}
 	if (access.value[AccessPermission.ADMIN]) {
 		legalRoutes.push({ to: { name: "admin" }, label: "Admin" });
+		legalRoutes.push({
+			to: { name: "employeeSearch" },
+			label: "Employees",
+		});
 	}
 	return legalRoutes;
 });
