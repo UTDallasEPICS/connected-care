@@ -485,23 +485,46 @@
 								class="max-h-48 space-y-1 overflow-y-auto rounded border p-2"
 							>
 								<div
-									v-for="objective in objectivesForSelectedTherapy"
-									:key="objective"
-									class="flex items-center gap-2"
+									v-for="(
+										item, index
+									) in objectivesForSelectedTherapy"
+									:key="index"
 								>
-									<input
-										type="checkbox"
-										:id="`obj-${objective}`"
-										class="h-4 w-4"
-										:value="objective"
-										v-model="selectedObjectives"
-									/>
-									<label
-										:for="`obj-${objective}`"
-										class="text-sm"
+									<!-- SECTION HEADER -->
+									<div
+										v-if="item.header"
+										class="mt-3 mb-1 border-b border-gray-300 text-xs font-bold text-blue-700 uppercase"
 									>
-										{{ objective }}
-									</label>
+										{{ item.header }}
+									</div>
+
+									<!-- SUB-SECTION LABEL -->
+									<div
+										v-else-if="item.subheader"
+										class="mt-2 mb-1 text-sm font-semibold text-gray-700"
+									>
+										{{ item.subheader }}
+									</div>
+
+									<!-- ACTUAL CHECKBOX OBJECTIVE -->
+									<div
+										v-else
+										class="ml-4 flex items-center gap-2"
+									>
+										<input
+											type="checkbox"
+											class="h-4 w-4"
+											:id="`obj-${item}`"
+											:value="item"
+											v-model="selectedObjectives"
+										/>
+										<label
+											:for="`obj-${item}`"
+											class="text-sm"
+										>
+											{{ item }}
+										</label>
+									</div>
 								</div>
 							</div>
 							<p v-else class="text-sm text-gray-500">
@@ -992,122 +1015,267 @@ const therapyTypes: Record<string, string> = {
 // Objectives by therapy
 const objectivesByTherapy: Record<string, string[]> = {
 	LEARNING_THERAPY: [
-		// Basic Student Skills (ABLLS)
-		"Cooperation and Reinforcer Effectiveness",
-		"Visual Performance",
-		"Receptive Language",
-		"Motor Imitation",
-		"Vocal Imitation",
-		"Requests",
-		"Labeling",
-		"Intraverbals",
-		"Spontaneous Vocalizations",
-		"Syntax and Grammar",
-		"Recess and Free Time",
-		"Social Interaction",
-		"Group Instruction",
-		"Following Classroom Routines",
-		"Generalized Responses",
-		// Academic Skills
-		"Reading Skills",
-		"Math Skills",
-		"Writing Skills",
-		"Spelling Skills",
-		// Executive Functions / Cognitive Skills
-		"Working Memory",
-		"Processing Speed",
-		"Inhibitory Control",
-		"Cognitive Flexibility",
-		"Planning",
-		"Comprehension",
-		"Reasoning",
-		"Attention",
-		"Problem-solving",
-		"Other (specify)",
+		{ header: "From ABBLS" },
+		{ subheader: "Basic Student Skills" },
+		"A. Cooperation and Reinforcer Effectiveness",
+		"B. Visual Performance",
+		"C. Receptive Language",
+		"D. Motor Imitation",
+		"E. Vocal Imitation",
+		"F. Requests",
+		"G. Labeling",
+		"H. Intraverbals",
+		"I. Spontaneous Vocalizations",
+		"J. Syntax and Grammar",
+		"K. Recess and Free Time",
+		"L. Social Interaction",
+		"M. Group Instruction",
+		"N. Following Classroom Routines",
+		"P. Generalized Responses",
+
+		{ subheader: "Academic Skills" },
+		"Q. Reading Skills",
+		"R. Math Skills",
+		"S. Writing Skills",
+		"T. Spelling Skills",
+
+		{ subheader: "Executive Functions" },
+		"1. Working memory",
+		"2. Processing speed",
+		"3. Inhibitory control",
+		"4. Cognitive flexibility",
+		"5. Planning",
+
+		{ subheader: "Cognitive Skills" },
+		"1. Comprehension",
+		"2. Reasoning",
+		"3. Attention",
+		"4. Problem-solving",
+
+		{ header: "Other Areas" },
+		{ subheader: "Executive Functions" },
+		"1. Working memory",
+		"2. Processing speed",
+		"3. Inhibitory control",
+		"4. Cognitive flexibility",
+		"5. Planning",
+		{ subheader: "Cognitive Skills" },
+		"1. Comprehension",
+		"2. Reasoning",
+		"3. Attention",
+		"4. Problem-solving",
+		{ subheader: "Others" },
+		"Other(Specify)",
 	],
 	BEHAVIORAL_EARLY: [
-		// Basic Student Skills
-		"Cooperation and Reinforcer Effectiveness",
-		"Visual Performance",
-		"Receptive Language",
-		"Motor Imitation",
-		"Vocal Imitation",
-		"Requests",
-		"Labeling",
-		"Intraverbals",
-		"Spontaneous Vocalizations",
-		"Syntax and Grammar",
-		"Recess and Free Time",
-		"Social Interaction",
-		"Group Instruction",
-		"Following Classroom Routines",
-		"Generalized Responses",
-		// Academic Skills
-		"Reading Skills",
-		"Math Skills",
-		"Writing Skills",
-		"Spelling Skills",
-		// Self-help Skills
-		"Dressing Skills",
-		"Eating Skills",
-		"Personal Maintenance",
-		"Personal Hygiene and Toilet Training",
-		// Motor Skills
-		"Gross Motor Skills",
-		"Fine Motor Skills",
-		"Other (specify)",
+		{ subheader: "Basic Student Skills" },
+		"A. Cooperation and Reinforcer Effectiveness",
+		"B. Visual Performance",
+		"C. Receptive Language",
+		"D. Motor Imitation",
+		"E. Vocal Imitation",
+		"F. Requests",
+		"G. Labeling",
+		"H. Intraverbals",
+		"I. Spontaneous Vocalizations",
+		"J. Syntax and Grammar",
+		"K. Recess and Free Time",
+		"L. Social Interaction",
+		"M. Group Instruction",
+		"N. Following Classroom Routines",
+		"P. Generalized Responses",
+		{ subheader: "Academic Skills" },
+		"Q. Reading Skills",
+		"R. Math Skills",
+		"S. Writing Skills",
+		"T. Spelling Skills",
+		{ subheader: "Self-help Skills" },
+		"U. Dressing Skills",
+		"V. Eating Skills",
+		"W. Personal Maintenance",
+		"X. Personal Hygiene and Toilet Training",
+		{ subheader: "Motor Skills" },
+		"Y. Gross Motor Skills",
+		"Z. Fine Motor Skills",
 	],
 	SPEECH_THERAPY: [
-		"Receptive Language",
-		"Vocal Imitation",
-		"Requests",
-		"Labeling",
-		"Intraverbals",
-		"Spontaneous Vocalizations",
-		"Syntax and Grammar",
-		"Social Interaction",
-		"Other (specify)",
+		"C. Receptive Language",
+		"E. Vocal Imitation",
+		"F. Requests",
+		"G. Labeling",
+		"H. Intraverbals",
+		"I. Spontaneous Vocalizations",
+		"J. Syntax and Grammar",
+		"L. Social Interaction",
 	],
 	SOCIAL_SKILLS: [
-		"Development of Social Autonomy",
-		"Understanding Bullying",
-		"Identifying Healthy Relationships",
-		"Setting Personal Boundaries",
-		"Other (specify)",
+		{ subheader: "Program Modules:" },
+		"1. Development of Social Autonomy",
+		"2. Understanding Bullying",
+		"3. Identifying Healthy Relationships",
+		"4. Setting Personal Boundaries",
 	],
 	OCCUPATIONAL_THERAPY: [
-		"Sensory Integration",
-		"Regulation of Sensory Responses",
-		"Sensory Modulation for Functional Participation",
-		"Gross Motor Coordination",
-		"Fine Motor Skills",
-		"Motor Planning and Strength",
-		"Emotional Self-regulation",
-		"Coping Strategies",
-		"Daily Living Skills (Eating, Dressing, Hygiene, Toileting)",
-		"Functional Communication and Social Skills",
-		"Play and Leisure Skills",
-		"Cognitive and Attention Skills",
-		"Environmental Adaptation and Visual Supports",
-		"Other (specify)",
+		{ header: "Occupational Therapy Objectives" },
+
+		{ subheader: "1. Sensory Integration" },
+		"Regulation of sensory responses (hyper- or hypo-reactivity)",
+		"Improving sensory modulation for functional participation",
+
+		{ subheader: "2. Gross and Fine Motor Skills" },
+		"Motor coordination (balance, strength, motor planning)",
+		"Manual precision and skills for play, writing, and daily activities",
+
+		{ subheader: "3. Self-regulation Skills" },
+		"Emotional management and adaptive behavior",
+		"Coping strategies for frustration and changes",
+
+		{ subheader: "4. Daily Living Skills (DLS)" },
+		"Eating, dressing, hygiene, toileting",
+		"Promoting independence in daily routines",
+
+		{ subheader: "5. Functional Communication and Social Skills" },
+		"Supporting interaction with others (children, adults)",
+		"Taking turns, eye contact, body language for communication",
+
+		{ subheader: "6. Play and Leisure" },
+		"Participation in age-appropriate games",
+		"Development of symbolic, functional, and shared play",
+
+		{ subheader: "7. Cognitive and Attention Skills" },
+		"Sustained attention, memory, problem-solving",
+		"Transitioning between activities and following instructions",
+
+		{ subheader: "8. Environmental Adaptation and Visual Supports" },
+		"Using environmental adaptations and visual supports to enhance participation",
 	],
 	INDEPENDENT_LIVING: [
-		"Personal Hygiene Autonomy",
-		"Bathing Routine",
-		"Oral Care (Tooth Brushing)",
-		"Hair Care",
-		"Hand Washing",
-		"Choosing and Wearing Clothes",
-		"Meal Autonomy and Table Manners",
-		"Home Tasks and Appliance Use",
-		"Using Kitchen and Laundry Appliances",
-		"Money Use: Identifying and Using Bills/Coins",
-		"Using Credit/Debit Cards and ATMs",
-		"Making Purchases",
-		"Travel and Mobility Autonomy",
-		"Recognizing Traffic Signs and Public Transport",
-		"Technology Use (Computer/Tablet/Phone)",
-		"Other (specify)",
+		{ header: "Independent Living Skills Training Program" },
+		{ subheader: "Autonomy Modules" },
+
+		// required custom textarea already exists (group recommendation for parents)
+
+		{ subheader: "Introduction to the Autonomy Workshop" },
+		"1. Meeting peers and creating rules for coexistence",
+		"2. Expressing personal information and workshop activities",
+		"3. Understanding how and why to make choices (knowing one’s rights)",
+
+		{ subheader: "Personal Hygiene Autonomy" },
+		"1. Following a bathing routine (body hygiene)",
+		"2. Brushing teeth (oral care)",
+		"3. Combing hair (hair care)",
+		"4. Cleaning and trimming nails (nail care)",
+		"5. Washing hands",
+		"6. Choosing and wearing clothes",
+		"7. Using cutlery and tableware (meal autonomy and table manners)",
+
+		{ subheader: "Home Tasks and Appliance Use Autonomy" },
+		"1. Tidying up bedroom",
+		"2. Dusting areas and objects",
+		"3. Sweeping and mopping floors",
+		"4. Cleaning the bathroom",
+		"5. Safely using appliances",
+		"6. Setting and clearing the table",
+		"7. Dishwashing",
+		"8. Using and cleaning the kitchen",
+		"9. Using and cleaning laundry appliances",
+
+		{ subheader: "Money Use Autonomy" },
+		"1. Learning about money: production and distribution",
+		"2. Understanding the use of money",
+		"3. Identifying and calculating bills and coins",
+		"4. Using credit and debit cards",
+		"5. Recognizing ATMs and simulating their use",
+		"6. Making a simple purchase",
+
+		{ subheader: "Travel and Mobility Autonomy" },
+		"1. Identifying common places",
+		"2. Recognizing traffic signs",
+		"3. Recognizing public and private transportation",
+		"4. Learning about street safety",
+
+		{ subheader: "Technology Use Autonomy" },
+		"1. Using the computer with assistance",
+		"2. Using the tablet with assistance",
+		"3. Using the cellphone with assistance",
+		"4. Using the ATM with assistance",
+
+		// ---------------------------------------------------------------------
+		// EXTRA MODULES (Camping, Gardening, Crafts, Cooking)
+		// ---------------------------------------------------------------------
+
+		{ header: "Additional Modules" },
+
+		{ subheader: "Camping" },
+		"1. Encourage coexistence and teamwork",
+		"2. Develop basic survival skills",
+		"3. Connect with nature and the environment",
+		"4. Improve self-esteem and autonomy",
+		"5. Promote fun and rest",
+
+		{ subheader: "Gardening" },
+		"1. Promote sustainability and recycling",
+		"2. Create a green and relaxing space",
+		"3. Develop responsibility and care habits",
+
+		{ subheader: "Crafts" },
+		"1. Develop manual skills and stimulate creativity",
+		"2. Foster patience and perseverance",
+		"3. Encourage step-by-step project work",
+		"4. Build problem-solving capacity",
+		"5. Promote teamwork skills",
+
+		{ subheader: "Cooking" },
+		"1. Prepare daily meals",
+
+		// ---------------------------------------------------------------------
+		// Occupational Therapy Skills Module (Inside Independent Living)
+		// ---------------------------------------------------------------------
+		{ header: "Occupational Therapy Skills Module" },
+
+		"1. Strengthen gross motor coordination",
+		"2. Promote fine motor skills",
+		"3. Encourage decision-making",
+		"4. Stimulate problem-solving",
+		"5. Manage frustration and build resilience",
+		"6. Improve social interactions",
+
+		// ---------------------------------------------------------------------
+		// Arts, Movement, Communication Module
+		// ---------------------------------------------------------------------
+		{ header: "Arts, Movement & Communication Module" },
+		// group recommendation for parents already handled
+
+		{ subheader: "Arts" },
+		"1. Stimulate lateral thinking and creativity",
+		"2. Support self-regulation",
+		"3. Express emotions and interests",
+		"4. Develop visuomotor coordination",
+		"5. Practice waiting",
+		"6. Interpret reality",
+		"7. Encourage attentive observation",
+		"8. Improve attention to detail",
+		"9. Develop fine motor skills",
+		"10. Stimulate problem-solving",
+
+		{ subheader: "Communication" },
+		"1. Encourage oral expression",
+		"2. Show feelings and express emotions appropriately",
+		"3. Express interests",
+		"4. Stimulate social interactions",
+		"5. Vocalization, projection, rhythm, imitation",
+		"6. Encourage reading",
+		"7. Practice diction",
+		"8. Promote teamwork",
+		"9. Stimulate imitation",
+
+		{ subheader: "Movement" },
+		"1. Increase body awareness and flexibility",
+		"2. Coordinate with others in group activities",
+		"3. Stimulate imitation",
+		"4. Move with awareness",
+		"5. Foster attention",
+		"6. Develop gross motor skills",
 	],
 };
 
