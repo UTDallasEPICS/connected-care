@@ -1297,7 +1297,7 @@ async function submitProgressReport() {
 		goalsAchieved: goalsAchieved.value || null,
 		goalsAchievedDate: goalsAchievedDate.value || null,
 		progressNotes: progressNotes.value || null,
-		progressNotesDate: progressNotes.value || null,
+		progressNotesDate: progressNotesDate.value || null,
 		nextSessionObjectives: nextSessionObjectives.value || null,
 		nextSessionObjectivesDate: nextSessionObjectivesDate.value || null,
 		incidents: incidents.value || null,
