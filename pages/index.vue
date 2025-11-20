@@ -44,17 +44,6 @@ onMounted(async () => {
 		method: "GET",
 	});
 	refreshCookie("AccessPermission");
-
-	// Add console logs here to debug
-	console.log("userId:", userId.value);
-	console.log("Access permissions:", access.value);
-	console.log("Is ADMIN?", access.value?.[AccessPermission.ADMIN]);
-	console.log(
-		"Is USER_SERVICE?",
-		access.value?.[AccessPermission.USER_SERVICE]
-	);
-	console.log("Is PATIENT?", access.value?.[AccessPermission.PATIENT]);
-
 	if (userId.value && access.value) {
 		if (access.value[AccessPermission.ADMIN]) {
 			await navigateTo("/admin");
@@ -75,9 +64,6 @@ async function handleSubmit() {
 	});
 	refreshCookie("userId");
 	refreshCookie("AccessPermission");
-	console.log("After login - userId:", userId.value);
-	console.log("After login - access:", access.value);
-
 	reloadNuxtApp();
 }
 </script>
