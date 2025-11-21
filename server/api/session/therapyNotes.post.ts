@@ -6,8 +6,8 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 
 const objectiveSchema = z.object({
-	goalKey: z.string().optional().nullable(), // predefined key (optional)
-	goalLabel: z.string(), // display label (required)
+	goalKey: z.string().optional().nullable(), // predefined key
+	goalLabel: z.string(), // display label
 	details: z.string().optional().nullable(),
 });
 

@@ -129,7 +129,7 @@
 			class="mt-6 rounded border p-4"
 		>
 			<div class="mb-2 flex items-center justify-between">
-				<h2 class="text-xl font-semibold">Therapy Note</h2>
+				<h2 class="text-xl font-semibold">Therapy Notes</h2>
 			</div>
 
 			<div v-if="!therapyNotes.length" class="text-sm text-gray-500">
@@ -438,7 +438,7 @@
 				class="relative z-10 max-h-9/12 w-full max-w-9/12 overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
-				<h2 class="mb-4 text-xl font-bold">Therapy Notes</h2>
+				<h2 class="mb-4 text-xl font-bold">Therapy Note</h2>
 				<form @submit.prevent="submitProgressReport">
 					<!-- Therapy + Objectives worked on (drill down) -->
 					<div class="mb-4 grid gap-4 md:grid-cols-2">
@@ -891,7 +891,7 @@
 					<p v-if="activeNote.reinforcersUsed">
 						<strong
 							>Reinforcers used
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.reinforcersDate">
 								({{
 									formatDate(activeNote.reinforcersDate)
 								}}) </span
@@ -902,7 +902,7 @@
 					<p v-if="activeNote.familyRecommendations">
 						<strong
 							>Recommendations
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.familyRecommendationsDate">
 								({{
 									formatDate(
 										activeNote.familyRecommendationsDate
@@ -919,7 +919,7 @@
 					<p v-if="activeNote.goalsAchieved">
 						<strong
 							>Goals achieved
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.goalsAchievedDate">
 								({{
 									formatDate(activeNote.goalsAchievedDate)
 								}}) </span
@@ -930,7 +930,7 @@
 					<p v-if="activeNote.progressNotes">
 						<strong
 							>Progress notes
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.progressNotesDate">
 								({{
 									formatDate(activeNote.progressNotesDate)
 								}}) </span
@@ -941,7 +941,7 @@
 					<p v-if="activeNote.nextSessionObjectives">
 						<strong
 							>Next session objectives
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.nextSessionsObjectivesDate">
 								({{
 									formatDate(
 										activeNote.nextSessionObjectivesDate
@@ -954,7 +954,7 @@
 					<p v-if="activeNote.incidents">
 						<strong
 							>Incidents
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.incidentsDate">
 								({{
 									formatDate(activeNote.incidentsDate)
 								}}) </span
@@ -965,7 +965,7 @@
 					<p v-if="activeNote.generalObservations">
 						<strong
 							>General observations
-							<span v-if="activeNote.objectivesDate">
+							<span v-if="activeNote.generalObservationsDate">
 								({{
 									formatDate(
 										activeNote.generalObservationsDate
@@ -1519,22 +1519,28 @@ async function submitProgressReport() {
 		patientId: uId,
 		therapyType: selectedTherapy.value,
 		objectives: objectivesPayload,
-		objectivesDate: objectivesDate.value || null,
+		objectivesDate: dateStringWithCurrentTime(objectivesDate.value),
 		reinforcersUsed: reinforcersUsed.value || null,
-		reinforcersDate: reinforcersDate.value || null,
+		reinforcersDate: dateStringWithCurrentTime(reinforcersDate.value),
 		familyRecommendations: familyRecommendations.value || null,
-		familyRecommendationsDate: familyRecommendationsDate.value || null,
+		familyRecommendationsDate: dateStringWithCurrentTime(
+			familyRecommendationsDate.value
+		),
 		groupRecommendationParents: groupRecommendationParents.value || null,
 		goalsAchieved: goalsAchieved.value || null,
-		goalsAchievedDate: goalsAchievedDate.value || null,
+		goalsAchievedDate: dateStringWithCurrentTime(goalsAchievedDate.value),
 		progressNotes: progressNotes.value || null,
-		progressNotesDate: progressNotesDate.value || null,
+		progressNotesDate: dateStringWithCurrentTime(progressNotesDate.value),
 		nextSessionObjectives: nextSessionObjectives.value || null,
-		nextSessionObjectivesDate: nextSessionObjectivesDate.value || null,
+		nextSessionObjectivesDate: dateStringWithCurrentTime(
+			nextSessionObjectivesDate.value
+		),
 		incidents: incidents.value || null,
-		incidentsDate: incidentsDate.value || null,
+		incidentsDate: dateStringWithCurrentTime(incidentsDate.value),
 		generalObservations: generalObservations.value || null,
-		generalObservationsDate: generalObservationsDate.value || null,
+		generalObservationsDate: dateStringWithCurrentTime(
+			generalObservationsDate.value
+		),
 	};
 
 	const url = editingNoteId.value
@@ -1557,6 +1563,29 @@ async function submitProgressReport() {
 		const msg = fromApi || err?.message || "Unknown error";
 		alert("Could not save therapy note: " + msg);
 	}
+}
+
+function dateStringWithCurrentTime(
+	dateStr: string | null | undefined
+): string | null {
+	if (!dateStr) return null;
+
+	// dateStr is "YYYY-MM-DD"
+	const [year, month, day] = dateStr.split("-").map(Number);
+	const now = new Date();
+
+	// Same day as selected date, time = current time
+	const combined = new Date(
+		year,
+		month - 1,
+		day,
+		now.getHours(),
+		now.getMinutes(),
+		now.getSeconds(),
+		now.getMilliseconds()
+	);
+
+	return combined.toISOString();
 }
 
 async function loadTherapyNotes() {
