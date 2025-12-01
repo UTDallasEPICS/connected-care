@@ -18,6 +18,7 @@ enum AccessPermission {
 const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Public Pages
 	index: AccessPermission.PUBLIC,
+	login: AccessPermission.PUBLIC,
 	contactForm: AccessPermission.PUBLIC,
 	// All User Pages
 	dashboard: AccessPermission.USER,
