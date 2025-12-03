@@ -693,7 +693,8 @@
 					>
 						<div>
 							<label class="mb-1 block font-medium">
-								Goals achieved <span class="text-red-500">*</span>
+								Goals achieved
+								<span class="text-red-500">*</span>
 							</label>
 							<textarea
 								class="input w-full"
@@ -718,7 +719,8 @@
 					>
 						<div>
 							<label class="mb-1 block font-medium">
-								Progress notes (what happened in therapy) <span class="text-red-500">*</span>
+								Progress notes (what happened in therapy)
+								<span class="text-red-500">*</span>
 							</label>
 							<textarea
 								class="input w-full"
@@ -743,7 +745,8 @@
 					>
 						<div>
 							<label class="mb-1 block font-medium">
-								Objectives for next therapy session <span class="text-red-500">*</span>
+								Objectives for next therapy session
+								<span class="text-red-500">*</span>
 							</label>
 							<textarea
 								class="input w-full"
@@ -1480,17 +1483,20 @@ async function submitProgressReport() {
 		return;
 	}
 
-	if (!goalsAchived.value || goalsAchived.value.trim() === '') {
+	if (!goalsAchieved.value || goalsAchieved.value.trim() === "") {
 		alert("Goals Achieved is required.");
 		return;
 	}
 
-	if (!progressNotes.value || progressNotes.value.trim() === '') {
+	if (!progressNotes.value || progressNotes.value.trim() === "") {
 		alert("Progress Notes is required.");
 		return;
 	}
 
-	if(!nextSessionObjectives.value || nextSessionObjectives.value.trim() === '') {
+	if (
+		!nextSessionObjectives.value ||
+		nextSessionObjectives.value.trim() === ""
+	) {
 		alert("Objectives for next session is required.");
 		return;
 	}
