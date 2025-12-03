@@ -1,8 +1,6 @@
 // server/api/session/therapyNotes.get.ts
 import { defineEventHandler, getQuery } from "h3";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "~/server/utils/prisma";
 
 export default defineEventHandler(async (event) => {
 	const { patientId } = getQuery(event) as { patientId?: string };

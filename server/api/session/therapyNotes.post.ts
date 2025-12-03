@@ -1,9 +1,7 @@
 // server/api/session/therapyNotes.post.ts
 import { defineEventHandler, readBody } from "h3";
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-
-const prisma = new PrismaClient();
+import { prisma } from "~/server/utils/prisma";
 
 const objectiveSchema = z.object({
 	goalKey: z.string().optional().nullable(), // predefined key
@@ -34,7 +32,9 @@ const therapyNoteSchema = z.object({
 	progressNotes: z.string().min(1, "Progress Notes is required"),
 	progressNotesDate: z.string().optional().nullable(),
 
-	nextSessionObjectives: z.string().min(1, "Objectives fro next session is required "),
+	nextSessionObjectives: z
+		.string()
+		.min(1, "Objectives fro next session is required "),
 	nextSessionObjectivesDate: z.string().optional().nullable(),
 
 	incidents: z.string().optional().nullable(),

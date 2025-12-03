@@ -19,7 +19,7 @@
 				class="btn text-nowrap hover:cursor-pointer"
 				@click="openNewTherapyNote"
 			>
-				Therapy Notes
+				Write Progress Report
 			</button>
 		</div>
 
@@ -121,6 +121,96 @@
 				<strong>All Sessions Paid?</strong>
 				{{ paid }}
 			</p>
+
+			<!-- Progress Reports (View Only) -->
+			<div class="mt-8">
+				<h2 class="mb-2 text-xl font-semibold">Progress Reports</h2>
+				<ul class="list-disc pl-6">
+					<li
+						v-for="(report, index) in profile?.NonEmployee?.Patient
+							?.ProgressReports"
+						:key="index"
+					>
+						<strong
+							>{{ new Date(report.date).toDateString() }}:</strong
+						>
+						<ul class="pl-6">
+							<li
+								v-for="(question, index) in report?.Questions"
+								:key="index"
+							>
+								{{ index + 1 }}.
+								<strong>{{ question.question }}:</strong>
+								{{ question.answer }}
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<p
+					v-if="
+						!profile?.NonEmployee?.Patient?.ProgressReports.length
+					"
+				>
+					No progress reports available.
+				</p>
+			</div>
+		</section>
+
+		<!-- Therapy Notes history – visible only to therapists -->
+		<section
+			v-if="access[AccessPermission.THERAPIST]"
+			class="mt-6 rounded border p-4"
+		>
+			<div class="mb-2 flex items-center justify-between">
+				<h2 class="text-xl font-semibold">Therapy Notes</h2>
+			</div>
+
+			<div v-if="!therapyNotes.length" class="text-sm text-gray-500">
+				No therapy notes recorded yet.
+			</div>
+
+			<div
+				v-for="note in therapyNotes"
+				:key="note.id"
+				class="mt-3 rounded border p-3"
+			>
+				<!-- Header row -->
+				<div class="flex items-center justify-between">
+					<div>
+						<div class="font-semibold">
+							Created: {{ formatDate(note.createdAt) }}
+						</div>
+
+						<div
+							v-if="note.updatedAt !== note.createdAt"
+							class="text-xs text-gray-500"
+						>
+							Updated: {{ formatDate(note.updatedAt) }}
+						</div>
+						<div class="text-sm text-gray-600">
+							{{
+								therapyTypes[note.therapyType] ||
+								note.therapyType
+							}}
+						</div>
+					</div>
+
+					<div class="space-x-2 text-sm">
+						<button
+							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+							@click="openViewTherapyNote(note)"
+						>
+							Open
+						</button>
+						<button
+							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+							@click="openEditTherapyNote(note)"
+						>
+							Edit
+						</button>
+					</div>
+				</div>
+			</div>
 		</section>
 
 		<!-- Therapy Notes history – visible only to therapists -->
@@ -420,7 +510,7 @@
 			</div>
 		</div>
 
-		<!-- ================= MODAL: Write Therapy Notes (for Therapist) ================= -->
+		<!-- ================= MODAL: Write Progress Report (for Therapist) ================= -->
 		<div
 			v-if="showProgressReportModal"
 			class="fixed inset-0 z-50 flex items-center justify-center"
@@ -813,7 +903,13 @@
 							/>
 						</div>
 					</div>
-
+					<button
+						class="bg-smoky mb-4 flex w-full cursor-pointer justify-center"
+						type="button"
+						@click="addQuestion"
+					>
+						<Plus />
+					</button>
 					<!-- Action Buttons -->
 					<div class="flex justify-end space-x-2">
 						<button
@@ -1001,6 +1097,7 @@
 <script setup lang="ts">
 import { computed, ref, useCookie, useFetch, useRoute } from "#imports";
 import { AccessPermission } from "~/permissions";
+import { Plus, X } from "lucide-vue-next";
 import { $fetch } from "ofetch";
 
 const contactType = ["EMAIL", "PHONE", "WHATS_APP"];
@@ -1442,6 +1539,8 @@ function closeEditModal() {
 
 function closeProgressReportModal() {
 	showProgressReportModal.value = false;
+	// Reset progress report form.
+	progressReportQuestions.value = [{ question: "", answer: "" }];
 }
 
 // Update the profile data from the edit form.
