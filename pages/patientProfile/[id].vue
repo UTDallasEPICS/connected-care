@@ -213,6 +213,63 @@
 			</div>
 		</section>
 
+		<!-- Therapy Notes history – visible only to therapists -->
+		<section
+			v-if="access[AccessPermission.THERAPIST]"
+			class="mt-6 rounded border p-4"
+		>
+			<div class="mb-2 flex items-center justify-between">
+				<h2 class="text-xl font-semibold">Therapy Notes</h2>
+			</div>
+
+			<div v-if="!therapyNotes.length" class="text-sm text-gray-500">
+				No therapy notes recorded yet.
+			</div>
+
+			<div
+				v-for="note in therapyNotes"
+				:key="note.id"
+				class="mt-3 rounded border p-3"
+			>
+				<!-- Header row -->
+				<div class="flex items-center justify-between">
+					<div>
+						<div class="font-semibold">
+							Created: {{ formatDate(note.createdAt) }}
+						</div>
+
+						<div
+							v-if="note.updatedAt !== note.createdAt"
+							class="text-xs text-gray-500"
+						>
+							Updated: {{ formatDate(note.updatedAt) }}
+						</div>
+						<div class="text-sm text-gray-600">
+							{{
+								therapyTypes[note.therapyType] ||
+								note.therapyType
+							}}
+						</div>
+					</div>
+
+					<div class="space-x-2 text-sm">
+						<button
+							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+							@click="openViewTherapyNote(note)"
+						>
+							Open
+						</button>
+						<button
+							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+							@click="openEditTherapyNote(note)"
+						>
+							Edit
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<!-- ================= MODAL: Edit Profile (for Patient/Parent) ================= -->
 		<div
 			v-if="showEditModal"
@@ -471,39 +528,378 @@
 				class="relative z-10 max-h-9/12 w-full max-w-9/12 overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
-				<h2 class="mb-4 text-xl font-bold">Write Progress Report</h2>
+				<h2 class="mb-4 text-xl font-bold">Therapy Note</h2>
 				<form @submit.prevent="submitProgressReport">
-					<div
-						v-for="(question, index) in progressReportQuestions"
-						:key="index"
-					>
-						<div
-							class="mb-4 flex w-full flex-col justify-between gap-4"
-						>
-							<div class="flex w-full flex-row">
-								<label class="text-nowrap">
-									Question {{ index + 1 }}
-								</label>
-								<div class="w-full"></div>
-								<button
-									class="cursor-pointer"
-									type="button"
-									@click="removeQuestion(index)"
+					<!-- Therapy + Objectives worked on (drill down) -->
+					<div class="mb-4 grid gap-4 md:grid-cols-2">
+						<!-- Therapy -->
+						<div>
+							<label class="mb-1 block font-medium">
+								Therapy (drill down)
+								<span class="text-red-500">*</span>
+							</label>
+							<select
+								class="input w-full"
+								v-model="selectedTherapy"
+								required
+								@change="
+									selectedObjectives = [];
+									objectiveDetails = {};
+								"
+							>
+								<option value="" disabled>
+									Select a therapy
+								</option>
+								<option
+									v-for="(label, key) in therapyTypes"
+									:key="key"
+									:value="key"
 								>
-									<X />
-								</button>
+									{{ label }}
+								</option>
+							</select>
+						</div>
+
+						<!-- Objectives worked on: multi-select via checkboxes -->
+						<div>
+							<label class="mb-1 block font-medium">
+								Objectives worked on (according to therapy)
+								<span class="text-red-500">*</span>
+							</label>
+
+							<div
+								v-if="
+									objectivesForSelectedTherapy.length &&
+									selectedTherapy
+								"
+								class="max-h-48 space-y-1 overflow-y-auto rounded border p-2"
+							>
+								<div
+									v-for="(
+										item, index
+									) in objectivesForSelectedTherapy"
+									:key="index"
+								>
+									<!-- SECTION HEADER -->
+									<div
+										v-if="item.header"
+										class="mt-3 mb-1 border-b border-gray-300 text-xs font-bold text-blue-700 uppercase"
+									>
+										{{ item.header }}
+									</div>
+
+									<!-- SUB-SECTION LABEL -->
+									<div
+										v-else-if="item.subheader"
+										class="mt-2 mb-1 text-sm font-semibold text-gray-700"
+									>
+										{{ item.subheader }}
+									</div>
+
+									<!-- ACTUAL CHECKBOX OBJECTIVE -->
+									<div
+										v-else
+										class="ml-4 flex items-center gap-2"
+									>
+										<input
+											type="checkbox"
+											class="h-4 w-4"
+											:id="`obj-${item}`"
+											:value="item"
+											v-model="selectedObjectives"
+										/>
+										<label
+											:for="`obj-${item}`"
+											class="text-sm"
+										>
+											{{ item }}
+										</label>
+									</div>
+								</div>
 							</div>
+							<p v-else class="text-sm text-gray-500">
+								Select a therapy first to see its objectives.
+							</p>
+						</div>
+					</div>
+
+					<!-- Objectives details + date -->
+					<div class="mb-4">
+						<label class="mb-1 block font-medium">
+							Objectives worked on - details
+						</label>
+
+						<!-- One textarea per selected predefined objective -->
+						<div v-if="selectedObjectives.length" class="space-y-3">
+							<div
+								v-for="objectiveKey in selectedObjectives"
+								:key="objectiveKey"
+								class="space-y-1 rounded border p-2"
+							>
+								<div class="text-sm font-semibold">
+									{{ objectiveKey }}
+								</div>
+								<textarea
+									class="input w-full"
+									rows="2"
+									v-model="objectiveDetails[objectiveKey]"
+									:placeholder="`Details for: ${objectiveKey}`"
+								></textarea>
+							</div>
+						</div>
+
+						<p v-else class="text-sm text-gray-500">
+							Select at least one objective above.
+						</p>
+
+						<!-- Date for objectives block -->
+						<div class="mt-3">
+							<label class="mb-1 block font-medium"> Date </label>
 							<input
-								v-model="question.question"
-								placeholder="Question"
-								class="input w-full"
-								required
+								type="date"
+								class="input w-full md:w-1/3"
+								v-model="objectivesDate"
 							/>
+						</div>
+					</div>
+
+					<!-- Other / custom goals -->
+					<div class="mb-4">
+						<div class="mb-2 flex items-center justify-between">
+							<label class="block font-medium">
+								Other goal(s)
+							</label>
+							<button
+								type="button"
+								class="text-sm underline hover:cursor-pointer"
+								@click="addCustomGoal"
+							>
+								+ Add other goal
+							</button>
+						</div>
+
+						<div v-if="customGoals.length" class="space-y-3">
+							<div
+								v-for="cg in customGoals"
+								:key="cg.id"
+								class="space-y-2 rounded border p-2"
+							>
+								<div class="flex items-center gap-2">
+									<input
+										type="text"
+										class="input w-full"
+										v-model="cg.label"
+										placeholder="Goal name (e.g., 'Other: XYZ')"
+									/>
+									<button
+										type="button"
+										class="text-xs text-red-600 underline hover:cursor-pointer"
+										@click="removeCustomGoal(cg.id)"
+									>
+										Remove
+									</button>
+								</div>
+								<textarea
+									class="input w-full"
+									rows="2"
+									v-model="cg.details"
+									placeholder="Details for this other goal"
+								></textarea>
+							</div>
+						</div>
+						<p v-else class="text-sm text-gray-500">
+							Click “Add other goal” to define custom goals for
+							this therapy.
+						</p>
+					</div>
+
+					<!-- Reinforcers used + Date -->
+					<div
+						class="mb-4 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								Reinforcers used (if applicable)
+							</label>
 							<textarea
-								v-model="question.answer"
-								placeholder="Answer"
 								class="input w-full"
+								rows="2"
+								v-model="reinforcersUsed"
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="reinforcersDate"
+							/>
+						</div>
+					</div>
+
+					<!-- Recommendations for the family and/or user + Date -->
+					<div
+						class="mb-4 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								Recommendations for the family and/or user
+							</label>
+							<textarea
+								class="input w-full"
+								rows="3"
+								v-model="familyRecommendations"
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="familyRecommendationsDate"
+							/>
+						</div>
+					</div>
+
+					<!-- Group recommendation for parents (Independent Living, etc.) -->
+					<div
+						class="mb-4"
+						v-if="selectedTherapy === 'INDEPENDENT_LIVING'"
+					>
+						<label class="mb-1 block font-medium">
+							Group recommendation for parents
+						</label>
+						<textarea
+							class="input w-full"
+							rows="3"
+							v-model="groupRecommendationParents"
+							placeholder="Group recommendation directed to parents"
+						></textarea>
+					</div>
+
+					<!-- Goals achieved + Date -->
+					<div
+						class="mb-4 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								Goals achieved
+								<span class="text-red-500">*</span>
+							</label>
+							<textarea
+								class="input w-full"
+								rows="3"
+								v-model="goalsAchieved"
 								required
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="goalsAchievedDate"
+							/>
+						</div>
+					</div>
+
+					<!-- Progress notes + Date -->
+					<div
+						class="mb-4 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								Progress notes (what happened in therapy)
+								<span class="text-red-500">*</span>
+							</label>
+							<textarea
+								class="input w-full"
+								rows="4"
+								v-model="progressNotes"
+								required
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="progressNotesDate"
+							/>
+						</div>
+					</div>
+
+					<!-- Objectives for next therapy session + Date -->
+					<div
+						class="mb-4 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								Objectives for next therapy session
+								<span class="text-red-500">*</span>
+							</label>
+							<textarea
+								class="input w-full"
+								rows="3"
+								v-model="nextSessionObjectives"
+								required
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="nextSessionObjectivesDate"
+							/>
+						</div>
+					</div>
+
+					<!-- Incidents + Date -->
+					<div
+						class="mb-4 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								Incidents (if applicable)
+							</label>
+							<textarea
+								class="input w-full"
+								rows="3"
+								v-model="incidents"
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="incidentsDate"
+							/>
+						</div>
+					</div>
+
+					<!-- General observations + Date -->
+					<div
+						class="mb-6 grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+					>
+						<div>
+							<label class="mb-1 block font-medium">
+								General observations
+							</label>
+							<textarea
+								class="input w-full"
+								rows="3"
+								v-model="generalObservations"
+								required
+							></textarea>
+						</div>
+						<div>
+							<label class="mb-1 block font-medium"> Date </label>
+							<input
+								type="date"
+								class="input w-full"
+								v-model="generalObservationsDate"
 							/>
 						</div>
 					</div>
@@ -710,6 +1106,289 @@ const gender = ["MALE", "FEMALE", "OTHER"];
 
 const access = useCookie("AccessPermission");
 
+// Therapy types (keys) -> labels for dropdown
+const therapyTypes: Record<string, string> = {
+	LEARNING_THERAPY: "Learning Therapy",
+	BEHAVIORAL_EARLY: "Behavioral Therapy & Early Intervention Therapy",
+	SPEECH_THERAPY: "Speech Therapy",
+	SOCIAL_SKILLS: "Social Skills Therapy",
+	OCCUPATIONAL_THERAPY: "Occupational Therapy",
+	INDEPENDENT_LIVING: "Independent Living Skills Training Program",
+};
+
+// Objectives by therapy
+const objectivesByTherapy: Record<string, string[]> = {
+	LEARNING_THERAPY: [
+		{ header: "From ABBLS" },
+		{ subheader: "Basic Student Skills" },
+		"A. Cooperation and Reinforcer Effectiveness",
+		"B. Visual Performance",
+		"C. Receptive Language",
+		"D. Motor Imitation",
+		"E. Vocal Imitation",
+		"F. Requests",
+		"G. Labeling",
+		"H. Intraverbals",
+		"I. Spontaneous Vocalizations",
+		"J. Syntax and Grammar",
+		"K. Recess and Free Time",
+		"L. Social Interaction",
+		"M. Group Instruction",
+		"N. Following Classroom Routines",
+		"P. Generalized Responses",
+
+		{ subheader: "Academic Skills" },
+		"Q. Reading Skills",
+		"R. Math Skills",
+		"S. Writing Skills",
+		"T. Spelling Skills",
+
+		{ subheader: "Executive Functions" },
+		"1. Working memory",
+		"2. Processing speed",
+		"3. Inhibitory control",
+		"4. Cognitive flexibility",
+		"5. Planning",
+
+		{ subheader: "Cognitive Skills" },
+		"1. Comprehension",
+		"2. Reasoning",
+		"3. Attention",
+		"4. Problem-solving",
+
+		{ header: "Other Areas" },
+		{ subheader: "Executive Functions" },
+		"1. Working memory",
+		"2. Processing speed",
+		"3. Inhibitory control",
+		"4. Cognitive flexibility",
+		"5. Planning",
+		{ subheader: "Cognitive Skills" },
+		"1. Comprehension",
+		"2. Reasoning",
+		"3. Attention",
+		"4. Problem-solving",
+		{ subheader: "Others" },
+		"Other(Specify)",
+	],
+	BEHAVIORAL_EARLY: [
+		{ subheader: "Basic Student Skills" },
+		"A. Cooperation and Reinforcer Effectiveness",
+		"B. Visual Performance",
+		"C. Receptive Language",
+		"D. Motor Imitation",
+		"E. Vocal Imitation",
+		"F. Requests",
+		"G. Labeling",
+		"H. Intraverbals",
+		"I. Spontaneous Vocalizations",
+		"J. Syntax and Grammar",
+		"K. Recess and Free Time",
+		"L. Social Interaction",
+		"M. Group Instruction",
+		"N. Following Classroom Routines",
+		"P. Generalized Responses",
+		{ subheader: "Academic Skills" },
+		"Q. Reading Skills",
+		"R. Math Skills",
+		"S. Writing Skills",
+		"T. Spelling Skills",
+		{ subheader: "Self-help Skills" },
+		"U. Dressing Skills",
+		"V. Eating Skills",
+		"W. Personal Maintenance",
+		"X. Personal Hygiene and Toilet Training",
+		{ subheader: "Motor Skills" },
+		"Y. Gross Motor Skills",
+		"Z. Fine Motor Skills",
+	],
+	SPEECH_THERAPY: [
+		"C. Receptive Language",
+		"E. Vocal Imitation",
+		"F. Requests",
+		"G. Labeling",
+		"H. Intraverbals",
+		"I. Spontaneous Vocalizations",
+		"J. Syntax and Grammar",
+		"L. Social Interaction",
+	],
+	SOCIAL_SKILLS: [
+		{ subheader: "Program Modules:" },
+		"1. Development of Social Autonomy",
+		"2. Understanding Bullying",
+		"3. Identifying Healthy Relationships",
+		"4. Setting Personal Boundaries",
+	],
+	OCCUPATIONAL_THERAPY: [
+		{ header: "Occupational Therapy Objectives" },
+
+		{ subheader: "1. Sensory Integration" },
+		"Regulation of sensory responses (hyper- or hypo-reactivity)",
+		"Improving sensory modulation for functional participation",
+
+		{ subheader: "2. Gross and Fine Motor Skills" },
+		"Motor coordination (balance, strength, motor planning)",
+		"Manual precision and skills for play, writing, and daily activities",
+
+		{ subheader: "3. Self-regulation Skills" },
+		"Emotional management and adaptive behavior",
+		"Coping strategies for frustration and changes",
+
+		{ subheader: "4. Daily Living Skills (DLS)" },
+		"Eating, dressing, hygiene, toileting",
+		"Promoting independence in daily routines",
+
+		{ subheader: "5. Functional Communication and Social Skills" },
+		"Supporting interaction with others (children, adults)",
+		"Taking turns, eye contact, body language for communication",
+
+		{ subheader: "6. Play and Leisure" },
+		"Participation in age-appropriate games",
+		"Development of symbolic, functional, and shared play",
+
+		{ subheader: "7. Cognitive and Attention Skills" },
+		"Sustained attention, memory, problem-solving",
+		"Transitioning between activities and following instructions",
+
+		{ subheader: "8. Environmental Adaptation and Visual Supports" },
+		"Using environmental adaptations and visual supports to enhance participation",
+	],
+	INDEPENDENT_LIVING: [
+		{ header: "Independent Living Skills Training Program" },
+		{ subheader: "Autonomy Modules" },
+
+		// required custom textarea already exists (group recommendation for parents)
+
+		{ subheader: "Introduction to the Autonomy Workshop" },
+		"1. Meeting peers and creating rules for coexistence",
+		"2. Expressing personal information and workshop activities",
+		"3. Understanding how and why to make choices (knowing one’s rights)",
+
+		{ subheader: "Personal Hygiene Autonomy" },
+		"1. Following a bathing routine (body hygiene)",
+		"2. Brushing teeth (oral care)",
+		"3. Combing hair (hair care)",
+		"4. Cleaning and trimming nails (nail care)",
+		"5. Washing hands",
+		"6. Choosing and wearing clothes",
+		"7. Using cutlery and tableware (meal autonomy and table manners)",
+
+		{ subheader: "Home Tasks and Appliance Use Autonomy" },
+		"1. Tidying up bedroom",
+		"2. Dusting areas and objects",
+		"3. Sweeping and mopping floors",
+		"4. Cleaning the bathroom",
+		"5. Safely using appliances",
+		"6. Setting and clearing the table",
+		"7. Dishwashing",
+		"8. Using and cleaning the kitchen",
+		"9. Using and cleaning laundry appliances",
+
+		{ subheader: "Money Use Autonomy" },
+		"1. Learning about money: production and distribution",
+		"2. Understanding the use of money",
+		"3. Identifying and calculating bills and coins",
+		"4. Using credit and debit cards",
+		"5. Recognizing ATMs and simulating their use",
+		"6. Making a simple purchase",
+
+		{ subheader: "Travel and Mobility Autonomy" },
+		"1. Identifying common places",
+		"2. Recognizing traffic signs",
+		"3. Recognizing public and private transportation",
+		"4. Learning about street safety",
+
+		{ subheader: "Technology Use Autonomy" },
+		"1. Using the computer with assistance",
+		"2. Using the tablet with assistance",
+		"3. Using the cellphone with assistance",
+		"4. Using the ATM with assistance",
+
+		// ---------------------------------------------------------------------
+		// EXTRA MODULES (Camping, Gardening, Crafts, Cooking)
+		// ---------------------------------------------------------------------
+
+		{ header: "Additional Modules" },
+
+		{ subheader: "Camping" },
+		"1. Encourage coexistence and teamwork",
+		"2. Develop basic survival skills",
+		"3. Connect with nature and the environment",
+		"4. Improve self-esteem and autonomy",
+		"5. Promote fun and rest",
+
+		{ subheader: "Gardening" },
+		"1. Promote sustainability and recycling",
+		"2. Create a green and relaxing space",
+		"3. Develop responsibility and care habits",
+
+		{ subheader: "Crafts" },
+		"1. Develop manual skills and stimulate creativity",
+		"2. Foster patience and perseverance",
+		"3. Encourage step-by-step project work",
+		"4. Build problem-solving capacity",
+		"5. Promote teamwork skills",
+
+		{ subheader: "Cooking" },
+		"1. Prepare daily meals",
+
+		// ---------------------------------------------------------------------
+		// Occupational Therapy Skills Module (Inside Independent Living)
+		// ---------------------------------------------------------------------
+		{ header: "Occupational Therapy Skills Module" },
+
+		"1. Strengthen gross motor coordination",
+		"2. Promote fine motor skills",
+		"3. Encourage decision-making",
+		"4. Stimulate problem-solving",
+		"5. Manage frustration and build resilience",
+		"6. Improve social interactions",
+
+		// ---------------------------------------------------------------------
+		// Arts, Movement, Communication Module
+		// ---------------------------------------------------------------------
+		{ header: "Arts, Movement & Communication Module" },
+		// group recommendation for parents already handled
+
+		{ subheader: "Arts" },
+		"1. Stimulate lateral thinking and creativity",
+		"2. Support self-regulation",
+		"3. Express emotions and interests",
+		"4. Develop visuomotor coordination",
+		"5. Practice waiting",
+		"6. Interpret reality",
+		"7. Encourage attentive observation",
+		"8. Improve attention to detail",
+		"9. Develop fine motor skills",
+		"10. Stimulate problem-solving",
+
+		{ subheader: "Communication" },
+		"1. Encourage oral expression",
+		"2. Show feelings and express emotions appropriately",
+		"3. Express interests",
+		"4. Stimulate social interactions",
+		"5. Vocalization, projection, rhythm, imitation",
+		"6. Encourage reading",
+		"7. Practice diction",
+		"8. Promote teamwork",
+		"9. Stimulate imitation",
+
+		{ subheader: "Movement" },
+		"1. Increase body awareness and flexibility",
+		"2. Coordinate with others in group activities",
+		"3. Stimulate imitation",
+		"4. Move with awareness",
+		"5. Foster attention",
+		"6. Develop gross motor skills",
+	],
+};
+
+// Computed list for selected therapy
+const objectivesForSelectedTherapy = computed(() => {
+	if (!selectedTherapy.value) return [];
+	return objectivesByTherapy[selectedTherapy.value] || [];
+});
+
 const route = useRoute();
 const uId = route.params.id;
 
@@ -771,20 +1450,62 @@ const editingNoteId = ref<number | null>(null);
 // Modal control flags.
 const showEditModal = ref(false);
 const showProgressReportModal = ref(false);
+// Therapy notes state
+// Selected therapy type
+const selectedTherapy = ref("");
 
-// Form object for a new progress report (for therapists).
-const progressReportQuestions = ref([{ question: "", answer: "" }]);
+// List of selected predefined objective keys
+const selectedObjectives = ref<string[]>([]);
 
-function addQuestion() {
-	progressReportQuestions.value.push({ question: "", answer: "" });
+// Map from objective key to details text
+const objectiveDetails = ref<Record<string, string>>({});
+
+const groupRecommendationParents = ref("");
+
+// Custom (other) goals for this note
+const customGoals = ref<{ id: number; label: string; details: string }[]>([]);
+
+let nextCustomGoalId = 1;
+
+// Helper: add an empty custom goal row
+function addCustomGoal() {
+	customGoals.value.push({
+		id: nextCustomGoalId++,
+		label: "",
+		details: "",
+	});
 }
 
-function removeQuestion(i) {
-	progressReportQuestions.value.splice(i, 1);
-	if (progressReportQuestions.value.length < 1) {
-		progressReportQuestions.value.push({ question: "", answer: "" });
-	}
+// Helper: remove one custom goal row
+function removeCustomGoal(id: number) {
+	customGoals.value = customGoals.value.filter((cg) => cg.id !== id);
 }
+
+// Text + date fields
+const otherTherapies = ref("");
+
+const objectivesDate = ref("");
+
+const reinforcersUsed = ref("");
+const reinforcersDate = ref("");
+
+const familyRecommendations = ref("");
+const familyRecommendationsDate = ref("");
+
+const goalsAchieved = ref("");
+const goalsAchievedDate = ref("");
+
+const progressNotes = ref("");
+const progressNotesDate = ref("");
+
+const nextSessionObjectives = ref("");
+const nextSessionObjectivesDate = ref("");
+
+const incidents = ref("");
+const incidentsDate = ref("");
+
+const generalObservations = ref("");
+const generalObservationsDate = ref("");
 
 // Methods to open/close modals.
 function openEditModal() {
@@ -855,19 +1576,283 @@ async function updateProfile() {
 	closeEditModal();
 }
 
-// Submit a new progress report (for therapists).
 async function submitProgressReport() {
-	const date = new Date().toISOString();
-	await $fetch("/api/profile/report", {
-		method: "Post",
-		body: {
-			date: date,
-			pId: uId,
-			questions: progressReportQuestions.value,
-		},
-	});
+	if (!selectedTherapy.value) {
+		alert("Please select a therapy.");
+		return;
+	}
 
-	getProfile();
-	closeProgressReportModal();
+	if (!goalsAchieved.value || goalsAchieved.value.trim() === "") {
+		alert("Goals Achieved is required.");
+		return;
+	}
+
+	if (!progressNotes.value || progressNotes.value.trim() === "") {
+		alert("Progress Notes is required.");
+		return;
+	}
+
+	if (
+		!nextSessionObjectives.value ||
+		nextSessionObjectives.value.trim() === ""
+	) {
+		alert("Objectives for next session is required.");
+		return;
+	}
+
+	// Only count objectives that actually have content
+	const hasPredefinedObjectives = selectedObjectives.value.length > 0;
+
+	const hasNonEmptyCustomGoals = customGoals.value.some(
+		(g) =>
+			(g.label && g.label.trim() !== "") ||
+			(g.details && g.details.trim() !== "")
+	);
+
+	if (!hasPredefinedObjectives && !hasNonEmptyCustomGoals) {
+		alert("Please select at least one objective or add another goal.");
+		return; // do not call the API
+	}
+
+	const objectivesPayload: {
+		goalKey?: string | null;
+		goalLabel: string;
+		details?: string | null;
+	}[] = [];
+
+	// Predefined objectives
+	for (const key of selectedObjectives.value) {
+		objectivesPayload.push({
+			goalKey: key,
+			goalLabel: key,
+			details: objectiveDetails.value[key] || null,
+		});
+	}
+
+	// Custom goals (only non-empty ones)
+	for (const cg of customGoals.value) {
+		if (!cg.label && !cg.details) continue;
+		objectivesPayload.push({
+			goalKey: null,
+			goalLabel: cg.label || "Other",
+			details: cg.details || null,
+		});
+	}
+
+	const payload = {
+		patientId: uId,
+		therapyType: selectedTherapy.value,
+		objectives: objectivesPayload,
+		objectivesDate: dateStringWithCurrentTime(objectivesDate.value),
+		reinforcersUsed: reinforcersUsed.value || null,
+		reinforcersDate: dateStringWithCurrentTime(reinforcersDate.value),
+		familyRecommendations: familyRecommendations.value || null,
+		familyRecommendationsDate: dateStringWithCurrentTime(
+			familyRecommendationsDate.value
+		),
+		groupRecommendationParents: groupRecommendationParents.value || null,
+		goalsAchieved: goalsAchieved.value || null,
+		goalsAchievedDate: dateStringWithCurrentTime(goalsAchievedDate.value),
+		progressNotes: progressNotes.value || null,
+		progressNotesDate: dateStringWithCurrentTime(progressNotesDate.value),
+		nextSessionObjectives: nextSessionObjectives.value || null,
+		nextSessionObjectivesDate: dateStringWithCurrentTime(
+			nextSessionObjectivesDate.value
+		),
+		incidents: incidents.value || null,
+		incidentsDate: dateStringWithCurrentTime(incidentsDate.value),
+		generalObservations: generalObservations.value || null,
+		generalObservationsDate: dateStringWithCurrentTime(
+			generalObservationsDate.value
+		),
+	};
+
+	const url = editingNoteId.value
+		? `/api/session/therapyNotes/${editingNoteId.value}`
+		: "/api/session/therapyNotes";
+
+	const method = editingNoteId.value ? "PUT" : "POST";
+
+	try {
+		await $fetch(url, {
+			method,
+			body: payload,
+		});
+
+		await loadTherapyNotes();
+		closeProgressReportModal();
+	} catch (err) {
+		console.error("Error saving therapy note:", err);
+		const fromApi = err?.data?.error;
+		const msg = fromApi || err?.message || "Unknown error";
+		alert("Could not save therapy note: " + msg);
+	}
+}
+
+function dateStringWithCurrentTime(
+	dateStr: string | null | undefined
+): string | null {
+	if (!dateStr) return null;
+
+	// dateStr is "YYYY-MM-DD"
+	const [year, month, day] = dateStr.split("-").map(Number);
+	const now = new Date();
+
+	// Same day as selected date, time = current time
+	const combined = new Date(
+		year,
+		month - 1,
+		day,
+		now.getHours(),
+		now.getMinutes(),
+		now.getSeconds(),
+		now.getMilliseconds()
+	);
+
+	return combined.toISOString();
+}
+
+async function loadTherapyNotes() {
+	const res = await $fetch("/api/session/therapyNotes", {
+		method: "GET",
+		params: { patientId: uId },
+	});
+	const data = (res as { data?: unknown[] }).data;
+	therapyNotes.value = (data as unknown[]) || [];
+}
+
+function formatDate(value?: string | Date | null) {
+	if (!value) return "No date";
+	const d = new Date(value);
+	if (isNaN(d.getTime())) return "No date";
+
+	return d.toLocaleString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "2-digit",
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: true,
+	});
+}
+
+function resetTherapyNoteForm() {
+	selectedTherapy.value = "";
+	selectedObjectives.value = [];
+	objectiveDetails.value = {};
+	customGoals.value = [];
+	otherTherapies.value = "";
+
+	objectivesDate.value = "";
+
+	reinforcersUsed.value = "";
+	reinforcersDate.value = "";
+
+	familyRecommendations.value = "";
+	familyRecommendationsDate.value = "";
+
+	goalsAchieved.value = "";
+	goalsAchievedDate.value = "";
+
+	progressNotes.value = "";
+	progressNotesDate.value = "";
+
+	nextSessionObjectives.value = "";
+	nextSessionObjectivesDate.value = "";
+
+	incidents.value = "";
+	incidentsDate.value = "";
+
+	generalObservations.value = "";
+	generalObservationsDate.value = "";
+
+	groupRecommendationParents.value = "";
+}
+
+function openNewTherapyNote() {
+	editingNoteId.value = null;
+	resetTherapyNoteForm();
+	showProgressReportModal.value = true;
+}
+
+function openEditTherapyNote(note) {
+	editingNoteId.value = note.id;
+	resetTherapyNoteForm();
+
+	selectedTherapy.value = note.therapyType;
+
+	// Date fields
+	objectivesDate.value = note.objectivesDate
+		? note.objectivesDate.slice(0, 10)
+		: "";
+
+	reinforcersUsed.value = note.reinforcersUsed || "";
+	reinforcersDate.value = note.reinforcersDate
+		? note.reinforcersDate.slice(0, 10)
+		: "";
+
+	familyRecommendations.value = note.familyRecommendations || "";
+	familyRecommendationsDate.value = note.familyRecommendationsDate
+		? note.familyRecommendationsDate.slice(0, 10)
+		: "";
+
+	goalsAchieved.value = note.goalsAchieved || "";
+	goalsAchievedDate.value = note.goalsAchievedDate
+		? note.goalsAchievedDate.slice(0, 10)
+		: "";
+
+	progressNotes.value = note.progressNotes || "";
+	progressNotesDate.value = note.progressNotesDate
+		? note.progressNotesDate.slice(0, 10)
+		: "";
+
+	nextSessionObjectives.value = note.nextSessionObjectives || "";
+	nextSessionObjectivesDate.value = note.nextSessionObjectivesDate
+		? note.nextSessionObjectivesDate.slice(0, 10)
+		: "";
+
+	incidents.value = note.incidents || "";
+	incidentsDate.value = note.incidentsDate
+		? note.incidentsDate.slice(0, 10)
+		: "";
+
+	generalObservations.value = note.generalObservations || "";
+	generalObservationsDate.value = note.generalObservationsDate
+		? note.generalObservationsDate.slice(0, 10)
+		: "";
+
+	// Objectives: split into predefined vs custom
+	selectedObjectives.value = [];
+	objectiveDetails.value = {};
+	customGoals.value = [];
+
+	if (note.objectives && Array.isArray(note.objectives)) {
+		for (const obj of note.objectives) {
+			if (obj.goalKey) {
+				if (!selectedObjectives.value.includes(obj.goalKey)) {
+					selectedObjectives.value.push(obj.goalKey);
+				}
+				objectiveDetails.value[obj.goalKey] = obj.details || "";
+			} else {
+				customGoals.value.push({
+					id: nextCustomGoalId++,
+					label: obj.goalLabel || "Other",
+					details: obj.details || "",
+				});
+			}
+		}
+	}
+
+	showProgressReportModal.value = true;
+}
+
+function openViewTherapyNote(note) {
+	activeNote.value = note;
+	showViewNoteModal.value = true;
+}
+
+function closeViewNoteModal() {
+	showViewNoteModal.value = false;
+	activeNote.value = null;
 }
 </script>
