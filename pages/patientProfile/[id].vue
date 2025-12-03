@@ -17,7 +17,7 @@
 			<button
 				v-if="access[AccessPermission.THERAPIST]"
 				class="btn text-nowrap hover:cursor-pointer"
-				@click="openNewTherapyNote"
+				@click="showProgressReportModal = true"
 			>
 				Write Progress Report
 			</button>
@@ -26,62 +26,17 @@
 		<!-- Patient / Parent Section -->
 		<section class="mb-6 rounded border p-4">
 			<h2 class="mb-2 text-xl font-semibold">Profile Details</h2>
-
 			<p class="mb-2">
-				<strong>User's full name:</strong>
-				{{ profile.fName }} {{ profile.mInit }} {{ profile.lName }}
+				<strong>Name:</strong> {{ profile.fName }} {{ profile.mInit }}
+				{{ profile.lName }}
 			</p>
-
 			<p class="mb-2">
-				<strong>User's age:</strong>
-				{{ age || "-" }}
+				<strong>Date of Birth:</strong>
+				{{ new Date(profile?.NonEmployee?.dob).toDateString() }}
 			</p>
-
 			<p class="mb-2">
-				<strong>Date of birth:</strong>
-				{{
-					profile?.NonEmployee?.dob
-						? new Date(profile.NonEmployee.dob).toDateString()
-						: "-"
-				}}
+				<strong>Gender:</strong> {{ profile?.NonEmployee?.gender }}
 			</p>
-
-			<p class="mb-2">
-				<strong>Diagnosis:</strong>
-				{{ profile?.NonEmployee?.Patient?.diagnosis || "—" }}
-			</p>
-
-			<p class="mb-2">
-				<strong>Record number:</strong>
-				{{ profile?.NonEmployee?.Patient?.recordNumber || "—" }}
-			</p>
-
-			<p class="mb-2">
-				<strong>Sex:</strong>
-				{{ profile?.NonEmployee?.gender || "—" }}
-			</p>
-
-			<p class="mb-2">
-				<strong>Medication:</strong>
-				{{ profile?.NonEmployee?.Patient?.medication || "—" }}
-			</p>
-
-			<p class="mb-2">
-				<strong>Allergies:</strong>
-				{{ profile?.NonEmployee?.Patient?.allergies || "—" }}
-			</p>
-
-			<p class="mb-2">
-				<strong>Diet:</strong>
-				{{ profile?.NonEmployee?.Patient?.diet || "—" }}
-			</p>
-
-			<p class="mb-2">
-				<strong>Parent/Guardian's name:</strong>
-				{{ profile?.NonEmployee?.Patient?.parentName || "—" }}
-			</p>
-
-			<!-- Keep the existing contact + address block for non-therapists -->
 			<div v-if="!access[AccessPermission.THERAPIST]">
 				<p class="mb-2"><strong>Email:</strong> {{ profile.email }}</p>
 				<p class="mb-2"><strong>Phone:</strong> {{ profile.phone }}</p>
@@ -112,7 +67,6 @@
 					</div>
 				</div>
 			</div>
-
 			<p class="mt-8 mb-2">
 				<strong>Diagnosed?</strong>
 				{{ profile?.NonEmployee?.Patient?.diagnosed }}
@@ -153,63 +107,6 @@
 				>
 					No progress reports available.
 				</p>
-			</div>
-		</section>
-
-		<!-- Therapy Notes history – visible only to therapists -->
-		<section
-			v-if="access[AccessPermission.THERAPIST]"
-			class="mt-6 rounded border p-4"
-		>
-			<div class="mb-2 flex items-center justify-between">
-				<h2 class="text-xl font-semibold">Therapy Notes</h2>
-			</div>
-
-			<div v-if="!therapyNotes.length" class="text-sm text-gray-500">
-				No therapy notes recorded yet.
-			</div>
-
-			<div
-				v-for="note in therapyNotes"
-				:key="note.id"
-				class="mt-3 rounded border p-3"
-			>
-				<!-- Header row -->
-				<div class="flex items-center justify-between">
-					<div>
-						<div class="font-semibold">
-							Created: {{ formatDate(note.createdAt) }}
-						</div>
-
-						<div
-							v-if="note.updatedAt !== note.createdAt"
-							class="text-xs text-gray-500"
-						>
-							Updated: {{ formatDate(note.updatedAt) }}
-						</div>
-						<div class="text-sm text-gray-600">
-							{{
-								therapyTypes[note.therapyType] ||
-								note.therapyType
-							}}
-						</div>
-					</div>
-
-					<div class="space-x-2 text-sm">
-						<button
-							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-							@click="openViewTherapyNote(note)"
-						>
-							Open
-						</button>
-						<button
-							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-							@click="openEditTherapyNote(note)"
-						>
-							Edit
-						</button>
-					</div>
-				</div>
 			</div>
 		</section>
 
@@ -468,7 +365,7 @@
 
 			<!-- Modal Content -->
 			<div
-				class="relative z-10 max-h-9/12 w-full max-w-9/12 overflow-auto rounded bg-white p-6 shadow-md"
+				class="relative z-10 max-h-9/12 w-full max-w-3/12 overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
 				<h2 class="mb-4 text-xl font-bold">Write Progress Report</h2>
@@ -530,171 +427,6 @@
 				</form>
 			</div>
 		</div>
-		<!-- ================= MODAL: View Therapy Note ================= -->
-		<div
-			v-if="showViewNoteModal"
-			class="fixed inset-0 z-50 flex items-center justify-center"
-			aria-modal="true"
-			role="dialog"
-		>
-			<div
-				class="absolute inset-0 bg-black/70"
-				@click.self="closeViewNoteModal"
-			></div>
-
-			<div
-				class="relative z-10 max-h-9/12 w-full max-w-3/12 overflow-auto rounded bg-white p-6 shadow-md"
-				@click.stop
-			>
-				<h2 class="mb-4 text-xl font-bold">Therapy Note</h2>
-
-				<div v-if="activeNote" class="space-y-3 text-sm">
-					<p>
-						<strong>Created at:</strong>
-						{{ formatDate(activeNote.createdAt) }}
-					</p>
-
-					<p
-						v-if="
-							activeNote.updatedAt &&
-							activeNote.updatedAt !== activeNote.createdAt
-						"
-					>
-						<strong>Updated at:</strong>
-						{{ formatDate(activeNote.updatedAt) }}
-					</p>
-
-					<p>
-						<strong>Therapy:</strong>
-						{{
-							therapyTypes[activeNote.therapyType] ||
-							activeNote.therapyType
-						}}
-					</p>
-
-					<div v-if="activeNote.objectives?.length">
-						<strong
-							>Objectives worked on
-							<span v-if="activeNote.objectivesDate">
-								({{
-									formatDate(activeNote.objectivesDate)
-								}}) </span
-							>:
-						</strong>
-						<ul class="ml-4 list-disc">
-							<li v-for="o in activeNote.objectives" :key="o.id">
-								<span class="font-semibold">{{
-									o.goalLabel
-								}}</span>
-								<span v-if="o.details"> – {{ o.details }}</span>
-							</li>
-						</ul>
-					</div>
-
-					<p v-if="activeNote.otherTherapies">
-						<strong>Other therapies:</strong>
-						{{ activeNote.otherTherapies }}
-					</p>
-					<p v-if="activeNote.reinforcersUsed">
-						<strong
-							>Reinforcers used
-							<span v-if="activeNote.reinforcersDate">
-								({{
-									formatDate(activeNote.reinforcersDate)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.reinforcersUsed }}
-					</p>
-					<p v-if="activeNote.familyRecommendations">
-						<strong
-							>Recommendations
-							<span v-if="activeNote.familyRecommendationsDate">
-								({{
-									formatDate(
-										activeNote.familyRecommendationsDate
-									)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.familyRecommendations }}
-					</p>
-					<p v-if="activeNote.groupRecommendationParents">
-						<strong>Group recommendation</strong>
-						{{ activeNote.groupRecommendationParents }}
-					</p>
-					<p v-if="activeNote.goalsAchieved">
-						<strong
-							>Goals achieved
-							<span v-if="activeNote.goalsAchievedDate">
-								({{
-									formatDate(activeNote.goalsAchievedDate)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.goalsAchieved }}
-					</p>
-					<p v-if="activeNote.progressNotes">
-						<strong
-							>Progress notes
-							<span v-if="activeNote.progressNotesDate">
-								({{
-									formatDate(activeNote.progressNotesDate)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.progressNotes }}
-					</p>
-					<p v-if="activeNote.nextSessionObjectives">
-						<strong
-							>Next session objectives
-							<span v-if="activeNote.nextSessionsObjectivesDate">
-								({{
-									formatDate(
-										activeNote.nextSessionObjectivesDate
-									)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.nextSessionObjectives }}
-					</p>
-					<p v-if="activeNote.incidents">
-						<strong
-							>Incidents
-							<span v-if="activeNote.incidentsDate">
-								({{
-									formatDate(activeNote.incidentsDate)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.incidents }}
-					</p>
-					<p v-if="activeNote.generalObservations">
-						<strong
-							>General observations
-							<span v-if="activeNote.generalObservationsDate">
-								({{
-									formatDate(
-										activeNote.generalObservationsDate
-									)
-								}}) </span
-							>:
-						</strong>
-						{{ activeNote.generalObservations }}
-					</p>
-				</div>
-
-				<div class="mt-4 flex justify-end">
-					<button
-						type="button"
-						class="bg-blay px-2 hover:cursor-pointer"
-						@click="closeViewNoteModal"
-					>
-						Close
-					</button>
-				</div>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -730,7 +462,6 @@ async function getProfile() {
 }
 
 getProfile();
-loadTherapyNotes();
 
 const paid = computed(() => {
 	if (profile.value?.NonEmployee?.Patient?.Appointments) {
@@ -744,29 +475,6 @@ const paid = computed(() => {
 	}
 	return false;
 });
-
-const age = computed(() => {
-	const dobVal = profile.value?.NonEmployee?.dob;
-	if (!dobVal) return "";
-
-	const birth = new Date(dobVal);
-	const today = new Date();
-
-	let years = today.getFullYear() - birth.getFullYear();
-	const m = today.getMonth() - birth.getMonth();
-
-	if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-		years--;
-	}
-
-	return years;
-});
-
-const therapyNotes = ref([]);
-const showViewNoteModal = ref(false);
-const activeNote = ref(null);
-
-const editingNoteId = ref<number | null>(null);
 
 // Modal control flags.
 const showEditModal = ref(false);
