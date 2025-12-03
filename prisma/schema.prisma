@@ -72,7 +72,8 @@ model Patient {
   sponsorId String?
   Sponsor   Sponsor? @relation(fields: [sponsorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  Parents NonEmployee[] @relation(name: "parent")
+  Parents      NonEmployee[] @relation(name: "parent")
+  TherapyNotes TherapyNote[]
 }
 
 // define therapist specializations here
@@ -178,6 +179,58 @@ model ContactForm {
   Patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
+model TherapyNote {
+  id Int @id @default(autoincrement())
+
+  patientId String
+  Patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  therapyType String
+
+  otherTherapies String?
+
+  objectivesDate DateTime?
+
+  reinforcersUsed String?
+  reinforcersDate DateTime?
+
+  familyRecommendations     String?
+  familyRecommendationsDate DateTime?
+
+  goalsAchieved     String
+  goalsAchievedDate DateTime?
+
+  progressNotes     String
+  progressNotesDate DateTime?
+
+  nextSessionObjectives     String
+  nextSessionObjectivesDate DateTime?
+
+  incidents     String?
+  incidentsDate DateTime?
+
+  generalObservations     String
+  generalObservationsDate DateTime?
+
+  groupRecommendationParents String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  objectives TherapyNoteObjective[]
+}
+
+model TherapyNoteObjective {
+  id Int @id @default(autoincrement())
+
+  therapyNoteId Int
+  TherapyNote   TherapyNote @relation(fields: [therapyNoteId], references: [id], onDelete: Cascade)
+
+  goalKey   String?
+  goalLabel String
+  details   String? // therapist’s text for this specific goal
+}
+
 enum ContactType {
   EMAIL
   PHONE
@@ -188,9 +241,7 @@ enum UserType {
   ADMIN
   USER_SERVICE
   THERAPIST //should be unness
-  n
-  }
-
+}
 
 enum Gender {
   MALE
