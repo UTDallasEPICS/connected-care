@@ -28,19 +28,19 @@ const therapyNoteSchema = z.object({
 
 	groupRecommendationParents: z.string().optional().nullable(),
 
-	goalsAchieved: z.string().optional().nullable(),
+	goalsAchieved: z.string().min(1, "Goals Achived is required"),
 	goalsAchievedDate: z.string().optional().nullable(),
 
-	progressNotes: z.string().optional().nullable(),
+	progressNotes: z.string().min(1, "Progress Notes is required"),
 	progressNotesDate: z.string().optional().nullable(),
 
-	nextSessionObjectives: z.string().optional().nullable(),
+	nextSessionObjectives: z.string().min(1, "Objectives fro next session is required "),
 	nextSessionObjectivesDate: z.string().optional().nullable(),
 
 	incidents: z.string().optional().nullable(),
 	incidentsDate: z.string().optional().nullable(),
 
-	generalObservations: z.string().optional().nullable(),
+	generalObservations: z.string().min(1, "General Observations is required"),
 	generalObservationsDate: z.string().optional().nullable(),
 
 	objectives: z.array(objectiveSchema).optional().default([]),
@@ -100,13 +100,13 @@ export default defineEventHandler(async (event) => {
 
 			groupRecommendationParents: data.groupRecommendationParents ?? null,
 
-			goalsAchieved: data.goalsAchieved ?? null,
+			goalsAchieved: data.goalsAchieved,
 			goalsAchievedDate: parseDateOrNull(data.goalsAchievedDate),
 
-			progressNotes: data.progressNotes ?? null,
+			progressNotes: data.progressNotes,
 			progressNotesDate: parseDateOrNull(data.progressNotesDate),
 
-			nextSessionObjectives: data.nextSessionObjectives ?? null,
+			nextSessionObjectives: data.nextSessionObjectives,
 			nextSessionObjectivesDate: parseDateOrNull(
 				data.nextSessionObjectivesDate
 			),
@@ -114,7 +114,7 @@ export default defineEventHandler(async (event) => {
 			incidents: data.incidents ?? null,
 			incidentsDate: parseDateOrNull(data.incidentsDate),
 
-			generalObservations: data.generalObservations ?? null,
+			generalObservations: data.generalObservations,
 			generalObservationsDate: parseDateOrNull(
 				data.generalObservationsDate
 			),

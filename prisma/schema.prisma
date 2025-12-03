@@ -197,19 +197,19 @@ model TherapyNote {
   familyRecommendations     String?
   familyRecommendationsDate DateTime?
 
-  goalsAchieved     String?
+  goalsAchieved     String
   goalsAchievedDate DateTime?
 
-  progressNotes     String?
+  progressNotes     String
   progressNotesDate DateTime?
 
-  nextSessionObjectives     String?
+  nextSessionObjectives     String
   nextSessionObjectivesDate DateTime?
 
   incidents     String?
   incidentsDate DateTime?
 
-  generalObservations     String?
+  generalObservations     String
   generalObservationsDate DateTime?
 
   groupRecommendationParents String?

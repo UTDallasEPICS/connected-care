@@ -693,12 +693,13 @@
 					>
 						<div>
 							<label class="mb-1 block font-medium">
-								Goals achieved
+								Goals achieved <span class="text-red-500">*</span>
 							</label>
 							<textarea
 								class="input w-full"
 								rows="3"
 								v-model="goalsAchieved"
+								required
 							></textarea>
 						</div>
 						<div>
@@ -717,12 +718,13 @@
 					>
 						<div>
 							<label class="mb-1 block font-medium">
-								Progress notes (what happened in therapy)
+								Progress notes (what happened in therapy) <span class="text-red-500">*</span>
 							</label>
 							<textarea
 								class="input w-full"
 								rows="4"
 								v-model="progressNotes"
+								required
 							></textarea>
 						</div>
 						<div>
@@ -741,12 +743,13 @@
 					>
 						<div>
 							<label class="mb-1 block font-medium">
-								Objectives for next therapy session
+								Objectives for next therapy session <span class="text-red-500">*</span>
 							</label>
 							<textarea
 								class="input w-full"
 								rows="3"
 								v-model="nextSessionObjectives"
+								required
 							></textarea>
 						</div>
 						<div>
@@ -795,6 +798,7 @@
 								class="input w-full"
 								rows="3"
 								v-model="generalObservations"
+								required
 							></textarea>
 						</div>
 						<div>
@@ -1473,6 +1477,21 @@ async function updateProfile() {
 async function submitProgressReport() {
 	if (!selectedTherapy.value) {
 		alert("Please select a therapy.");
+		return;
+	}
+
+	if (!goalsAchived.value || goalsAchived.value.trim() === '') {
+		alert("Goals Achieved is required.");
+		return;
+	}
+
+	if (!progressNotes.value || progressNotes.value.trim() === '') {
+		alert("Progress Notes is required.");
+		return;
+	}
+
+	if(!nextSessionObjectives.value || nextSessionObjectives.value.trim() === '') {
+		alert("Objectives for next session is required.");
 		return;
 	}
 
