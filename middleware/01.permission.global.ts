@@ -1,5 +1,5 @@
 import { defineNuxtRouteMiddleware } from "nuxt/app";
-import { pageAccessMap } from "~/permissions";
+import { pageAccessMap, AccessPermission } from "~/permissions"; // <-- Import AccessPermission
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	const userId = useCookie("userId");
@@ -7,8 +7,15 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const permissions = accessCookie.value;
 
 	console.log(
-		"Attempting to navigating\nfrom: " + from.path + ", to: " + to.path
+		"Attempting to navigating\nfrom: " +
+			from.path +
+			", to: " +
+			to.path +
+			"\nRoute name: '" +
+			to.name +
+			"'"
 	);
+
 	// TODO, handle when navigating back to index page while logged in
 	if (to.path == "/") {
 		console.log("Navigation authorized");
@@ -17,6 +24,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	// page does not exist in pageAccessMap
 	if (!pageAccessMap[to.name]) {
+		console.log("Route not found in pageAccessMap. to.name:", to.name);
+		console.log("pageAccessMap keys:", Object.keys(pageAccessMap));
 		if (!from.path || to.path == from.path) {
 			console.log("Unknown path, navigating to index");
 			return navigateTo("/");
@@ -25,8 +34,17 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 			return abortNavigation();
 		}
 	}
-	// do not have permission to access
+
+	// Get required permission for this route
 	const requiredAccessPermission: string = pageAccessMap[to.name];
+
+	// Allow PUBLIC routes without authentication
+	if (requiredAccessPermission === AccessPermission.PUBLIC) {
+		console.log("Public route, navigation authorized");
+		return;
+	}
+
+	// For non-public routes, check if user has permission
 	if (
 		!(
 			permissions &&
@@ -42,7 +60,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 			return abortNavigation();
 		}
 	}
-	// enfore patient can only view their own profile
+
+	// enforce patient can only view their own profile
 	if (to.name === "myProfile-id" && to.params.id !== userId.value) {
 		if (!from.path || to.path == from.path) {
 			console.log("Unauthorized path, navigating to index");
@@ -52,6 +71,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 			return abortNavigation();
 		}
 	}
+
 	// enforce parent can only view their own children's profiles
 	if (to.name === "childProfile-id") {
 		// fetch children

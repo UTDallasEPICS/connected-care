@@ -3,9 +3,9 @@
 		class="font-sc-encode flex items-center justify-between bg-blue-950 p-4 text-white shadow-md"
 	>
 		<!-- Logo -->
-		<NuxtLink to="/" class="flex items-center">
+		<div @click="goToDashboard" class="flex cursor-pointer items-center">
 			<div class="text-xl font-bold">Connected Care</div>
-		</NuxtLink>
+		</div>
 
 		<!-- Hamburger menu button: visible only on mobile -->
 		<div class="sm:hidden">
@@ -134,8 +134,28 @@ const userLinks = computed(() => {
 });
 
 const isMenuOpen = ref(false);
+
 function toggleMenu() {
 	isMenuOpen.value = !isMenuOpen.value;
+}
+
+function goToDashboard() {
+	// If logged in, go to appropriate dashboard, otherwise go to landing page
+	if (userId.value && access.value) {
+		if (access.value[AccessPermission.ADMIN]) {
+			navigateTo("/admin");
+		} else if (access.value[AccessPermission.USER_SERVICE]) {
+			navigateTo("/userServiceDashboard");
+		} else if (access.value[AccessPermission.PARENT]) {
+			navigateTo("/parentDashboard");
+		} else if (access.value[AccessPermission.PATIENT]) {
+			navigateTo("/patientDashboard");
+		} else {
+			navigateTo("/Dashboard");
+		}
+	} else {
+		navigateTo("/");
+	}
 }
 
 async function logout() {
