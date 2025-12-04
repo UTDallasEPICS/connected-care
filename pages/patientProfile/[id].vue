@@ -213,63 +213,6 @@
 			</div>
 		</section>
 
-		<!-- Therapy Notes history – visible only to therapists -->
-		<section
-			v-if="access[AccessPermission.THERAPIST]"
-			class="mt-6 rounded border p-4"
-		>
-			<div class="mb-2 flex items-center justify-between">
-				<h2 class="text-xl font-semibold">Therapy Notes</h2>
-			</div>
-
-			<div v-if="!therapyNotes.length" class="text-sm text-gray-500">
-				No therapy notes recorded yet.
-			</div>
-
-			<div
-				v-for="note in therapyNotes"
-				:key="note.id"
-				class="mt-3 rounded border p-3"
-			>
-				<!-- Header row -->
-				<div class="flex items-center justify-between">
-					<div>
-						<div class="font-semibold">
-							Created: {{ formatDate(note.createdAt) }}
-						</div>
-
-						<div
-							v-if="note.updatedAt !== note.createdAt"
-							class="text-xs text-gray-500"
-						>
-							Updated: {{ formatDate(note.updatedAt) }}
-						</div>
-						<div class="text-sm text-gray-600">
-							{{
-								therapyTypes[note.therapyType] ||
-								note.therapyType
-							}}
-						</div>
-					</div>
-
-					<div class="space-x-2 text-sm">
-						<button
-							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-							@click="openViewTherapyNote(note)"
-						>
-							Open
-						</button>
-						<button
-							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-							@click="openEditTherapyNote(note)"
-						>
-							Edit
-						</button>
-					</div>
-				</div>
-			</div>
-		</section>
-
 		<!-- ================= MODAL: Edit Profile (for Patient/Parent) ================= -->
 		<div
 			v-if="showEditModal"
@@ -1097,7 +1040,7 @@
 <script setup lang="ts">
 import { computed, ref, useCookie, useFetch, useRoute } from "#imports";
 import { AccessPermission } from "~/permissions";
-import { Plus, X } from "lucide-vue-next";
+import { Plus } from "lucide-vue-next";
 import { $fetch } from "ofetch";
 
 const contactType = ["EMAIL", "PHONE", "WHATS_APP"];
@@ -1539,8 +1482,8 @@ function closeEditModal() {
 
 function closeProgressReportModal() {
 	showProgressReportModal.value = false;
-	// Reset progress report form.
-	progressReportQuestions.value = [{ question: "", answer: "" }];
+	// Reset therapy note form
+	resetTherapyNoteForm();
 }
 
 // Update the profile data from the edit form.
