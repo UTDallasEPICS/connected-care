@@ -14,6 +14,16 @@
 			>
 				Edit Profile
 			</button>
+
+			<!-- Therapist Recommendations Button -->
+			<button
+				v-if="access[AccessPermission.PATIENT]"
+				class="ml-2 rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
+				@click="openRecommendationsModal"
+			>
+				Therapist Recommendations
+			</button>
+
 			<button
 				v-if="access[AccessPermission.THERAPIST]"
 				class="btn text-nowrap hover:cursor-pointer"
@@ -179,6 +189,59 @@
 				</div>
 			</div>
 		</section>
+
+		<!-- ================= MODAL: Therapist Recommendations ============== -->
+		<div
+			v-if="showRecommendationsModal"
+			class="fixed inset-0 z-50 flex items-center justify-center"
+			aria-modal="true"
+			role="dialog"
+		>
+			<div
+				class="absolute inset-0 bg-black/70"
+				@click.self="closeRecommendationsModal"
+			></div>
+
+			<div
+				class="relative z-10 max-h-9/12 w-full max-w-3xl overflow-auto rounded bg-white p-6 shadow-md"
+				@click.stop
+			>
+				<h2 class="mb-4 text-xl font-bold">
+					Therapist Recommendations
+				</h2>
+
+				<div v-if="recommendations.length" class="space-y-3 text-sm">
+					<ul class="ml-5 list-disc">
+						<li
+							v-for="rec in recommendations"
+							:key="rec.id"
+							class="cursor-pointer hover:underline"
+							@click="viewRecommendation(rec)"
+						>
+							<strong
+								>{{
+									formatDate(rec.familyRecommendationsDate)
+								}}:</strong
+							>
+							{{ rec.familyRecommendations.slice(0, 50) }}...
+						</li>
+					</ul>
+				</div>
+				<div v-else>
+					<p>No rec available.</p>
+				</div>
+
+				<div class="mt-4 flex justify-end">
+					<button
+						type="button"
+						class="bg-blay px-2 hover:cursor-pointer"
+						@click="closeRecommendationsModal"
+					>
+						Close
+					</button>
+				</div>
+			</div>
+		</div>
 
 		<!-- ================= MODAL: Edit Profile (for Patient/Parent) ================= -->
 		<div
@@ -1292,6 +1355,41 @@ const objectivesByTherapy: Record<string, string[]> = {
 		"6. Develop gross motor skills",
 	],
 };
+
+//Therapist Recommendations Modal
+interface Recommendation {
+	id: string;
+	familyRecommendations: string;
+	familyRecommendationsDate: string;
+}
+const showRecommendationsModal = ref(false);
+const recommendations = ref<Recommendation[]>([]);
+
+function openRecommendationsModal() {
+	recommendations.value = therapyNotes.value
+		.filter((note) => note.familyRecommendations)
+		.sort(
+			(a, b) =>
+				new Date(b.familyRecommendationsDate).getTime() -
+				new Date(a.familyRecommendationsDate).getTime()
+		)
+		.map((note) => ({
+			id: note.id,
+			familyRecommendations: note.familyRecommendations.slice(0, 50),
+			familyRecommendationsDate: note.familyRecommendationsDate,
+		}));
+
+	showRecommendationsModal.value = true;
+}
+
+function closeRecommendationsModal() {
+	showRecommendationsModal.value = false;
+}
+
+function viewRecommendation(note) {
+	openViewTherapyNote(note);
+	closeRecommendationsModal();
+}
 
 // Computed list for selected therapy
 const objectivesForSelectedTherapy = computed(() => {
