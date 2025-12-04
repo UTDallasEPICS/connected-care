@@ -19,7 +19,7 @@
 				class="btn text-nowrap hover:cursor-pointer"
 				@click="openNewTherapyNote"
 			>
-				Write Progress Report
+				Write Therapy Notes
 			</button>
 		</div>
 
@@ -121,39 +121,6 @@
 				<strong>All Sessions Paid?</strong>
 				{{ paid }}
 			</p>
-
-			<!-- Progress Reports (View Only) -->
-			<div class="mt-8">
-				<h2 class="mb-2 text-xl font-semibold">Progress Reports</h2>
-				<ul class="list-disc pl-6">
-					<li
-						v-for="(report, index) in profile?.NonEmployee?.Patient
-							?.ProgressReports"
-						:key="index"
-					>
-						<strong
-							>{{ new Date(report.date).toDateString() }}:</strong
-						>
-						<ul class="pl-6">
-							<li
-								v-for="(question, index) in report?.Questions"
-								:key="index"
-							>
-								{{ index + 1 }}.
-								<strong>{{ question.question }}:</strong>
-								{{ question.answer }}
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<p
-					v-if="
-						!profile?.NonEmployee?.Patient?.ProgressReports.length
-					"
-				>
-					No progress reports available.
-				</p>
-			</div>
 		</section>
 
 		<!-- Therapy Notes history – visible only to therapists -->
