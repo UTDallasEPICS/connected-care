@@ -31,7 +31,7 @@
 					<!-- Therapist (required) -->
 					<div class="mb-4">
 						<label class="mb-1 block font-medium" for="therapist"
-							>Therapist
+							>{{ $t("Therapist") }}
 							<span class="text-red-500">*</span></label
 						>
 						<select
@@ -55,7 +55,7 @@
 					<!-- Session Type (required) -->
 					<div class="mb-4">
 						<label class="mb-1 block font-medium" for="sessionType"
-							>Session Type
+							>{{ $t("Session Type") }}
 							<span class="text-red-500">*</span></label
 						>
 						<select
@@ -94,7 +94,7 @@
 						<!-- Time Picker -->
 						<div class="w-1/2 grow flex-row">
 							<label class="mb-1 block font-medium" for="time"
-								>Time
+								>{{ $t("Time") }}
 								<span class="text-red-500">*</span>
 							</label>
 							<input
@@ -109,7 +109,7 @@
 					<!-- Duration (optional, defaults to 1) -->
 					<div class="mb-4">
 						<label class="mb-1 block font-medium" for="max"
-							>Duration (Minutes)
+							>{{ $t("Duration (Minutes)") }}
 						</label>
 						<input
 							type="number"

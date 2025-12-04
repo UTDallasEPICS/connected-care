@@ -3,9 +3,9 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"i18n:bootstrap": "node scripts/i18n-bootstrap.js",
-		"i18n:report": "node scripts/i18n-report.js",
-		"predev": "npm run i18n:report",
+		"i18n:deepl": "node scripts/i18n-deepl.js",
+		"i18n:fill": "node scripts/i18n-report.js",
+		"predev": "npm run i18n:deepl",
 		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",

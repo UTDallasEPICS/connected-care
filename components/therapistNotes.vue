@@ -5,7 +5,7 @@
 				class="w-full max-w-5xl flex-col flex-wrap font-light md:w-180"
 			>
 				<h1 class="mt-5 ml-5 text-4xl sm:mr-5 sm:ml-0">
-					Therapist’s Notes
+					{{ $t("Therapist’s Notes") }}
 				</h1>
 
 				<!-- content goes here next step -->

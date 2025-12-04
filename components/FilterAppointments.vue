@@ -24,7 +24,7 @@
 			<!-- Information -->
 			<div class="m-3 flex flex-col gap-3">
 				<h1 class="font-cormorant-garamond text-3xl font-bold">
-					Filter Appointments
+					{{ $t("Filter Appointments") }}
 				</h1>
 				<h3 class="font-bold">Tick to hide appointment:</h3>
 				<div>
@@ -46,7 +46,7 @@
 			<div class="flex flex-col justify-center gap-3">
 				<div class="flex justify-center">
 					<button class="btn cursor-pointer" @click="submitForm">
-						Submit
+						{{ $t("Submit") }}
 					</button>
 				</div>
 			</div>

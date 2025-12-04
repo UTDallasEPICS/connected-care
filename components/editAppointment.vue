@@ -107,10 +107,10 @@
 						class="bg-blay cursor-pointer px-2"
 						@click="close()"
 					>
-						Cancel
+						{{ $t("Cancel") }}
 					</button>
 					<button type="submit" class="btn cursor-pointer">
-						Save Changes
+						{{ $t("Save Changes") }}
 					</button>
 				</div>
 			</form>

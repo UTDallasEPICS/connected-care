@@ -8,11 +8,15 @@
 				Autismo
 			</p>
 			<nav class="mt-2 flex space-x-4 md:mt-0">
-				<NuxtLink to="/" class="hover:underline">Home</NuxtLink>
-				<NuxtLink to="/about" class="hover:underline">About</NuxtLink>
-				<NuxtLink to="/contact" class="hover:underline"
-					>Contact</NuxtLink
-				>
+				<NuxtLink to="/" class="hover:underline">{{
+					$t("Home")
+				}}</NuxtLink>
+				<NuxtLink to="/about" class="hover:underline">{{
+					$t("About")
+				}}</NuxtLink>
+				<NuxtLink to="/contact" class="hover:underline">{{
+					$t("Contact")
+				}}</NuxtLink>
 			</nav>
 		</div>
 	</footer>

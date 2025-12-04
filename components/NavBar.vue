@@ -138,7 +138,7 @@
 						class="py-2 text-end text-lg hover:underline"
 						@click="logout"
 					>
-						Log Out
+						{{ $t("Log Out") }}
 					</button>
 				</nav>
 			</div>
