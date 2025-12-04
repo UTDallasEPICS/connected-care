@@ -58,6 +58,8 @@ async function handleSubmit() {
 			await navigateTo("/parentDashboard");
 		} else if (access.value[AccessPermission.PATIENT]) {
 			await navigateTo("/patientDashboard");
+		} else if (access.value[AccessPermission.THERAPIST]) {
+			await navigateTo("/therapistDashboard");
 		} else {
 			await navigateTo("/Dashboard");
 		}

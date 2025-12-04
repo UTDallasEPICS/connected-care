@@ -150,6 +150,8 @@ function goToDashboard() {
 			navigateTo("/parentDashboard");
 		} else if (access.value[AccessPermission.PATIENT]) {
 			navigateTo("/patientDashboard");
+		} else if (access.value[AccessPermission.THERAPIST]) {
+			navigateTo("/therapistDashboard");
 		} else {
 			navigateTo("/Dashboard");
 		}
