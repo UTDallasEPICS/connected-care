@@ -49,11 +49,12 @@ model Patient {
   sponsorId       String?
   ContactForm     ContactForm?
   MedicalRecords  MedicalRecord[]
-  Sponsor         Sponsor?         @relation(fields: [sponsorId], references: [id])
-  User            NonEmployee      @relation(fields: [id], references: [id], onDelete: Cascade)
+  Sponsor         Sponsor?         @relation(fields: [sponsorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  User            NonEmployee      @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ProgressReports Report[]
   Appointments    SessionPatient[]
-  Parents         NonEmployee[]    @relation("parent")
+  Parents         NonEmployee[]    @relation(name: "parent")
+  TherapyNotes    TherapyNote[]
 }
 
 model Specialization {
@@ -135,6 +136,58 @@ model ContactForm {
   status        Status           @default(PROCESSING)
   patientId     String           @unique
   Patient       Patient          @relation(fields: [patientId], references: [id], onDelete: Cascade)
+}
+
+model TherapyNote {
+  id Int @id @default(autoincrement())
+
+  patientId String
+  Patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  therapyType String
+
+  otherTherapies String?
+
+  objectivesDate DateTime?
+
+  reinforcersUsed String?
+  reinforcersDate DateTime?
+
+  familyRecommendations     String?
+  familyRecommendationsDate DateTime?
+
+  goalsAchieved     String
+  goalsAchievedDate DateTime?
+
+  progressNotes     String
+  progressNotesDate DateTime?
+
+  nextSessionObjectives     String
+  nextSessionObjectivesDate DateTime?
+
+  incidents     String?
+  incidentsDate DateTime?
+
+  generalObservations     String
+  generalObservationsDate DateTime?
+
+  groupRecommendationParents String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  objectives TherapyNoteObjective[]
+}
+
+model TherapyNoteObjective {
+  id Int @id @default(autoincrement())
+
+  therapyNoteId Int
+  TherapyNote   TherapyNote @relation(fields: [therapyNoteId], references: [id], onDelete: Cascade)
+
+  goalKey   String?
+  goalLabel String
+  details   String? // therapist’s text for this specific goal
 }
 
 enum ContactType {

@@ -18,21 +18,26 @@ enum AccessPermission {
 const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Public Pages
 	index: AccessPermission.PUBLIC,
+	login: AccessPermission.PUBLIC,
 	contactForm: AccessPermission.PUBLIC,
 	// All User Pages
 	dashboard: AccessPermission.USER,
 	scheduleView: AccessPermission.USER,
 	// Patient Pages
 	"myProfile-id": AccessPermission.PATIENT,
+	patientDashboard: AccessPermission.PATIENT,
 	// Parent Pages
 	childSearch: AccessPermission.PARENT,
+	parentDashboard: AccessPermission.PARENT,
 	"childProfile-id": AccessPermission.PARENT,
 	// All Staff Pages
 	patientSearch: AccessPermission.STAFF,
 	"patientProfile-id": AccessPermission.STAFF,
 	viewContactForms: AccessPermission.STAFF,
 	// Therapist Pages
+	therapistDashboard: AccessPermission.THERAPIST,
 	// User Service Pages
+	userServiceDashboard: AccessPermission.USER_SERVICE,
 	// Admin Pages
 	admin: AccessPermission.ADMIN,
 	employeeSearch: AccessPermission.ADMIN,

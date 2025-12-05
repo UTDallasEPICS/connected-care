@@ -1,66 +1,39 @@
 <template>
-	<div class="flex items-center justify-center gap-16">
-		<form class="flex w-70 flex-col gap-5" @submit.prevent="handleSubmit">
-			<input
-				required
-				type="text"
-				v-model="email"
-				placeholder="User's Email"
-				class="rounded-md bg-slate-100 p-2 outline-2 outline-blue-950 outline-solid"
-			/>
-			<button class="rounded-md bg-blue-950 p-2 text-white">
-				Submit
-			</button>
-		</form>
-		<p>or</p>
-		<NuxtLink
-			class="w-70 rounded-md bg-blue-950 p-2 text-center text-white"
-			to="/ContactForm"
-		>
-			Submit Contact Form
-		</NuxtLink>
+	<div class="font-karla">
+		<div class="flex min-h-[70vh] flex-col items-center justify-center">
+			<!-- Logo -->
+			<img src="/manos-unidas-logo.jpg" alt="Logo" class="mb-16 w-60" />
+
+			<!-- Buttons -->
+			<div class="flex w-64 flex-col gap-4">
+				<!-- Login Button -->
+				<button
+					@click="goToLogin"
+					class="rounded-md bg-blue-950 px-8 py-4 text-center text-lg font-medium text-white transition hover:bg-blue-900"
+				>
+					Log In
+				</button>
+
+				<!-- Sign Up Button -->
+				<button
+					@click="goToSignUp"
+					class="rounded-md border-2 border-blue-950 bg-white px-8 py-4 text-center text-lg font-medium text-blue-950 transition hover:bg-gray-50"
+				>
+					Sign Up
+				</button>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "vue";
-import { $fetch } from "ofetch";
-import {
-	ref,
-	useCookie,
-	refreshCookie,
-	reloadNuxtApp,
-	useFetch,
-	navigateTo,
-} from "#imports";
-import { AccessPermission } from "~/permissions";
+import { navigateTo } from "#imports";
 
-const email = ref("");
-const userId = useCookie("userId");
-const access = useCookie("AccessPermission");
+function goToLogin() {
+	navigateTo("/login");
+}
 
-onMounted(async () => {
-	await $fetch("/api/updatePermissions", {
-		method: "GET",
-	});
-	refreshCookie("AccessPermission");
-
-	if (userId.value && access.value) {
-		if (access.value[AccessPermission.ADMIN]) {
-			await navigateTo("/admin");
-		} else {
-			await navigateTo("/Dashboard");
-		}
-	}
-});
-
-async function handleSubmit() {
-	await useFetch("/api/login", {
-		method: "GET",
-		query: { email },
-	});
-	refreshCookie("userId");
-	refreshCookie("AccessPermission");
-	reloadNuxtApp();
+function goToSignUp() {
+	navigateTo("/contactForm");
 }
 </script>

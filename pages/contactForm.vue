@@ -2,7 +2,7 @@
 	<!--div container for the whole app-->
 	<div class="font-karla">
 		<!--div container for the contact form-->
-		<div class="flex h-auto place-content-center">
+		<div class="flex h-auto place-content-center overflow-y-auto">
 			<div class="flex-col flex-wrap font-light md:w-180">
 				<!--Title of contact form-->
 				<h1 class="mt-5 ml-5 text-4xl sm:mr-5 sm:ml-0">
@@ -145,6 +145,38 @@
 								</div>
 							</div>
 
+							<div
+								class="flex h-auto w-full flex-col gap-3 sm:flex-row sm:gap-7"
+							>
+								<div class="flex flex-col">
+									<label class="">Medication:</label>
+									<input
+										class="input w-70 sm:w-full"
+										type="text"
+										v-model="data.medication"
+									/>
+								</div>
+
+								<div class="flex flex-col">
+									<label class="">Allergies:</label>
+									<input
+										class="input w-70 sm:w-full"
+										type="text"
+										v-model="data.allergies"
+										placeholder="List any allergies"
+									/>
+								</div>
+
+								<div class="flex flex-col">
+									<label class="">Diet:</label>
+									<input
+										class="input w-70 sm:w-full"
+										type="text"
+										v-model="data.diet"
+										placeholder="Dietary restrictions/prefences"
+									/>
+								</div>
+							</div>
 							<div
 								class="flex h-auto w-full flex-col gap-3 sm:flex-row sm:gap-7"
 							>
@@ -478,7 +510,7 @@
 								<label
 									>{{
 										$t(
-											"Have you been a paitent previously with us?"
+											"Have you been a patient previously with us?"
 										)
 									}}
 									<span class="text-red-500">*</span>
@@ -654,6 +686,9 @@ const data = reactive<{
 	age: string;
 	DOB: string;
 	nationality: string;
+	medication: string;
+	allergies: string;
+	diet: string;
 	parentFirstName: string;
 	parentLastName: string;
 	ID: string;
@@ -678,6 +713,9 @@ const data = reactive<{
 	age: "",
 	DOB: "",
 	nationality: "",
+	medication: "",
+	allergies: "",
+	diet: "",
 	parentFirstName: "",
 	parentLastName: "",
 	ID: "",
@@ -724,6 +762,9 @@ async function handleSubmit() {
 		gender: gender.value.toUpperCase(),
 		dob: new Date(data.DOB),
 		nationality: data.nationality,
+		medication: data.medication,
+		allergies: data.allergies,
+		diet: data.diet,
 		streetName: data.address1.substring(data.address1.indexOf(" ") + 1),
 		streetNum: Number(
 			data.address1.substring(0, data.address1.indexOf(" "))
@@ -770,6 +811,9 @@ function clearForm() {
 	data.age = "";
 	data.DOB = "";
 	data.nationality = "";
+	data.medication = "";
+	data.allergies = "";
+	data.diet = "";
 	data.parentFirstName = "";
 	data.parentLastName = "";
 	data.ID = "";
