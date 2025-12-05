@@ -12,7 +12,13 @@ const postCodes = [
 ];
 
 const createPostCodes = async () => {
-	await prisma.postCodeCity.createMany({ data: postCodes });
+	for (const code of postCodes) {
+		await prisma.postCodeCity.upsert({
+			where: { postCode: code.postCode },
+			update: {},
+			create: code,
+		});
+	}
 };
 
 const therapistSpecializations = [
@@ -30,7 +36,9 @@ const specializationIds = [];
 const createSpecializations = async () => {
 	for (const specialization of therapistSpecializations) {
 		const { id } = await prisma.specialization.upsert({
-			data: { name: specialization },
+			where: { name: specialization },
+			update: {},
+			create: { name: specialization },
 		});
 		specializationIds.push(id);
 	}

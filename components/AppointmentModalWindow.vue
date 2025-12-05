@@ -27,22 +27,23 @@
 					{{ props.session.Type.name + " - " + duration }}
 				</h1>
 				<h2 class="text-xl">
-					Therapist: {{ props.session.Therapist.fName }}
+					{{ $t("Therapist") }}: {{ props.session.Therapist.fName }}
 				</h2>
 				<h3 class="font-bold" v-if="!permissions.nonEmployee">
-					Maximum Patients: {{ props.session.maxAttendance }}
+					{{ $t("Maximum Patients") }}:
+					{{ props.session.maxAttendance }}
 				</h3>
 				<h3 class="font-bold" v-else>
-					Space Left: {{ remainingSpace }}
+					{{ $t("Space Left") }}: {{ remainingSpace }}
 				</h3>
 				<button
 					class="grid cursor-pointer grid-cols-2 bg-blue-950 text-white"
 					@click="showPatients = !showPatients"
 					v-if="!permissions.nonEmployee"
 				>
-					<span class="col-span-1 px-2 py-1 text-left font-bold"
-						>Patients Attending</span
-					>
+					<span class="col-span-1 px-2 py-1 text-left font-bold">{{
+						$t("Patients Attending")
+					}}</span>
 					<span class="col-span-1 flex justify-end px-2 py-1">
 						<ChevronDown v-if="!showPatients" />
 						<ChevronUp v-else />
@@ -63,19 +64,22 @@
 							}}
 						</div>
 						<div class="col-span-1 text-center">
-							Age: {{ getAge(patient.Patient.User.dob) }}
+							{{ $t("Age") }}:
+							{{ getAge(patient.Patient.User.dob) }}
 						</div>
 						<div class="col-span-1 text-center">
-							Gender:
+							{{ $t("Gender") }}:
 							{{ getGender(patient.Patient.User.gender) }}
 						</div>
 						<div
 							class="col-span-1 px-3 text-right text-xs text-blue-400"
 						>
-							View Profile &gt;
+							{{ $t("View Profile") }} &gt;
 						</div>
 					</div>
-					<div v-if="!props.session.Patients.length">No patients</div>
+					<div v-if="!props.session.Patients.length">
+						{{ $t("No patients") }}
+					</div>
 				</div>
 				<div
 					v-if="
@@ -85,7 +89,7 @@
 						!permissions.nonEmployee
 					"
 				>
-					<h3 class="font-bold">Comments:</h3>
+					<h3 class="font-bold">{{ $t("Comments") }}</h3>
 					<div>{{ props.session.comment }}</div>
 				</div>
 			</div>
@@ -96,7 +100,7 @@
 						class="btn cursor-pointer"
 						v-if="!permissions.nonEmployee"
 					>
-						Therapy Notes
+						{{ $t("Therapy Notes") }}
 					</button>
 				</div>
 				<div class="flex justify-center">
@@ -108,7 +112,7 @@
 						"
 						@click="showEditAppointment()"
 					>
-						Edit Appointment
+						{{ $t("Edit Appointment") }}
 					</button>
 				</div>
 			</div>
