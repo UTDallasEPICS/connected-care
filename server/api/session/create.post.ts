@@ -5,7 +5,12 @@ const prisma = new PrismaClient();
 
 const sessionSchema = z.object({
 	typeId: z.string(),
-	time: z.coerce.date(),
+	time: z.coerce.date().refine(
+		(date) => date >= new Date(),
+		{
+			message: "Appointment time cannot be in the past",
+		}
+	),
 	comment: z.string().optional(),
 	maxAttendance: z.number().gte(1),
 	therapistId: z.string(),

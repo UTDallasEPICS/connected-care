@@ -86,6 +86,7 @@
 							<input
 								type="date"
 								v-model="form.date"
+								:min="minDate"
 								required
 								class="input w-full"
 							/>
@@ -222,6 +223,15 @@ const typeOptions = computed(() =>
 	}))
 );
 
+// Compute today's date in YYYY-MM-DD format for the min attribute
+const minDate = computed(() => {
+	const today = new Date();
+	const year = today.getFullYear();
+	const month = String(today.getMonth() + 1).padStart(2, '0');
+	const day = String(today.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+});
+
 function enforceMin() {
 	if (form.max < 1 || isNaN(form.max)) form.max = 1;
 	if (form.duration < 1 || isNaN(form.duration)) form.duration = 1;
@@ -237,6 +247,13 @@ async function submitForm() {
 
 	// 2) build the create.post.ts payload
 	const dateTime = new Date(`${form.date}T${form.time}`);
+	
+	// Check if the appointment is in the past
+	const now = new Date();
+	if (dateTime < now) {
+		alert("Cannot create appointments in the past. Please select a future date and time.");
+		return;
+	}
 
 	const payload = {
 		therapistId: form.therapist, // string
