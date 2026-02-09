@@ -1553,6 +1553,8 @@ function closeProgressReportModal() {
 
 // Update the profile data from the edit form.
 async function updateProfile() {
+	profileEdits.value.NonEmployee.gender = genderEdit.value;
+
 	await $fetch("/api/profile/patient", {
 		method: "Put",
 		body: {
