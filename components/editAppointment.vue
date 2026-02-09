@@ -185,13 +185,20 @@ async function submitForm() {
 	const sessionTime = new Date(
 		form.date && form.time ? `${form.date}T${form.time}:00` : ""
 	);
+
+	const MAX_PATIENTS = 20; //Max Patients should be between 1 and 20 which is reasonable before being fetched into the database
+	const maxPatients = Number(form.max);
+	if (isNaN(maxPatients) || maxPatients < 1 || maxPatients > MAX_PATIENTS) {
+		alert(`Max patients must be a number between 1 and ${MAX_PATIENTS}`);
+		return;
+	}
 	const sessionData = {
 		id: props.session.id,
 		therapistId: form.therapist,
 		typeId: form.sessionType,
 		time: sessionTime.toISOString(),
 		duration: form.duration,
-		maxAttendance: form.max,
+		maxAttendance: maxPatients,
 		comment: form.comments,
 	};
 
