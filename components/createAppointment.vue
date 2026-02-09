@@ -229,7 +229,13 @@ function enforceMin() {
 
 // Submit form handler
 async function submitForm() {
-	// 1) basic client-side validation
+	const MAX_PATIENTS = 20; //Max Patients should be between 1 and 20 which is reasonable before being fetched into the database
+	const maxPatients = Number(form.max);
+	if (isNaN(maxPatients) || maxPatients < 1 || maxPatients > MAX_PATIENTS) {
+		alert(`Max patients must be a number between 1 and ${MAX_PATIENTS}`);
+		return;
+	}
+
 	if (!form.therapist || !form.sessionType || !form.date || !form.time) {
 		alert("Please fill out all required fields.");
 		return;
@@ -243,7 +249,7 @@ async function submitForm() {
 		typeId: form.sessionType, // string
 		time: dateTime, // JS Date
 		duration: form.duration, // number ≥1
-		maxAttendance: form.max, // number ≥1
+		maxAttendance: maxPatients, // number ≥1
 		comment: form.comments || undefined,
 	};
 

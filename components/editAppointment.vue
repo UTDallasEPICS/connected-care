@@ -192,6 +192,7 @@ async function submitForm() {
 		alert(`Max patients must be a number between 1 and ${MAX_PATIENTS}`);
 		return;
 	}
+
 	const sessionData = {
 		id: props.session.id,
 		therapistId: form.therapist,
