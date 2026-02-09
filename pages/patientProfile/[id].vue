@@ -1553,7 +1553,7 @@ function closeProgressReportModal() {
 
 // Update the profile data from the edit form.
 async function updateProfile() {
-	profileEdits.value.NonEmployee.gender = genderEdit.value;
+	profileEdits.value.NonEmployee.gender = genderEdit.value; // Value of GenderEdit should be saved in ProfileEdits dict in Schema
 
 	await $fetch("/api/profile/patient", {
 		method: "Put",
