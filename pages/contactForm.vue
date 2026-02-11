@@ -6,7 +6,7 @@
 			<div class="flex-col flex-wrap font-light md:w-180">
 				<!--Title of contact form-->
 				<h1 class="mt-5 ml-5 text-4xl sm:mr-5 sm:ml-0">
-					Patient Contact Form
+					Patient Sign-Up Form
 				</h1>
 
 				<!--div container for the form-->
