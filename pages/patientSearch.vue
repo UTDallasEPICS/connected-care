@@ -33,8 +33,8 @@
 				<tr
 					v-for="user in filteredUsers"
 					:key="user.id"
-					@click="goToProfile(user.id)"
 					class="cursor-pointer border-t hover:bg-gray-100"
+					@click="goToProfile(user.id)"
 				>
 					<td class="px-4 py-2">{{ user.name }}</td>
 					<td class="px-4 py-2">{{ user.age ?? "—" }}</td>
@@ -59,7 +59,7 @@
 import { ref, computed } from "vue";
 import { useFetch, useCookie, navigateTo } from "#imports";
 import { Search } from "lucide-vue-next";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 
 const userId = useCookie("userId");
 const access = useCookie("AccessPermission");

@@ -2,7 +2,7 @@
 	<div class="font-sc-encode p-4">
 		<!-- Dashboard Header -->
 		<div class="mb-4 flex flex-row items-center">
-			<h1 class="font-cormorant-garamond text-3xl font-bold text-nowrap">
+			<h1 class="font-cormorant-garamond text-nowrap text-3xl font-bold">
 				User Profile
 			</h1>
 			<!-- Edit Profile Button -->
@@ -102,7 +102,7 @@
 					<strong>Contact Preference:</strong>
 					{{ profile.contactPref }}
 				</p>
-				<div class="mt-8 mb-2">
+				<div class="mb-2 mt-8">
 					<strong>Address:</strong>
 					<div class="pl-12">
 						<div v-if="profile?.NonEmployee?.buildingNum">
@@ -123,7 +123,7 @@
 				</div>
 			</div>
 
-			<p class="mt-8 mb-2">
+			<p class="mb-2 mt-8">
 				<strong>Diagnosed?</strong>
 				{{ profile?.NonEmployee?.Patient?.diagnosed }}
 			</p>
@@ -203,7 +203,7 @@
 			></div>
 
 			<div
-				class="relative z-10 max-h-9/12 w-full max-w-3xl overflow-auto rounded bg-white p-6 shadow-md"
+				class="max-h-9/12 relative z-10 w-full max-w-3xl overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
 				<h2 class="mb-4 text-xl font-bold">
@@ -258,7 +258,7 @@
 
 			<!-- Modal Content -->
 			<div
-				class="relative z-10 w-full max-w-7/12 overflow-y-auto bg-white p-6 shadow-md"
+				class="max-w-7/12 relative z-10 w-full overflow-y-auto bg-white p-6 shadow-md"
 				@click.stop
 			>
 				<h2 class="mb-4 text-xl font-bold">Edit Profile</h2>
@@ -272,22 +272,22 @@
 								First Name <span class="text-red-500">*</span>
 							</label>
 							<input
-								type="text"
 								id="fname"
 								v-model="profileEdits.fName"
+								type="text"
 								required
 								class="input w-full"
 								placeholder="Enter your first name"
 							/>
 						</div>
-						<div class="w-full lg:w-lg 2xl:w-xl">
+						<div class="lg:w-lg 2xl:w-xl w-full">
 							<label class="mb-1 block font-medium" for="minit">
 								Middle Initial
 							</label>
 							<input
-								type="text"
 								id="minit"
 								v-model="profileEdits.mInit"
+								type="text"
 								class="input w-full"
 								placeholder="Enter your initial"
 							/>
@@ -297,9 +297,9 @@
 								Last Name <span class="text-red-500">*</span>
 							</label>
 							<input
-								type="text"
 								id="lname"
 								v-model="profileEdits.lName"
+								type="text"
 								required
 								class="input w-full"
 								placeholder="Enter your last name"
@@ -313,9 +313,9 @@
 							DOB <span class="text-red-500">*</span>
 						</label>
 						<input
-							type="date"
 							id="dob"
 							v-model="dob"
+							type="date"
 							required
 							class="input w-full"
 							placeholder="Enter your email"
@@ -327,7 +327,7 @@
 						<label class="mb-1 block font-medium">
 							Gender <span class="text-red-500">*</span>
 						</label>
-						<select class="input w-full" v-model="genderEdit">
+						<select v-model="genderEdit" class="input w-full">
 							<option
 								v-for="(type, index) in gender"
 								:key="index"
@@ -343,9 +343,9 @@
 							Email <span class="text-red-500">*</span>
 						</label>
 						<input
-							type="email"
 							id="email"
 							v-model="profileEdits.email"
+							type="email"
 							required
 							class="input w-full"
 							placeholder="Enter your email"
@@ -358,9 +358,9 @@
 							Phone <span class="text-red-500">*</span>
 						</label>
 						<input
-							type="text"
 							id="phone"
 							v-model="profileEdits.phone"
+							type="text"
 							required
 							class="input w-full"
 							placeholder="Enter your phone number"
@@ -373,9 +373,9 @@
 							What's App <span class="text-red-500">*</span>
 						</label>
 						<input
-							type="text"
 							id="whatsapp"
 							v-model="profileEdits.whatsApp"
+							type="text"
 							required
 							class="input w-full"
 							placeholder="Enter your what's app number"
@@ -389,8 +389,8 @@
 							<span class="text-red-500">*</span>
 						</label>
 						<select
-							class="input w-full"
 							v-model="profileEdits.contactPref"
+							class="input w-full"
 						>
 							<option
 								v-for="(type, index) in contactType"
@@ -410,9 +410,9 @@
 								Address
 							</label>
 							<input
-								type="text"
 								id="address"
 								v-model="addressEdit"
+								type="text"
 								class="input w-full"
 								placeholder="Enter your address"
 							/>
@@ -422,9 +422,9 @@
 								Building Number
 							</label>
 							<input
-								type="number"
 								id="address"
 								v-model="buildNumEdit"
+								type="number"
 								class="input w-full"
 								placeholder="Enter your address"
 							/>
@@ -440,9 +440,9 @@
 								City <span class="text-red-500">*</span>
 							</label>
 							<input
-								type="text"
 								id="city"
 								v-model="cityEdit"
+								type="text"
 								required
 								class="input w-full"
 								placeholder="Enter your city"
@@ -456,9 +456,9 @@
 								Post Code <span class="text-red-500">*</span>
 							</label>
 							<input
-								type="number"
 								id="postcode"
 								v-model="postCodeEdit"
+								type="number"
 								required
 								class="input w-full"
 								placeholder="Enter your post code"
@@ -498,7 +498,7 @@
 
 			<!-- Modal Content -->
 			<div
-				class="relative z-10 max-h-9/12 w-full max-w-9/12 overflow-auto rounded bg-white p-6 shadow-md"
+				class="max-h-9/12 max-w-9/12 relative z-10 w-full overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
 				<h2 class="mb-4 text-xl font-bold">Therapy Note</h2>
@@ -512,8 +512,8 @@
 								<span class="text-red-500">*</span>
 							</label>
 							<select
-								class="input w-full"
 								v-model="selectedTherapy"
+								class="input w-full"
 								required
 								@change="
 									selectedObjectives = [];
@@ -556,7 +556,7 @@
 									<!-- SECTION HEADER -->
 									<div
 										v-if="item.header"
-										class="mt-3 mb-1 border-b border-gray-300 text-xs font-bold text-blue-700 uppercase"
+										class="mb-1 mt-3 border-b border-gray-300 text-xs font-bold uppercase text-blue-700"
 									>
 										{{ item.header }}
 									</div>
@@ -564,7 +564,7 @@
 									<!-- SUB-SECTION LABEL -->
 									<div
 										v-else-if="item.subheader"
-										class="mt-2 mb-1 text-sm font-semibold text-gray-700"
+										class="mb-1 mt-2 text-sm font-semibold text-gray-700"
 									>
 										{{ item.subheader }}
 									</div>
@@ -575,11 +575,11 @@
 										class="ml-4 flex items-center gap-2"
 									>
 										<input
-											type="checkbox"
-											class="h-4 w-4"
+											v-model="selectedObjectives"
 											:id="`obj-${item}`"
 											:value="item"
-											v-model="selectedObjectives"
+											type="checkbox"
+											class="h-4 w-4"
 										/>
 										<label
 											:for="`obj-${item}`"
@@ -613,10 +613,10 @@
 									{{ objectiveKey }}
 								</div>
 								<textarea
-									class="input w-full"
-									rows="2"
 									v-model="objectiveDetails[objectiveKey]"
 									:placeholder="`Details for: ${objectiveKey}`"
+									class="input w-full"
+									rows="2"
 								></textarea>
 							</div>
 						</div>
@@ -629,9 +629,9 @@
 						<div class="mt-3">
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="objectivesDate"
 								type="date"
 								class="input w-full md:w-1/3"
-								v-model="objectivesDate"
 							/>
 						</div>
 					</div>
@@ -659,9 +659,9 @@
 							>
 								<div class="flex items-center gap-2">
 									<input
+										v-model="cg.label"
 										type="text"
 										class="input w-full"
-										v-model="cg.label"
 										placeholder="Goal name (e.g., 'Other: XYZ')"
 									/>
 									<button
@@ -673,9 +673,9 @@
 									</button>
 								</div>
 								<textarea
+									v-model="cg.details"
 									class="input w-full"
 									rows="2"
-									v-model="cg.details"
 									placeholder="Details for this other goal"
 								></textarea>
 							</div>
@@ -695,17 +695,17 @@
 								Reinforcers used (if applicable)
 							</label>
 							<textarea
+								v-model="reinforcersUsed"
 								class="input w-full"
 								rows="2"
-								v-model="reinforcersUsed"
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="reinforcersDate"
 								type="date"
 								class="input w-full"
-								v-model="reinforcersDate"
 							/>
 						</div>
 					</div>
@@ -719,33 +719,33 @@
 								Recommendations for the family and/or user
 							</label>
 							<textarea
+								v-model="familyRecommendations"
 								class="input w-full"
 								rows="3"
-								v-model="familyRecommendations"
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="familyRecommendationsDate"
 								type="date"
 								class="input w-full"
-								v-model="familyRecommendationsDate"
 							/>
 						</div>
 					</div>
 
 					<!-- Group recommendation for parents (Independent Living, etc.) -->
 					<div
-						class="mb-4"
 						v-if="selectedTherapy === 'INDEPENDENT_LIVING'"
+						class="mb-4"
 					>
 						<label class="mb-1 block font-medium">
 							Group recommendation for parents
 						</label>
 						<textarea
+							v-model="groupRecommendationParents"
 							class="input w-full"
 							rows="3"
-							v-model="groupRecommendationParents"
 							placeholder="Group recommendation directed to parents"
 						></textarea>
 					</div>
@@ -760,18 +760,18 @@
 								<span class="text-red-500">*</span>
 							</label>
 							<textarea
+								v-model="goalsAchieved"
 								class="input w-full"
 								rows="3"
-								v-model="goalsAchieved"
 								required
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="goalsAchievedDate"
 								type="date"
 								class="input w-full"
-								v-model="goalsAchievedDate"
 							/>
 						</div>
 					</div>
@@ -786,18 +786,18 @@
 								<span class="text-red-500">*</span>
 							</label>
 							<textarea
+								v-model="progressNotes"
 								class="input w-full"
 								rows="4"
-								v-model="progressNotes"
 								required
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="progressNotesDate"
 								type="date"
 								class="input w-full"
-								v-model="progressNotesDate"
 							/>
 						</div>
 					</div>
@@ -812,18 +812,18 @@
 								<span class="text-red-500">*</span>
 							</label>
 							<textarea
+								v-model="nextSessionObjectives"
 								class="input w-full"
 								rows="3"
-								v-model="nextSessionObjectives"
 								required
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="nextSessionObjectivesDate"
 								type="date"
 								class="input w-full"
-								v-model="nextSessionObjectivesDate"
 							/>
 						</div>
 					</div>
@@ -837,17 +837,17 @@
 								Incidents (if applicable)
 							</label>
 							<textarea
+								v-model="incidents"
 								class="input w-full"
 								rows="3"
-								v-model="incidents"
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="incidentsDate"
 								type="date"
 								class="input w-full"
-								v-model="incidentsDate"
 							/>
 						</div>
 					</div>
@@ -861,18 +861,18 @@
 								General observations
 							</label>
 							<textarea
+								v-model="generalObservations"
 								class="input w-full"
 								rows="3"
-								v-model="generalObservations"
 								required
 							></textarea>
 						</div>
 						<div>
 							<label class="mb-1 block font-medium"> Date </label>
 							<input
+								v-model="generalObservationsDate"
 								type="date"
 								class="input w-full"
-								v-model="generalObservationsDate"
 							/>
 						</div>
 					</div>
@@ -912,7 +912,7 @@
 			></div>
 
 			<div
-				class="relative z-10 max-h-9/12 w-full max-w-3/12 overflow-auto rounded bg-white p-6 shadow-md"
+				class="max-h-9/12 max-w-3/12 relative z-10 w-full overflow-auto rounded bg-white p-6 shadow-md"
 				@click.stop
 			>
 				<h2 class="mb-4 text-xl font-bold">Therapy Note</h2>
@@ -1069,7 +1069,7 @@
 
 <script setup lang="ts">
 import { computed, ref, useCookie, useFetch, useRoute } from "#imports";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 import { Plus } from "lucide-vue-next";
 import { $fetch } from "ofetch";
 

@@ -4,16 +4,16 @@
 <template>
 	<!-- Background -->
 	<div
-		class="fixed top-0 right-0 z-50 h-full w-full bg-black/70"
+		class="fixed right-0 top-0 z-50 h-full w-full bg-black/70"
 		@click="closeWindow"
 	></div>
 
 	<div
-		class="font-sc-encode fixed top-0 right-0 z-51 h-full w-full items-center text-left"
+		class="font-sc-encode z-51 fixed right-0 top-0 h-full w-full items-center text-left"
 	>
 		<!-- Window -->
 		<div
-			class="text-md relative z-52 m-7 flex max-h-7/8 flex-col overflow-y-auto bg-white p-4 text-black"
+			class="text-md z-52 max-h-7/8 relative m-7 flex flex-col overflow-y-auto bg-white p-4 text-black"
 		>
 			<div
 				class="flex cursor-pointer justify-end pr-2 text-right"
@@ -29,17 +29,17 @@
 				<h2 class="text-xl">
 					{{ $t("Therapist") }}: {{ props.session.Therapist.fName }}
 				</h2>
-				<h3 class="font-bold" v-if="!permissions.nonEmployee">
+				<h3 v-if="!permissions.nonEmployee" class="font-bold">
 					{{ $t("Maximum Patients") }}:
 					{{ props.session.maxAttendance }}
 				</h3>
-				<h3 class="font-bold" v-else>
+				<h3 v-else class="font-bold">
 					{{ $t("Space Left") }}: {{ remainingSpace }}
 				</h3>
 				<button
+					v-if="!permissions.nonEmployee"
 					class="grid cursor-pointer grid-cols-2 bg-blue-950 text-white"
 					@click="showPatients = !showPatients"
-					v-if="!permissions.nonEmployee"
 				>
 					<span class="col-span-1 px-2 py-1 text-left font-bold">{{
 						$t("Patients Attending")
@@ -97,19 +97,19 @@
 			<div class="flex flex-col justify-center gap-3">
 				<div class="flex justify-center">
 					<button
-						class="btn cursor-pointer"
 						v-if="!permissions.nonEmployee"
+						class="btn cursor-pointer"
 					>
 						{{ $t("Therapy Notes") }}
 					</button>
 				</div>
 				<div class="flex justify-center">
 					<button
-						class="btn cursor-pointer"
 						v-if="
 							!permissions.nonEmployee &&
 							permissions.editAppointments
 						"
+						class="btn cursor-pointer"
 						@click="showEditAppointment()"
 					>
 						{{ $t("Edit Appointment") }}
@@ -117,7 +117,7 @@
 				</div>
 			</div>
 
-			<div class="mt-5 mb-10 flex justify-center" v-if="showEdit">
+			<div v-if="showEdit" class="mb-10 mt-5 flex justify-center">
 				<editAppointment
 					:session="props.session"
 					@close-edit="showEditAppointment()"
@@ -131,7 +131,7 @@
 import { computed, ref, useCookie, navigateTo } from "#imports";
 import type { Session } from "@prisma/client";
 import { X, ChevronDown, ChevronUp } from "lucide-vue-next";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 import { Gender } from "@prisma/client";
 
 const props = defineProps<{
@@ -147,7 +147,7 @@ function closeWindow() {
 const access = useCookie("AccessPermission");
 
 const permissions = computed(() => {
-	let actions = {
+	const actions = {
 		nonEmployee: true, // patient = true, user service/admin/therapist = false
 		editAppointments: false, // user service = true, admin/patient/therapist = false
 	};
@@ -189,7 +189,7 @@ const duration = computed(() => {
 	const startMins = date.getMinutes();
 
 	// get end time
-	let endTime = getSessionEndTime(date, props.session.duration);
+	const endTime = getSessionEndTime(date, props.session.duration);
 	const endHour = endTime.getHours();
 	const endMins = endTime.getMinutes();
 
@@ -205,7 +205,7 @@ const duration = computed(() => {
 });
 
 function getSessionEndTime(d: Date, sessionLength: number): Date {
-	let endTime = new Date(d.getTime());
+	const endTime = new Date(d.getTime());
 	endTime.setMinutes(d.getMinutes() + sessionLength);
 	return endTime;
 }

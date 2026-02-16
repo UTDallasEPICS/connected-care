@@ -5,22 +5,22 @@
 <template>
 	<div class="font-sc-encode overflow-auto">
 		<!-- Header part -->
-		<div class="grid min-w-2xl grid-cols-11 text-center">
-			<div class="bg-blay col-span-1 min-w-15 text-xl">
+		<div class="min-w-2xl grid grid-cols-11 text-center">
+			<div class="bg-blay min-w-15 col-span-1 text-xl">
 				<div class="row-span-1 overflow-hidden">Time</div>
 			</div>
 			<div
-				class="bg-blay col-span-2 text-xl"
 				v-for="day in dayNames"
 				:key="day"
+				class="bg-blay col-span-2 text-xl"
 			>
 				<div class="row-span-1 overflow-hidden">
 					{{ day }}
 				</div>
 			</div>
 			<!-- Times -->
-			<div class="col-span-1 min-w-15">
-				<div class="row-span-4 flex-none" v-for="hr in hours" :key="hr">
+			<div class="min-w-15 col-span-1">
+				<div v-for="hr in hours" :key="hr" class="row-span-4 flex-none">
 					<div class="h-24px border-smoky border-1">
 						<b>{{ militaryTimeToTwelveHr(hr) }}</b>
 					</div>
@@ -32,9 +32,9 @@
 
 			<!-- Appointments -->
 			<div
-				class="border-smoky bg-pearl col-span-2 overflow-hidden border-1"
 				v-for="day in 5"
 				:key="day"
+				class="border-smoky bg-pearl border-1 col-span-2 overflow-hidden"
 			>
 				<div
 					v-for="(session, index) in thisWeekSessions[day - 1]"
@@ -47,8 +47,8 @@
 					>
 						<AppointmentBox
 							:session="session"
-							:calendarStartHour="startHr"
-							:rowHeight="rowHeight"
+							:calendar-start-hour="startHr"
+							:row-height="rowHeight"
 						/>
 					</div>
 				</div>
@@ -61,7 +61,7 @@
 import { computed, ref, useCookie, useFetch } from "#imports";
 import { computedAsync } from "@vueuse/core";
 import type { Session } from "@prisma/client";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 
 const props = defineProps<{
 	week: Date; // any day in the week wanted to be displayed. week starts at monday
@@ -133,7 +133,7 @@ async function fetchSessions() {
 
 // 2d array holding the widths for each session that should be displayed. indexes correspond to thisWeekSessions
 const boxWidths: string[][] = computed(() => {
-	let result: string[][] = [];
+	const result: string[][] = [];
 
 	for (let i = 0; i < 5; i++) {
 		result.push([]);
@@ -159,7 +159,7 @@ const startHr = computed(() => {
 
 	for (let day = 0; day < 5; day++) {
 		for (let i = 0; i < thisWeekSessions.value[day].length; i++) {
-			let sessionTime = new Date(thisWeekSessions.value[day][i].time);
+			const sessionTime = new Date(thisWeekSessions.value[day][i].time);
 			//check its starting hour
 			if (sessionTime.getHours() < earliestHr) {
 				earliestHr = sessionTime.getHours();
@@ -178,9 +178,9 @@ const endHr = computed(() => {
 
 	for (let day = 0; day < 5; day++) {
 		for (let i = 0; i < thisWeekSessions.value[day].length; i++) {
-			let sessionTime = new Date(thisWeekSessions.value[day][i].time);
+			const sessionTime = new Date(thisWeekSessions.value[day][i].time);
 			// get the end time
-			let sessionEnd = getSessionEndTime(
+			const sessionEnd = getSessionEndTime(
 				sessionTime,
 				thisWeekSessions.value[day][i].duration
 			);
@@ -239,7 +239,7 @@ const rowHeight = ref(26); // height in pixels of each row of time for the appoi
 
 // given a time and a duration, return the end of the session time
 function getSessionEndTime(d: Date, sessionLength: number): Date {
-	let endTime = new Date(d.getTime());
+	const endTime = new Date(d.getTime());
 	endTime.setMinutes(d.getMinutes() + sessionLength);
 	return endTime;
 }
@@ -249,7 +249,7 @@ function getSessionEndTime(d: Date, sessionLength: number): Date {
 async function getFilteredSessions(): Session[][] {
 	const sessions = await fetchSessions();
 
-	let filteredSessions: Session[][] = [];
+	const filteredSessions: Session[][] = [];
 	for (let i = 0; i < 5; i++) {
 		filteredSessions.push([]);
 	}
@@ -259,7 +259,7 @@ async function getFilteredSessions(): Session[][] {
 	}
 
 	for (let i = 0; i < sessions.length; i++) {
-		let currSessionDay = new Date(sessions[i].time);
+		const currSessionDay = new Date(sessions[i].time);
 
 		// append to the filtered sessions
 		filteredSessions[currSessionDay.getDay() - 1].push(sessions[i]);
@@ -284,16 +284,16 @@ function sortSessions(unsorted: Session[]): Session[] {
 		// recursive case: multiple sessions
 		const middle = Math.floor(unsorted.length / 2);
 
-		let leftHalf = sortSessions(unsorted.slice(0, middle)); // sort left half
-		let rightHalf = sortSessions(unsorted.slice(middle)); // sort right half
+		const leftHalf = sortSessions(unsorted.slice(0, middle)); // sort left half
+		const rightHalf = sortSessions(unsorted.slice(middle)); // sort right half
 
 		// merge halves
 		let leftIdx = 0;
 		let rightIdx = 0;
 
 		while (leftIdx < leftHalf.length && rightIdx < rightHalf.length) {
-			let leftTime = new Date(leftHalf[leftIdx].time);
-			let rightTime = new Date(rightHalf[rightIdx].time);
+			const leftTime = new Date(leftHalf[leftIdx].time);
+			const rightTime = new Date(rightHalf[rightIdx].time);
 
 			if (leftTime.getTime() < rightTime.getTime()) {
 				sorted.push(leftHalf[leftIdx]);
@@ -329,12 +329,12 @@ function getBoxWidths(sessions: Session[]) {
 
 	for (let i = 0; i < sessions.length; i++) {
 		// for each started appointment
-		let currSessionStartTime = new Date(sessions[i].time);
+		const currSessionStartTime = new Date(sessions[i].time);
 		let overlaps = false;
 
 		// check if current session overlaps with another session in the set of started sessions
 		for (let j = 0; j < startedSessions.length; j++) {
-			let startedSessionEndTime = getSessionEndTime(
+			const startedSessionEndTime = getSessionEndTime(
 				new Date(startedSessions[j].time),
 				startedSessions[j].duration
 			);
@@ -367,7 +367,7 @@ function getBoxWidths(sessions: Session[]) {
 }
 // given a list of sessions that overlap, it calculates and returns the session's width
 function calculateWidths(sessions: Session[]): string[] {
-	let result: string[] = [];
+	const result: string[] = [];
 	for (let i = 0; i < sessions.length; i++) {
 		result.push(((sessions.length - i) / sessions.length) * 100 + "%");
 	}

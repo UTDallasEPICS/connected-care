@@ -1,5 +1,5 @@
 import { defineNuxtRouteMiddleware } from "nuxt/app";
-import { pageAccessMap, AccessPermission } from "~/permissions"; // <-- Import AccessPermission
+import { pageAccessMap, AccessPermission } from "~/types/permissions"; // <-- Import AccessPermission
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	const userId = useCookie("userId");

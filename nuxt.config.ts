@@ -1,24 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-	modules: ['@nuxtjs/i18n'],
+	modules: ["@nuxtjs/i18n", "@nuxtjs/tailwindcss", "@nuxt/eslint"],
 	i18n: {
 		locales: [
-		{ code: 'en', iso: 'en-US', file: 'en.json' },
-		{ code: 'es', iso: 'es-ES', file: 'es.json' }
+			{ code: "en", iso: "en-US", file: "en.json" },
+			{ code: "es", iso: "es-ES", file: "es.json" },
 		],
-		defaultLocale: 'en',
-		langDir: 'locales/',
-		strategy: 'no_prefix',
-		vueI18n: './i18n.config.ts'
+		defaultLocale: "en",
+		langDir: "locales/",
+		strategy: "no_prefix",
+		vueI18n: "./i18n.config.ts",
 	},
 	compatibilityDate: "2024-11-01",
 	devtools: { enabled: false },
 	css: ["~/assets/css/main.css"],
-	vite: {
-		plugins: [tailwindcss()],
-	},
 	hooks: {
 		"pages:extend"(pages) {
 			pages.push({
@@ -38,5 +34,9 @@ export default defineNuxtConfig({
 			});
 		},
 	},
-				
+	// This is so nuxt can auto import files that aren't directly under composables but are instead nested
+	// within a folder inside of composables
+	imports: {
+		dirs: ["composables", "composables/**"],
+	},
 });

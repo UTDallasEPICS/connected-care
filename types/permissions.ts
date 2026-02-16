@@ -9,6 +9,8 @@ enum AccessPermission {
 	ADMIN = "ADMIN",
 }
 
+type AccessVal = Partial<Record<AccessPermission, boolean>>;
+
 /* 
 	NOTE: 
 		This does not check for extraneous APIs. Clean it yourself. Best to organize it in order when you expand all server/api folders.
@@ -64,3 +66,6 @@ const apiAccessMap: {
 };
 
 export { AccessPermission, pageAccessMap, apiAccessMap };
+// necessary to export separately as types do not actually "exist" in js
+// its not a runtime value so its exported separately by ts (because of verbatimModuleSyntax)
+export type { AccessVal };

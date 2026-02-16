@@ -8,15 +8,15 @@
 
 			<!-- Login Form -->
 			<form
-				class="flex w-70 flex-col gap-5"
+				class="w-70 flex flex-col gap-5"
 				@submit.prevent="handleSubmit"
 			>
 				<input
+					v-model="email"
 					required
 					type="text"
-					v-model="email"
 					placeholder="User's Email"
-					class="rounded-md bg-slate-100 p-2 outline-2 outline-blue-950 outline-solid"
+					class="outline-solid rounded-md bg-slate-100 p-2 outline-2 outline-blue-950"
 				/>
 				<button class="rounded-md bg-blue-950 p-2 text-white">
 					Submit
@@ -29,7 +29,7 @@
 <script lang="ts" setup>
 import { $fetch } from "ofetch";
 import { ref, useCookie, navigateTo } from "#imports";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 
 const email = ref("");
 

@@ -4,8 +4,8 @@
 	<div class="font-sc-encode pb-8">
 		<!-- Filter modal window -->
 		<FilterAppointments
-			:filter="filters"
 			v-if="showFilterWindow"
+			:filter="filters"
 			@close-filter-window="showFilterWindow = false"
 			@add-filters="(filter) => addFilters(filter)"
 		/>
@@ -24,9 +24,9 @@
 					<createAppointment v-if="permissions.editAppointments" />
 					<!-- placeholder style for the button so it's not just text lmao -->
 					<button
-						@click="showFilterWindow = true"
-						class="btn cursor-pointer"
 						v-if="permissions.filter"
+						class="btn cursor-pointer"
+						@click="showFilterWindow = true"
 					>
 						Filter
 					</button>
@@ -54,12 +54,12 @@
 
 <script setup lang="ts">
 import { ref, computed, useCookie } from "#imports";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 
 const access = useCookie("AccessPermission");
 
 const permissions = computed(() => {
-	let actions = {
+	const actions = {
 		filter: false, // user service/admin = true, admin/patient/therapist = false
 		editAppointments: false, // user service = true, admin/patient/therapist = false
 	};
@@ -106,9 +106,9 @@ function getCurrentWeek() {
 		date.value.getDate() -
 		date.value.getDay() +
 		(date.value.getDay() == 0 ? -6 : 1);
-	let monday = new Date(date.value.getTime());
+	const monday = new Date(date.value.getTime());
 	monday.setDate(firstDay);
-	let friday = new Date(date.value.getTime());
+	const friday = new Date(date.value.getTime());
 	friday.setDate(firstDay + 4);
 
 	const result =

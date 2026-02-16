@@ -2,7 +2,7 @@
 	<div class="font-karla">
 		<div class="flex min-h-[70vh] flex-col items-center justify-center">
 			<!--Image here -->
-			<img src="/manos-unidas-logo.jpg" alt="Logo" class="mb-10 w-45" />
+			<img src="/manos-unidas-logo.jpg" alt="Logo" class="w-45 mb-10" />
 
 			<!-- Buttons -->
 			<div class="cols-2 grid grid-cols-2 gap-8 text-center sm:grid">
@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { navigateTo, useCookie } from "#imports";
 import { onMounted } from "vue";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 import { Calendar, User } from "lucide-vue-next";
 
 // Access cookies for authentication / role check

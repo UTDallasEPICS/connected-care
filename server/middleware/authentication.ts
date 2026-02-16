@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { PrismaClient, UserType } from "@prisma/client";
-import { AccessPermission } from "~/permissions";
+import { AccessPermission } from "~/types/permissions";
 
 const prisma = new PrismaClient();
 
