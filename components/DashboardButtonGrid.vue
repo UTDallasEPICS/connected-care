@@ -3,7 +3,7 @@
 		<div class="flex min-h-[70vh] flex-col items-center justify-center">
 			<img src="/manos-unidas-logo.jpg" alt="Logo" class="w-45 mb-10" />
 			<div
-				:class="`cols-${buttons.length} grid grid-cols-${buttons.length} gap-8 text-center sm:grid`"
+				:class="`cols-${buttons.length} flex flex-row justify-evenly gap-8 text-center`"
 			>
 				<div
 					v-for="button in buttons"
