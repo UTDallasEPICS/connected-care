@@ -23,26 +23,26 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	login: AccessPermission.PUBLIC,
 	contactForm: AccessPermission.PUBLIC,
 	// All User Pages
-	dashboard: AccessPermission.USER,
-	scheduleView: AccessPermission.USER,
+	"dashboard-dashboard": AccessPermission.USER,
+	"admin-scheduleView": AccessPermission.USER,
 	// Patient Pages
 	"myProfile-id": AccessPermission.PATIENT,
-	patientDashboard: AccessPermission.PATIENT,
+	"dashboard-patientDashboard": AccessPermission.PATIENT,
 	// Parent Pages
 	childSearch: AccessPermission.PARENT,
-	parentDashboard: AccessPermission.PARENT,
+	"dashboard-parentDashboard": AccessPermission.PARENT,
 	"childProfile-id": AccessPermission.PARENT,
 	// All Staff Pages
-	patientSearch: AccessPermission.STAFF,
+	"patient-patientSearch": AccessPermission.STAFF,
 	"patientProfile-id": AccessPermission.STAFF,
-	viewContactForms: AccessPermission.STAFF,
+	"patient-viewContactForms": AccessPermission.STAFF,
 	// Therapist Pages
-	therapistDashboard: AccessPermission.THERAPIST,
+	"dashboard-therapistDashboard": AccessPermission.THERAPIST,
 	// User Service Pages
-	userServiceDashboard: AccessPermission.USER_SERVICE,
+	"dashboard-userServiceDashboard": AccessPermission.USER_SERVICE,
 	// Admin Pages
-	admin: AccessPermission.ADMIN,
-	employeeSearch: AccessPermission.ADMIN,
+	"dashboard-admin": AccessPermission.ADMIN,
+	"admin-employeeSearch": AccessPermission.ADMIN,
 };
 
 const apiAccessMap: {
