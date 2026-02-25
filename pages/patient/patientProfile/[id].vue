@@ -155,19 +155,19 @@
 				<div class="flex items-center justify-between">
 					<div>
 						<div class="font-semibold">
-							Created: {{ formatDate(note.createdAt as string) }}
+							Created: {{ formatDate(note.createdAt) }}
 						</div>
 
 						<div
 							v-if="note.updatedAt !== note.createdAt"
 							class="text-xs text-gray-500"
 						>
-							Updated: {{ formatDate(note.updatedAt as string) }}
+							Updated: {{ formatDate(note.updatedAt) }}
 						</div>
 						<div class="text-sm text-gray-600">
 							{{
-								therapyTypes[String(note.therapyType)] ||
-								String(note.therapyType)
+								therapyTypes[note.therapyType] ||
+								note.therapyType
 							}}
 						</div>
 					</div>
@@ -175,13 +175,13 @@
 					<div class="space-x-2 text-sm">
 						<button
 							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-							@click="openViewTherapyNote(note as TherapyNote)"
+							@click="openViewTherapyNote(note)"
 						>
 							Open
 						</button>
 						<button
 							class="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
-							@click="openEditTherapyNote(note as TherapyNote)"
+							@click="openEditTherapyNote(note)"
 						>
 							Edit
 						</button>
@@ -205,17 +205,181 @@
 		<ProgressReportModal
 			v-model="showProgressReportModal"
 			:patient-id="uId"
-			:editing-note="editingNote || undefined"
+			:editing-note="editingNote"
 			@save="handleProgressReportSave"
 			@add-question="addQuestion"
 		/>
 
-		<ViewTherapyNoteModal v-model="showViewNoteModal" :note="activeNote" />
+		<!-- ================= MODAL: View Therapy Note ================= -->
+		<div
+			v-if="showViewNoteModal"
+			class="fixed inset-0 z-50 flex items-center justify-center"
+			aria-modal="true"
+			role="dialog"
+		>
+			<div
+				class="absolute inset-0 bg-black/70"
+				@click.self="closeViewNoteModal"
+			></div>
+
+			<div
+				class="max-h-9/12 max-w-3/12 relative z-10 w-full overflow-auto rounded bg-white p-6 shadow-md"
+				@click.stop
+			>
+				<h2 class="mb-4 text-xl font-bold">Therapy Note</h2>
+
+				<div v-if="activeNote" class="space-y-3 text-sm">
+					<p>
+						<strong>Created at:</strong>
+						{{ formatDate(activeNote.createdAt) }}
+					</p>
+
+					<p
+						v-if="
+							activeNote.updatedAt &&
+							activeNote.updatedAt !== activeNote.createdAt
+						"
+					>
+						<strong>Updated at:</strong>
+						{{ formatDate(activeNote.updatedAt) }}
+					</p>
+
+					<p>
+						<strong>Therapy:</strong>
+						{{
+							therapyTypes[activeNote.therapyType] ||
+							activeNote.therapyType
+						}}
+					</p>
+
+					<div v-if="activeNote.objectives?.length">
+						<strong
+							>Objectives worked on
+							<span v-if="activeNote.objectivesDate">
+								({{
+									formatDate(activeNote.objectivesDate)
+								}}) </span
+							>:
+						</strong>
+						<ul class="ml-4 list-disc">
+							<li v-for="o in activeNote.objectives" :key="o.id">
+								<span class="font-semibold">{{
+									o.goalLabel
+								}}</span>
+								<span v-if="o.details"> – {{ o.details }}</span>
+							</li>
+						</ul>
+					</div>
+
+					<p v-if="activeNote.otherTherapies">
+						<strong>Other therapies:</strong>
+						{{ activeNote.otherTherapies }}
+					</p>
+					<p v-if="activeNote.reinforcersUsed">
+						<strong
+							>Reinforcers used
+							<span v-if="activeNote.reinforcersDate">
+								({{
+									formatDate(activeNote.reinforcersDate)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.reinforcersUsed }}
+					</p>
+					<p v-if="activeNote.familyRecommendations">
+						<strong
+							>Recommendations
+							<span v-if="activeNote.familyRecommendationsDate">
+								({{
+									formatDate(
+										activeNote.familyRecommendationsDate
+									)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.familyRecommendations }}
+					</p>
+					<p v-if="activeNote.groupRecommendationParents">
+						<strong>Group recommendation</strong>
+						{{ activeNote.groupRecommendationParents }}
+					</p>
+					<p v-if="activeNote.goalsAchieved">
+						<strong
+							>Goals achieved
+							<span v-if="activeNote.goalsAchievedDate">
+								({{
+									formatDate(activeNote.goalsAchievedDate)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.goalsAchieved }}
+					</p>
+					<p v-if="activeNote.progressNotes">
+						<strong
+							>Progress notes
+							<span v-if="activeNote.progressNotesDate">
+								({{
+									formatDate(activeNote.progressNotesDate)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.progressNotes }}
+					</p>
+					<p v-if="activeNote.nextSessionObjectives">
+						<strong
+							>Next session objectives
+							<span v-if="activeNote.nextSessionsObjectivesDate">
+								({{
+									formatDate(
+										activeNote.nextSessionObjectivesDate
+									)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.nextSessionObjectives }}
+					</p>
+					<p v-if="activeNote.incidents">
+						<strong
+							>Incidents
+							<span v-if="activeNote.incidentsDate">
+								({{
+									formatDate(activeNote.incidentsDate)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.incidents }}
+					</p>
+					<p v-if="activeNote.generalObservations">
+						<strong
+							>General observations
+							<span v-if="activeNote.generalObservationsDate">
+								({{
+									formatDate(
+										activeNote.generalObservationsDate
+									)
+								}}) </span
+							>:
+						</strong>
+						{{ activeNote.generalObservations }}
+					</p>
+				</div>
+
+				<div class="mt-4 flex justify-end">
+					<button
+						type="button"
+						class="bg-blay px-2 hover:cursor-pointer"
+						@click="closeViewNoteModal"
+					>
+						Close
+					</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, useCookie, useRoute } from "#imports";
+import { computed, ref, useCookie, useFetch, useRoute } from "#imports";
 import { AccessPermission } from "~/types/permissions";
 import { $fetch } from "ofetch";
 import { therapyTypes } from "~/composables/therapy/therapyData";
@@ -223,10 +387,6 @@ import { therapyTypes } from "~/composables/therapy/therapyData";
 import EditProfileModal from "~/components/EditProfileModal.vue";
 import TherapistRecommendationsModal from "~/components/TherapistRecommendationsModal.vue";
 import ProgressReportModal from "~/components/ProgressReportModal.vue";
-import ViewTherapyNoteModal from "~/components/ViewTherapyNoteModal.vue";
-import { usePatientProfile } from "~/composables/patient/usePatientProfile";
-import { useTherapyNotes } from "~/composables/therapy/useTherapyNotes";
-import { useTherapyNoteForm } from "~/composables/therapy/useTherapyNoteForm";
 
 interface EditProfileFormData {
 	fName: string;
@@ -285,18 +445,13 @@ function openRecommendationsModal() {
 		.filter((note) => note.familyRecommendations)
 		.sort(
 			(a, b) =>
-				new Date(
-					(b.familyRecommendationsDate || "") as string
-				).getTime() -
-				new Date(
-					(a.familyRecommendationsDate || "") as string
-				).getTime()
+				new Date(b.familyRecommendationsDate).getTime() -
+				new Date(a.familyRecommendationsDate).getTime()
 		)
 		.map((note) => ({
-			id: String(note.id),
-			familyRecommendations: (note.familyRecommendations || "") as string,
-			familyRecommendationsDate: (note.familyRecommendationsDate ||
-				"") as string,
+			id: note.id,
+			familyRecommendations: note.familyRecommendations,
+			familyRecommendationsDate: note.familyRecommendationsDate,
 		}));
 
 	showRecommendationsModal.value = true;
@@ -304,36 +459,68 @@ function openRecommendationsModal() {
 
 function viewRecommendation(note: Recommendation) {
 	// Find the full note from therapyNotes
-	const fullNote = therapyNotes.value.find((n) => String(n.id) === note.id);
+	const fullNote = therapyNotes.value.find((n) => n.id === note.id);
 	if (fullNote) {
-		openViewTherapyNote(fullNote as TherapyNote);
+		openViewTherapyNote(fullNote);
 	}
 	showRecommendationsModal.value = false;
 }
 
 const route = useRoute();
-const uId = route.params.id as string;
+const uId = route.params.id;
 
-// Use composables for profile and therapy notes
-const { profile, getProfile, paid, age } = usePatientProfile(uId);
-const {
-	therapyNotes,
-	loadTherapyNotes,
-	editingNoteId,
-	editingNote,
-	openNewTherapyNote: openNewNote,
-	openEditTherapyNote: openEditNote,
-} = useTherapyNotes(uId);
-const { saveTherapyNote } = useTherapyNoteForm();
+interface Profile {
+	NonEmployee?: {
+		dob?: string;
+		Patient?: {
+			Appointments?: Array<{ paid: boolean }>;
+		};
+	};
+	[key: string]: unknown;
+}
 
-// Initialize data
+const profile = ref<Profile>({} as Profile);
+
+async function getProfile() {
+	const { data: test } = await useFetch("/api/profile/patient", {
+		query: { id: uId },
+	});
+	profile.value = test.value;
+}
+
 getProfile();
 loadTherapyNotes();
 
-// Modal control flags
-const showEditModal = ref(false);
-const showProgressReportModal = ref(false);
-const showViewNoteModal = ref(false);
+const paid = computed(() => {
+	if (profile.value?.NonEmployee?.Patient?.Appointments) {
+		let inFull = true;
+		for (const session of profile.value.NonEmployee.Patient.Appointments) {
+			if (!session.paid) {
+				inFull = false;
+			}
+		}
+		return inFull;
+	}
+	return false;
+});
+
+const age = computed(() => {
+	const dobVal = profile.value?.NonEmployee?.dob;
+	if (!dobVal) return "";
+
+	const birth = new Date(dobVal);
+	const today = new Date();
+
+	let years = today.getFullYear() - birth.getFullYear();
+	const m = today.getMonth() - birth.getMonth();
+
+	if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+		years--;
+	}
+
+	return years;
+});
+
 interface TherapyNote {
 	id: number;
 	createdAt: string;
@@ -364,7 +551,20 @@ interface TherapyNote {
 	[key: string]: unknown;
 }
 
+const therapyNotes = ref<TherapyNote[]>([]);
+const showViewNoteModal = ref(false);
 const activeNote = ref<TherapyNote | null>(null);
+
+const editingNoteId = ref<number | null>(null);
+
+// Modal control flags.
+const showEditModal = ref(false);
+const showProgressReportModal = ref(false);
+
+const editingNote = computed(() => {
+	if (!editingNoteId.value) return null;
+	return therapyNotes.value.find((n) => n.id === editingNoteId.value) || null;
+});
 
 // Methods to open/close modals.
 function openEditModal() {
@@ -409,21 +609,123 @@ async function handleEditProfileSave(formData: EditProfileFormData) {
 }
 
 async function handleProgressReportSave(formData: ProgressReportFormData) {
-	const result = await saveTherapyNote(
-		formData,
-		uId,
-		editingNoteId.value,
-		async () => {
-			await loadTherapyNotes();
-		}
-	);
+	const objectivesPayload: {
+		goalKey?: string | null;
+		goalLabel: string;
+		details?: string | null;
+	}[] = [];
 
-	if (result.success) {
+	// Predefined objectives
+	for (const key of formData.selectedObjectives) {
+		objectivesPayload.push({
+			goalKey: key,
+			goalLabel: key,
+			details: formData.objectiveDetails[key] || null,
+		});
+	}
+
+	// Custom goals (only non-empty ones)
+	for (const cg of formData.customGoals) {
+		if (!cg.label && !cg.details) continue;
+		objectivesPayload.push({
+			goalKey: null,
+			goalLabel: cg.label || "Other",
+			details: cg.details || null,
+		});
+	}
+
+	const payload = {
+		patientId: uId,
+		therapyType: formData.selectedTherapy,
+		objectives: objectivesPayload,
+		objectivesDate: dateStringWithCurrentTime(formData.objectivesDate),
+		reinforcersUsed: formData.reinforcersUsed || null,
+		reinforcersDate: dateStringWithCurrentTime(formData.reinforcersDate),
+		familyRecommendations: formData.familyRecommendations || null,
+		familyRecommendationsDate: dateStringWithCurrentTime(
+			formData.familyRecommendationsDate
+		),
+		groupRecommendationParents: formData.groupRecommendationParents || null,
+		goalsAchieved: formData.goalsAchieved || null,
+		goalsAchievedDate: dateStringWithCurrentTime(
+			formData.goalsAchievedDate
+		),
+		progressNotes: formData.progressNotes || null,
+		progressNotesDate: dateStringWithCurrentTime(
+			formData.progressNotesDate
+		),
+		nextSessionObjectives: formData.nextSessionObjectives || null,
+		nextSessionObjectivesDate: dateStringWithCurrentTime(
+			formData.nextSessionObjectivesDate
+		),
+		incidents: formData.incidents || null,
+		incidentsDate: dateStringWithCurrentTime(formData.incidentsDate),
+		generalObservations: formData.generalObservations || null,
+		generalObservationsDate: dateStringWithCurrentTime(
+			formData.generalObservationsDate
+		),
+	};
+
+	const noteId = editingNoteId.value;
+	const url = noteId
+		? `/api/session/therapyNotes/${noteId}`
+		: "/api/session/therapyNotes";
+
+	const method = noteId ? "PUT" : "POST";
+
+	try {
+		await $fetch(url, {
+			method,
+			body: payload,
+		});
+
+		await loadTherapyNotes();
 		showProgressReportModal.value = false;
 		editingNoteId.value = null;
-	} else {
-		alert("Could not save therapy note: " + result.error);
+	} catch (err: unknown) {
+		console.error("Error saving therapy note:", err);
+		const error = err as { data?: { error?: string }; message?: string };
+		const fromApi = error?.data?.error;
+		const msg = fromApi || error?.message || "Unknown error";
+		alert("Could not save therapy note: " + msg);
 	}
+}
+
+function dateStringWithCurrentTime(
+	dateStr: string | null | undefined
+): string | null {
+	if (!dateStr) return null;
+
+	// dateStr is "YYYY-MM-DD"
+	const parts = dateStr.split("-").map(Number);
+	if (parts.length !== 3) return null;
+
+	const [year, month, day] = parts;
+	if (!year || !month || !day) return null;
+
+	const now = new Date();
+
+	// Same day as selected date, time = current time
+	const combined = new Date(
+		year,
+		month - 1,
+		day,
+		now.getHours(),
+		now.getMinutes(),
+		now.getSeconds(),
+		now.getMilliseconds()
+	);
+
+	return combined.toISOString();
+}
+
+async function loadTherapyNotes() {
+	const res = await $fetch("/api/session/therapyNotes", {
+		method: "GET",
+		params: { patientId: uId },
+	});
+	const data = (res as { data?: TherapyNote[] }).data;
+	therapyNotes.value = data || [];
 }
 
 function formatDate(value?: string | Date | null) {
@@ -441,25 +743,23 @@ function formatDate(value?: string | Date | null) {
 	});
 }
 
-// Close view note modal when it's updated
-watch(showViewNoteModal, (newVal) => {
-	if (!newVal) {
-		activeNote.value = null;
-	}
-});
-
 function openNewTherapyNote() {
-	openNewNote();
+	editingNoteId.value = null;
 	showProgressReportModal.value = true;
 }
 
-function openEditTherapyNote(note: TherapyNote) {
-	openEditNote(note);
+function openEditTherapyNote(note: { id: number }) {
+	editingNoteId.value = note.id;
 	showProgressReportModal.value = true;
 }
 
-function openViewTherapyNote(note: TherapyNote) {
+function openViewTherapyNote(note: { id: number }) {
 	activeNote.value = note;
 	showViewNoteModal.value = true;
+}
+
+function closeViewNoteModal() {
+	showViewNoteModal.value = false;
+	activeNote.value = null;
 }
 </script>

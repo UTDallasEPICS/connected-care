@@ -2,7 +2,7 @@
 	<div class="font-sc-encode m-5 flex justify-center">
 		<div class="flex flex-col gap-10">
 			<div
-				class="flex w-4/5 flex-col justify-between md:w-200 md:flex-row"
+				class="md:w-200 flex w-4/5 flex-col justify-between md:flex-row"
 			>
 				<div class="font-cormorant-garamond">
 					<h1 class="text-2xl">View Incoming Contact Forms</h1>
@@ -11,7 +11,7 @@
 					<Listbox
 						v-model="sortBy"
 						as="div"
-						class="fill-smoky bg-smoky w-2/3 md:w-66"
+						class="fill-smoky bg-smoky md:w-66 w-2/3"
 					>
 						<div>
 							<ListboxButton
@@ -24,7 +24,7 @@
 							>
 							<ListboxOptions
 								as="div"
-								class="bg-smoky absolute w-1/5 md:w-66"
+								class="bg-smoky md:w-66 absolute w-1/5"
 							>
 								<ListboxOption
 									as="div"
@@ -130,11 +130,11 @@ import {
 	ListboxOptions,
 	ListboxOption,
 } from "@headlessui/vue";
+import { $fetch } from "ofetch";
 
 const sortOptions = ["SSN", "Last Name"];
 const sortBy = ref("");
 const processingPatients = ref([]);
-import { $fetch } from "ofetch";
 
 async function getPatients() {
 	try {

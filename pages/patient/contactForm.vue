@@ -3,9 +3,9 @@
 	<div class="font-karla">
 		<!--div container for the contact form-->
 		<div class="flex h-auto place-content-center overflow-y-auto">
-			<div class="flex-col flex-wrap font-light md:w-180">
+			<div class="md:w-180 flex-col flex-wrap font-light">
 				<!--Title of contact form-->
-				<h1 class="mt-5 ml-5 text-4xl sm:mr-5 sm:ml-0">
+				<h1 class="ml-5 mt-5 text-4xl sm:ml-0 sm:mr-5">
 					Patient Contact Form
 				</h1>
 
@@ -20,7 +20,7 @@
 						<div class="flex w-full flex-wrap gap-5 py-5">
 							<!--div class for the name portion (the name components should occupy the same line)-->
 							<div
-								class="flex h-auto w-9/10 flex-col gap-3 sm:flex-row md:w-full md:gap-7"
+								class="w-9/10 flex h-auto flex-col gap-3 sm:flex-row md:w-full md:gap-7"
 							>
 								<div class="flex flex-col">
 									<label class=""
@@ -279,7 +279,7 @@
 
 											<ListboxOptions
 												as="div"
-												class="bg-blay absolute left-0 mt-1 flex max-h-45 w-full flex-col overflow-y-auto"
+												class="bg-blay max-h-45 absolute left-0 mt-1 flex w-full flex-col overflow-y-auto"
 												style="z-index: 10"
 											>
 												<ListboxOption
@@ -355,10 +355,10 @@
 							</div>
 
 							<div
-								class="flex h-auto w-9/10 flex-col gap-7 sm:flex-row md:w-full"
+								class="w-9/10 flex h-auto flex-col gap-7 sm:flex-row md:w-full"
 							>
 								<div
-									class="relative flex w-50 flex-col sm:w-1/2"
+									class="w-50 relative flex flex-col sm:w-1/2"
 								>
 									<label class=""
 										>{{ $t("Medical Insurance:")
@@ -408,7 +408,7 @@
 								</div>
 
 								<div
-									class="relative flex w-70 flex-col sm:w-1/2"
+									class="w-70 relative flex flex-col sm:w-1/2"
 								>
 									<label class="">{{
 										$t("Preferred Services/Therapies:")
@@ -617,8 +617,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import {
 	Listbox,
 	ListboxButton,
@@ -629,8 +628,6 @@ import { $fetch } from "ofetch";
 
 const genders = ["Male", "Female", "Other"];
 const gender = ref("");
-
-import { onMounted } from "vue";
 
 interface Country {
 	name: { common: string };
@@ -738,9 +735,9 @@ const fileInputRef = ref<HTMLInputElement | null>(null);
 
 function handleFileUpload() {
 	if (!fileInputRef.value) return;
-	let files = fileInputRef.value.files;
+	const files = fileInputRef.value.files;
 	if (!files) return;
-	let formData = new FormData();
+	const formData = new FormData();
 
 	for (let i = 0; i < files.length; i++) {
 		if (data.medicalRecordFiles.indexOf(files[i].name) < 0) {
