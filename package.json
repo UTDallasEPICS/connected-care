@@ -27,6 +27,7 @@
 		"h3": "^1.15.1",
 		"lucide-vue-next": "^0.487.0",
 		"nuxt": "^4.2.1",
+		"ts-node": "^10.9.2",
 		"vue": "latest",
 		"vue-multiselect": "^3.2.0",
 		"vue-router": "latest",
