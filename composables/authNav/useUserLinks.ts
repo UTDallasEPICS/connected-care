@@ -25,10 +25,10 @@ export function useUserLinks() {
 		if (!val) {
 			return legalRoutes;
 		}
-
+		console.log(val[AP.USER]);
 		// add relevant links
 		if (val[AP.USER]) {
-			legalRoutes.push({ to: "scheduleView", label: "Schedule" });
+			legalRoutes.push({ to: "admin-scheduleView", label: "Schedule" });
 		}
 		if (val[AP.PATIENT]) {
 			if (userId.value)
@@ -42,12 +42,20 @@ export function useUserLinks() {
 			legalRoutes.push({ to: "childSearch", label: "Children" });
 		}
 		if (val[AP.STAFF]) {
-			legalRoutes.push({ to: "patientSearch", label: "Patients" });
-			legalRoutes.push({ to: "viewContactForms", label: "Review Forms" });
+			legalRoutes.push({
+				to: "patient-patientSearch",
+				label: "Patients",
+			});
+			legalRoutes.push({
+				to: "patient-viewContactForms",
+				label: "Review Forms",
+			});
 		}
 		if (val[AP.ADMIN]) {
-			legalRoutes.push({ to: "admin", label: "Admin" });
-			legalRoutes.push({ to: "employeeSearch", label: "Employees" });
+			legalRoutes.push({
+				to: "admin-employeeSearch",
+				label: "Employees",
+			});
 		}
 		return legalRoutes;
 	});

@@ -21,7 +21,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Public Pages
 	index: AccessPermission.PUBLIC,
 	login: AccessPermission.PUBLIC,
-	contactForm: AccessPermission.PUBLIC,
+	"patient-contactForm": AccessPermission.PUBLIC,
 	// All User Pages
 	"dashboard-dashboard": AccessPermission.USER,
 	"admin-scheduleView": AccessPermission.USER,
@@ -43,6 +43,10 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Admin Pages
 	"dashboard-admin": AccessPermission.ADMIN,
 	"admin-employeeSearch": AccessPermission.ADMIN,
+
+	// Contact & About
+	contact: AccessPermission.USER,
+	about: AccessPermission.USER,
 };
 
 const apiAccessMap: {
