@@ -3,9 +3,9 @@
 	<div class="font-karla">
 		<!--div container for the contact form-->
 		<div class="flex h-auto place-content-center overflow-y-auto">
-			<div class="flex-col flex-wrap font-light md:w-180">
+			<div class="md:w-180 flex-col flex-wrap font-light">
 				<!--Title of contact form-->
-				<h1 class="mt-5 ml-5 text-4xl sm:mr-5 sm:ml-0">
+				<h1 class="ml-5 mt-5 text-4xl sm:ml-0 sm:mr-5">
 					Patient Contact Form
 				</h1>
 
@@ -20,12 +20,12 @@
 						<div class="flex w-full flex-wrap gap-5 py-5">
 							<!--div class for the name portion (the name components should occupy the same line)-->
 							<div
-								class="flex h-auto w-9/10 flex-col gap-3 sm:flex-row md:w-full md:gap-7"
+								class="w-9/10 flex h-auto flex-col gap-3 sm:flex-row md:w-full md:gap-7"
 							>
 								<div class="flex flex-col">
 									<label class=""
-										>Patient First name:<span
-											class="text-red-500"
+										>{{ $t("Patient First name:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -39,7 +39,9 @@
 								</div>
 
 								<div class="flex flex-col">
-									<label class="">Patient Middle name:</label>
+									<label class="">{{
+										$t("Patient Middle name:")
+									}}</label>
 									<!--takes a string, type/enter box-->
 									<input
 										type="middleName"
@@ -50,8 +52,8 @@
 
 								<div class="flex flex-col">
 									<label class=""
-										>Patient Last name:<span
-											class="text-red-500"
+										>{{ $t("Patient Last name:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -70,7 +72,8 @@
 							>
 								<div class="relative flex flex-col sm:w-1/5">
 									<label class=""
-										>Gender:<span class="text-red-500"
+										>{{ $t("Gender:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -113,8 +116,8 @@
 
 								<div class="flex flex-col">
 									<label class=""
-										>Date of Birth:<span
-											class="text-red-500"
+										>{{ $t("Date of Birth:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -128,7 +131,8 @@
 
 								<div class="flex flex-col">
 									<label class=""
-										>Nationality:<span class="text-red-500"
+										>{{ $t("Nationality:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -178,7 +182,8 @@
 							>
 								<div class="flex flex-col">
 									<label class=""
-										>ID Number:<span class="text-red-500"
+										>{{ $t("ID Number:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -196,8 +201,8 @@
 							>
 								<div class="flex flex-col">
 									<label class=""
-										>Address Line 1:<span
-											class="text-red-500"
+										>{{ $t("Address Line 1:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -210,7 +215,9 @@
 								</div>
 
 								<div class="flex flex-col">
-									<label class="">Address Line 2:</label>
+									<label class="">{{
+										$t("Address Line 2:")
+									}}</label>
 									<input
 										class="input w-90 sm:w-full"
 										type="address2"
@@ -221,8 +228,8 @@
 								<div class="flex flex-col sm:flex-row sm:gap-5">
 									<div class="flex flex-col">
 										<label class=""
-											>Postal Code:<span
-												class="text-red-500"
+											>{{ $t("Postal Code:")
+											}}<span class="text-red-500"
 												>*</span
 											></label
 										>
@@ -235,7 +242,8 @@
 									</div>
 									<div class="flex flex-col">
 										<label class=""
-											>Locality:<span class="text-red-500"
+											>{{ $t("Locality:")
+											}}<span class="text-red-500"
 												>*</span
 											></label
 										>
@@ -247,8 +255,9 @@
 										/>
 									</div>
 									<div class="flex flex-col sm:w-1/3">
-										<label class="">
-											Country:<span class="text-red-500"
+										<label class=""
+											>{{ $t("Country:")
+											}}<span class="text-red-500"
 												>*</span
 											>
 										</label>
@@ -270,7 +279,7 @@
 
 											<ListboxOptions
 												as="div"
-												class="bg-blay absolute left-0 mt-1 flex max-h-45 w-full flex-col overflow-y-auto"
+												class="bg-blay max-h-45 absolute left-0 mt-1 flex w-full flex-col overflow-y-auto"
 												style="z-index: 10"
 											>
 												<ListboxOption
@@ -296,7 +305,9 @@
 								class="flex h-auto w-full flex-col gap-3 sm:flex-row sm:gap-7"
 							>
 								<div class="flex flex-col">
-									<label class="">Parent First Name:</label>
+									<label class="">{{
+										$t("Parent First Name:")
+									}}</label>
 									<input
 										class="input w-70 sm:w-full"
 										type="parentFirstName"
@@ -304,7 +315,9 @@
 									/>
 								</div>
 								<div class="flex flex-col">
-									<label class="">Parent Last Name:</label>
+									<label class="">{{
+										$t("Parent Last Name:")
+									}}</label>
 									<input
 										class="input w-70 sm:w-full"
 										type="parentLastName"
@@ -317,7 +330,7 @@
 								class="flex h-auto w-full flex-col gap-3 sm:flex-row sm:gap-7"
 							>
 								<div class="flex flex-col">
-									<label class="">Email:</label>
+									<label class="">{{ $t("Email:") }}</label>
 									<input
 										class="input w-70 sm:w-full"
 										type="email"
@@ -327,8 +340,8 @@
 
 								<div class="flex flex-col">
 									<label class=""
-										>Phone Number/Whatsapp:<span
-											class="text-red-500"
+										>{{ $t("Phone Number/Whatsapp:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -342,14 +355,14 @@
 							</div>
 
 							<div
-								class="flex h-auto w-9/10 flex-col gap-7 sm:flex-row md:w-full"
+								class="w-9/10 flex h-auto flex-col gap-7 sm:flex-row md:w-full"
 							>
 								<div
-									class="relative flex w-50 flex-col sm:w-1/2"
+									class="w-50 relative flex flex-col sm:w-1/2"
 								>
 									<label class=""
-										>Medical Insurance:<span
-											class="text-red-500"
+										>{{ $t("Medical Insurance:")
+										}}<span class="text-red-500"
 											>*</span
 										></label
 									>
@@ -364,7 +377,9 @@
 												class="flex w-full cursor-pointer items-start px-2"
 												>{{
 													insurance == ""
-														? "Select the insurance:"
+														? $t(
+																"Select the insurance:"
+															)
 														: insurance
 												}}</ListboxButton
 											>
@@ -393,11 +408,11 @@
 								</div>
 
 								<div
-									class="relative flex w-70 flex-col sm:w-1/2"
+									class="w-70 relative flex flex-col sm:w-1/2"
 								>
-									<label class=""
-										>Preferred Services/Therapies:</label
-									>
+									<label class="">{{
+										$t("Preferred Services/Therapies:")
+									}}</label>
 									<Listbox
 										v-model="therapies"
 										multiple
@@ -446,7 +461,11 @@
 
 						<div class="flex flex-col gap-5">
 							<div class="flex flex-col">
-								<p>Please submit any medical records.</p>
+								<p>
+									{{
+										$t("Please submit any medical records.")
+									}}
+								</p>
 								<label class="">
 									<input
 										v-on:change="handleFileUpload"
@@ -489,7 +508,11 @@
 
 							<div class="flex flex-col">
 								<label
-									>Have you been a patient previously with us?
+									>{{
+										$t(
+											"Have you been a patient previously with us?"
+										)
+									}}
 									<span class="text-red-500">*</span>
 								</label>
 								<div class="flex flex-row gap-5 text-xl">
@@ -514,9 +537,11 @@
 
 							<div class="">
 								<label class=""
-									>Have you been formally diagnosed?</label
-								>
-								<span class="text-red-500">*</span>
+									>{{
+										$t("Have you been formally diagnosed?")
+									}}
+									<span class="text-red-500">*</span>
+								</label>
 								<div class="flex flex-row gap-5 text-xl">
 									<label>
 										<input
@@ -539,10 +564,13 @@
 
 							<div class="">
 								<label class=""
-									>Do you want to perform a Diagnostic
-									Evaluation on the patient?</label
-								>
-								<span class="text-red-500">*</span>
+									>{{
+										$t(
+											"Do you want to perform a Diagnostic Evaluation on the patient?"
+										)
+									}}
+									<span class="text-red-500">*</span>
+								</label>
 								<div class="flex flex-row gap-5 text-xl">
 									<label>
 										<input
@@ -564,9 +592,9 @@
 							</div>
 
 							<div class="flex flex-col">
-								<label class=""
-									>Any Comments for the therapist?</label
-								>
+								<label class="">{{
+									$t("Any Comments for the therapist?")
+								}}</label>
 								<textarea
 									class="bg-smoky w-90 px-2 sm:w-full"
 									type="comments"
@@ -577,7 +605,7 @@
 
 							<div class="">
 								<button class="btn mt-5 flex flex-col">
-									Submit form
+									{{ $t("Submit form") }}
 								</button>
 							</div>
 						</div>

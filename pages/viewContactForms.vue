@@ -2,7 +2,7 @@
 	<div class="font-sc-encode m-5 flex justify-center">
 		<div class="flex flex-col gap-10">
 			<div
-				class="flex w-4/5 flex-col justify-between md:w-200 md:flex-row"
+				class="md:w-200 flex w-4/5 flex-col justify-between md:flex-row"
 			>
 				<div class="font-cormorant-garamond">
 					<h1 class="text-2xl">View Incoming Contact Forms</h1>
@@ -11,7 +11,7 @@
 					<Listbox
 						v-model="sortBy"
 						as="div"
-						class="fill-smoky bg-smoky w-2/3 md:w-66"
+						class="fill-smoky bg-smoky md:w-66 w-2/3"
 					>
 						<div>
 							<ListboxButton
@@ -24,7 +24,7 @@
 							>
 							<ListboxOptions
 								as="div"
-								class="bg-smoky absolute w-1/5 md:w-66"
+								class="bg-smoky md:w-66 absolute w-1/5"
 							>
 								<ListboxOption
 									as="div"
@@ -46,73 +46,77 @@
 				<table
 					class="font-cormorant-garamond w-full border-collapse border-2 border-b-black text-2xl"
 				>
-					<tr class="border-collapse border-2 border-b-black">
-						<th
-							class="border-collapse border-2 border-b-black px-2"
+					<thead>
+						<tr class="border-collapse border-2 border-b-black">
+							<th
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								First Name
+							</th>
+							<th
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								Last Name
+							</th>
+							<th
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								SSN
+							</th>
+							<th
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								Insurance
+							</th>
+							<th
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								Comments
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							class="font-sc-encode border-collapse border-2 border-b-black text-lg"
+							v-for="(user, index) in processingPatients"
+							:key="index"
 						>
-							First Name
-						</th>
-						<th
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							Last Name
-						</th>
-						<th
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							SSN
-						</th>
-						<th
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							Insurance
-						</th>
-						<th
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							Comments
-						</th>
-					</tr>
-					<tr
-						class="font-sc-encode border-collapse border-2 border-b-black text-lg"
-						v-for="(user, index) in processingPatients"
-						:key="index"
-					>
-						<td
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							{{ user.fName }}
-						</td>
-						<td
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							{{ user.lName }}
-						</td>
-						<td
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							{{ user.NonEmployee?.Patient?.identification }}
-						</td>
-						<td
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							{{
-								user.NonEmployee?.Patient?.ContactForm
-									?.insurance
-							}}
-						</td>
-						<td
-							class="border-collapse border-2 border-b-black px-2"
-						>
-							{{
-								user.NonEmployee?.Patient?.ContactForm
-									?.comment == ""
-									? "None"
-									: user.NonEmployee?.Patient?.ContactForm
-											?.comment
-							}}
-						</td>
-					</tr>
+							<td
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								{{ user.fName }}
+							</td>
+							<td
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								{{ user.lName }}
+							</td>
+							<td
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								{{ user.NonEmployee?.Patient?.identification }}
+							</td>
+							<td
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								{{
+									user.NonEmployee?.Patient?.ContactForm
+										?.insurance
+								}}
+							</td>
+							<td
+								class="border-collapse border-2 border-b-black px-2"
+							>
+								{{
+									user.NonEmployee?.Patient?.ContactForm
+										?.comment == ""
+										? "None"
+										: user.NonEmployee?.Patient?.ContactForm
+												?.comment
+								}}
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>

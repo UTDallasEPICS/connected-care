@@ -2,7 +2,7 @@
 	<div class="font-karla">
 		<div class="flex min-h-[70vh] flex-col items-center justify-center">
 			<!--Image here -->
-			<img src="/manos-unidas-logo.jpg" alt="Logo" class="mb-10 w-45" />
+			<img src="/manos-unidas-logo.jpg" alt="Logo" class="w-45 mb-10" />
 
 			<!-- Buttons -->
 			<div class="cols-4 grid grid-cols-4 gap-8 text-center sm:grid">
@@ -15,7 +15,9 @@
 					>
 						<Calendar :size="84" color="black" />
 					</button>
-					<span class="text -sm font-medium">SCHEDULE</span>
+					<span class="text -sm font-medium">{{
+						$t("Schedule")
+					}}</span>
 				</div>
 
 				<!-- View contact forms -->
@@ -26,10 +28,9 @@
 					>
 						<FileText :size="84" color="black" />
 					</button>
-					<span class="text -sm font-medium"
-						>VIEW NEW<br />
-						CONTACT FORMS</span
-					>
+					<span class="text -sm font-medium">{{
+						$t("View New Contact Forms")
+					}}</span>
 				</div>
 
 				<!-- view employees -->
@@ -40,7 +41,9 @@
 					>
 						<Users :size="84" color="black" />
 					</button>
-					<span class="text -sm font-medium">VIEW EMPLOYEES</span>
+					<span class="text -sm font-medium">{{
+						$t("View Employees")
+					}}</span>
 				</div>
 				<!-- create account -->
 				<div class="flex flex-col items-center">
@@ -50,7 +53,9 @@
 					>
 						<UserPlus :size="84" color="black" />
 					</button>
-					<span class="text -sm font-medium">CREATE ACCOUNT</span>
+					<span class="text -sm font-medium">{{
+						$t("Create Account")
+					}}</span>
 				</div>
 			</div>
 		</div>

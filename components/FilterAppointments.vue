@@ -3,17 +3,17 @@
  -->
 <template>
 	<div
-		class="font-sc-encode fixed top-0 right-0 z-50 h-full w-full items-center text-left"
+		class="font-sc-encode fixed right-0 top-0 z-50 h-full w-full items-center text-left"
 	>
 		<!-- Background -->
 		<div
-			class="fixed z-51 h-full w-full bg-black/70"
+			class="z-51 fixed h-full w-full bg-black/70"
 			@click="closeWindow"
 		></div>
 
 		<!-- Window -->
 		<div
-			class="text-md relative z-52 m-7 flex max-h-full flex-col overflow-y-auto bg-white p-4 text-black"
+			class="text-md z-52 relative m-7 flex max-h-full flex-col overflow-y-auto bg-white p-4 text-black"
 		>
 			<div
 				class="flex cursor-pointer justify-end pr-2 text-right"
@@ -24,7 +24,7 @@
 			<!-- Information -->
 			<div class="m-3 flex flex-col gap-3">
 				<h1 class="font-cormorant-garamond text-3xl font-bold">
-					Filter Appointments
+					{{ $t("Filter Appointments") }}
 				</h1>
 				<h3 class="font-bold">Tick to hide appointment:</h3>
 				<div>
@@ -46,7 +46,7 @@
 			<div class="flex flex-col justify-center gap-3">
 				<div class="flex justify-center">
 					<button class="btn cursor-pointer" @click="submitForm">
-						Submit
+						{{ $t("Submit") }}
 					</button>
 				</div>
 			</div>
