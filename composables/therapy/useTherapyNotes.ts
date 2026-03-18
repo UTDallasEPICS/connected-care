@@ -1,10 +1,6 @@
 import { ref, computed } from "vue";
 import { $fetch } from "ofetch";
-
-interface TherapyNote {
-	id: number;
-	[key: string]: unknown;
-}
+import type { TherapyNote } from "~/types/formTypes";
 
 interface TherapyNotesResponse {
 	data?: TherapyNote[];

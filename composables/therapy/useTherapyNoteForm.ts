@@ -6,7 +6,6 @@ export function useTherapyNoteForm() {
 	): string | null {
 		if (!dateStr) return null;
 
-		// dateStr is "YYYY-MM-DD"
 		const parts = dateStr.split("-").map(Number);
 		if (parts.length !== 3) return null;
 
@@ -15,7 +14,6 @@ export function useTherapyNoteForm() {
 
 		const now = new Date();
 
-		// Same day as selected date, time = current time
 		const combined = new Date(
 			year,
 			month - 1,
@@ -29,52 +27,45 @@ export function useTherapyNoteForm() {
 		return combined.toISOString();
 	}
 
-	interface ProgressReportFormData {
-		selectedTherapy: string;
-		selectedObjectives: string[];
-		objectiveDetails: Record<string, string>;
-		customGoals: Array<{ id: number; label: string; details: string }>;
-		objectivesDate: string;
-		reinforcersUsed: string;
-		reinforcersDate: string;
-		familyRecommendations: string;
-		familyRecommendationsDate: string;
-		groupRecommendationParents: string;
-		goalsAchieved: string;
-		goalsAchievedDate: string;
-		progressNotes: string;
-		progressNotesDate: string;
-		nextSessionObjectives: string;
-		nextSessionObjectivesDate: string;
-		incidents: string;
-		incidentsDate: string;
-		generalObservations: string;
-		generalObservationsDate: string;
-	}
-
+	/**
+	 * Maps any form data shape to the API payload and saves.
+	 * Accepts Record<string, unknown> for flexibility with component emit types.
+	 */
 	async function saveTherapyNote(
-		formData: ProgressReportFormData,
-		patientId: string | string[],
+		formData: Record<string, unknown>,
+		patientId: string,
 		noteId: number | null,
 		onSuccess: () => Promise<void>
 	) {
+		const objectives = formData.objectives as Record<string, unknown> ?? {};
+		const goals = formData.goals as Record<string, unknown> ?? {};
+		const reinforcers = formData.reinforcers as Record<string, string> ?? {};
+		const famRecs = formData.famRecs as Record<string, string> ?? {};
+		const progressNotes = formData.progressNotes as Record<string, string> ?? {};
+		const nextSeshObjectives = formData.nextSeshObjectives as Record<string, string> ?? {};
+		const incidents = formData.incidents as Record<string, string> ?? {};
+		const observations = formData.observations as Record<string, string> ?? {};
+		const goalsGoals = goals.goals as Record<string, string> ?? {};
+
+		const objectiveNames = (objectives.objectiveNames as string[]) ?? [];
+		const objectiveDetails = (objectives.objectiveDetails as Record<string, string>) ?? {};
+		const customGoals = (goals.customGoals as Array<{ id: number; label: string; details: string }>) ?? [];
+
 		const objectivesPayload: {
 			goalKey?: string | null;
 			goalLabel: string;
 			details?: string | null;
 		}[] = [];
 
-		// Predefined objectives
-		for (const key of formData.selectedObjectives) {
+		for (const key of objectiveNames) {
 			objectivesPayload.push({
 				goalKey: key,
 				goalLabel: key,
-				details: formData.objectiveDetails[key] || null,
+				details: objectiveDetails[key] || null,
 			});
 		}
 
-		// Custom goals (only non-empty ones)
-		for (const cg of formData.customGoals) {
+		for (const cg of customGoals) {
 			if (!cg.label && !cg.details) continue;
 			objectivesPayload.push({
 				goalKey: null,
@@ -85,37 +76,24 @@ export function useTherapyNoteForm() {
 
 		const payload = {
 			patientId,
-			therapyType: formData.selectedTherapy,
+			therapyType: formData.therapy,
 			objectives: objectivesPayload,
-			objectivesDate: dateStringWithCurrentTime(formData.objectivesDate),
-			reinforcersUsed: formData.reinforcersUsed || null,
-			reinforcersDate: dateStringWithCurrentTime(
-				formData.reinforcersDate
-			),
-			familyRecommendations: formData.familyRecommendations || null,
-			familyRecommendationsDate: dateStringWithCurrentTime(
-				formData.familyRecommendationsDate
-			),
-			groupRecommendationParents:
-				formData.groupRecommendationParents || null,
-			goalsAchieved: formData.goalsAchieved || null,
-			goalsAchievedDate: dateStringWithCurrentTime(
-				formData.goalsAchievedDate
-			),
-			progressNotes: formData.progressNotes || null,
-			progressNotesDate: dateStringWithCurrentTime(
-				formData.progressNotesDate
-			),
-			nextSessionObjectives: formData.nextSessionObjectives || null,
-			nextSessionObjectivesDate: dateStringWithCurrentTime(
-				formData.nextSessionObjectivesDate
-			),
-			incidents: formData.incidents || null,
-			incidentsDate: dateStringWithCurrentTime(formData.incidentsDate),
-			generalObservations: formData.generalObservations || null,
-			generalObservationsDate: dateStringWithCurrentTime(
-				formData.generalObservationsDate
-			),
+			objectivesDate: dateStringWithCurrentTime(objectives.objectivesDate as string),
+			reinforcersUsed: reinforcers.value || null,
+			reinforcersDate: dateStringWithCurrentTime(reinforcers.date),
+			familyRecommendations: famRecs.value || null,
+			familyRecommendationsDate: dateStringWithCurrentTime(famRecs.date),
+			groupRecommendationParents: (formData.groupRecommendationParents as string) || null,
+			goalsAchieved: goalsGoals.value || null,
+			goalsAchievedDate: dateStringWithCurrentTime(goalsGoals.date),
+			progressNotes: progressNotes.value || null,
+			progressNotesDate: dateStringWithCurrentTime(progressNotes.date),
+			nextSessionObjectives: nextSeshObjectives.value || null,
+			nextSessionObjectivesDate: dateStringWithCurrentTime(nextSeshObjectives.date),
+			incidents: incidents.value || null,
+			incidentsDate: dateStringWithCurrentTime(incidents.date),
+			generalObservations: observations.value || null,
+			generalObservationsDate: dateStringWithCurrentTime(observations.date),
 		};
 
 		const url = noteId
