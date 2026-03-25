@@ -1,16 +1,4 @@
-import { defineEventHandler } from "h3";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
-export default defineEventHandler(async (event) => {
-	// only allow GET
-	if (event.node.req.method !== "GET") {
-		event.node.res.statusCode = 405;
-		return { error: "Method Not Allowed" };
-	}
-
-	// fetch all users of type THERAPIST
+export default defineEventHandler(async () => {
 	const therapists = await prisma.user.findMany({
 		where: { type: "THERAPIST" },
 		select: {
