@@ -17,8 +17,7 @@
 					>{{ $t("About") }}</NuxtLink
 				>
 				<NuxtLink
-					:to="localePath({ name: 'contact', params: {} })"
-					class="hover:underline"
+					:to="localePath({ name: 'contactInfo', params: {} })"
 					>{{ $t("Contact") }}</NuxtLink
 				>
 			</nav>
