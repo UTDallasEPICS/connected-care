@@ -41,7 +41,14 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// User Service Pages
 	"dashboard-userServiceDashboard": AccessPermission.USER_SERVICE,
 	// Admin Pages
+
+	admin: AccessPermission.ADMIN,
+	employeeSearch: AccessPermission.ADMIN,
+
 	"dashboard-admin": AccessPermission.ADMIN,
+	"admin-employeeSearch": AccessPermission.ADMIN,
+	"admin-createAccount": AccessPermission.ADMIN,
+
 	// "admin-employeeSearch": AccessPermission.ADMIN,
 
 	// testing:
