@@ -1,28 +1,26 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginVue from "eslint-plugin-vue";
+import withNuxt from "./.nuxt/eslint.config.mjs";
 import eslintConfigPrettier from "eslint-config-prettier";
+import globals from "globals";
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-	{ files: ["**/*.{js,mjs,cjs,ts,vue}"] },
-	{ ignores: [".nuxt/*"] },
-	{ languageOptions: { globals: globals.browser } },
-	pluginJs.configs.recommended,
-	...tseslint.configs.recommended,
-	...pluginVue.configs["flat/essential"],
+export default withNuxt(
+	// your additions/overrides go here
+	{
+		files: ["**/*.{js,mjs,cjs,ts,vue}"],
+		ignores: [".nuxt/*"],
+		languageOptions: {
+			globals: globals.browser,
+		},
+	},
+
 	{
 		files: ["**/*.vue"],
-		languageOptions: { parserOptions: { parser: tseslint.parser } },
 		rules: {
 			"vue/multi-word-component-names": [
 				"warn",
-				{
-					ignores: ["index", "Nav", "Footer"],
-				},
+				{ ignores: ["index", "Nav", "Footer"] },
 			],
 		},
 	},
-	eslintConfigPrettier,
-];
+
+	eslintConfigPrettier
+);

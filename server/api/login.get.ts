@@ -1,8 +1,4 @@
-import { setCookie } from "h3";
 import { z } from "zod";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
 
 const schema = z.object({
 	email: z.string().email(),
@@ -11,18 +7,7 @@ const schema = z.object({
 const validateSchema = schema.strict().required();
 
 export default defineEventHandler(async (event) => {
-	const validatedQuery = await getValidatedQuery(event, (query) =>
-		validateSchema.safeParse(query)
-	);
-	if (!validatedQuery.success) {
-		const zodError = validatedQuery.error?.format();
-		throw createError({
-			statusCode: 400,
-			statusMessage: "Bad Request Body",
-			data: zodError,
-		});
-	}
-	const { email } = validatedQuery.data;
+	const { email } = await validateQuery(event, validateSchema);
 
 	// find user with email
 	const user = await prisma.user.findUnique({
