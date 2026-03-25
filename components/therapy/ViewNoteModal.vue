@@ -52,8 +52,8 @@
 						<strong>
 							{{ field.label }}
 							<span v-if="field.dateKey && note[field.dateKey]">
-								({{ formatDate(note[field.dateKey]) }})
-							</span>:
+								({{ formatDate(note[field.dateKey]) }}) </span
+							>:
 						</strong>
 						{{ note[field.key] }}
 					</p>
@@ -75,18 +75,45 @@
 
 <script setup lang="ts">
 import { therapyTypes } from "~/composables/therapy/therapyData";
-import type { TherapyNote, NoteField } from "~/types/formTypes";
+import type {
+	TherapyNote,
+	NoteField,
+} from "~/types/FormConfig/TherapyForms/therapyInfo";
 
 const noteFields: NoteField[] = [
 	{ key: "otherTherapies", label: "Other therapies" },
-	{ key: "reinforcersUsed", label: "Reinforcers used", dateKey: "reinforcersDate" },
-	{ key: "familyRecommendations", label: "Recommendations", dateKey: "familyRecommendationsDate" },
+	{
+		key: "reinforcersUsed",
+		label: "Reinforcers used",
+		dateKey: "reinforcersDate",
+	},
+	{
+		key: "familyRecommendations",
+		label: "Recommendations",
+		dateKey: "familyRecommendationsDate",
+	},
 	{ key: "groupRecommendationParents", label: "Group recommendation" },
-	{ key: "goalsAchieved", label: "Goals achieved", dateKey: "goalsAchievedDate" },
-	{ key: "progressNotes", label: "Progress notes", dateKey: "progressNotesDate" },
-	{ key: "nextSessionObjectives", label: "Next session objectives", dateKey: "nextSessionObjectivesDate" },
+	{
+		key: "goalsAchieved",
+		label: "Goals achieved",
+		dateKey: "goalsAchievedDate",
+	},
+	{
+		key: "progressNotes",
+		label: "Progress notes",
+		dateKey: "progressNotesDate",
+	},
+	{
+		key: "nextSessionObjectives",
+		label: "Next session objectives",
+		dateKey: "nextSessionObjectivesDate",
+	},
 	{ key: "incidents", label: "Incidents", dateKey: "incidentsDate" },
-	{ key: "generalObservations", label: "General observations", dateKey: "generalObservationsDate" },
+	{
+		key: "generalObservations",
+		label: "General observations",
+		dateKey: "generalObservationsDate",
+	},
 ];
 
 defineProps<{

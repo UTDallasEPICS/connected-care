@@ -12,7 +12,8 @@ export function useProfileSave(
 		const streetNum = addressParts[0] ? Number(addressParts[0]) : 0;
 		const streetName = addressParts.slice(1).join(" ");
 
-		const ne = (profile.value?.NonEmployee as Record<string, unknown>) ?? {};
+		const ne =
+			(profile.value?.NonEmployee as Record<string, unknown>) ?? {};
 		const pt = (ne?.Patient as Record<string, unknown>) ?? {};
 
 		await $fetch("/api/profile/patient", {
@@ -20,20 +21,19 @@ export function useProfileSave(
 			body: {
 				id: patientId,
 				fName: formData.firstName,
-				mInit: formData.middleInitial || "",
+				mInit: formData.middleName || "",
 				lName: formData.lastName,
 				gender: formData.gender,
 				dob: new Date(String(formData.DOB)).toISOString(),
 				streetName,
 				streetNum,
 				buildingNum: formData.buildNum,
-				postcode: formData.postCode,
+				postcode: formData.postcode,
 				identification: pt?.identification,
 				city: formData.city,
-				contactPref: formData.contactPreference,
 				email: formData.email,
 				phone: formData.phone,
-				whatsapp: formData.whatsApp,
+				whatsapp: formData.whatsapp,
 				isDiagnosed: pt?.diagnosed,
 			},
 		});

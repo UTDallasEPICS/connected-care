@@ -42,18 +42,18 @@
 </template>
 
 <script setup lang="ts">
+import type { Profile, NonEmployee, PatientDetails } from "~/types/formTypes";
+
 const props = defineProps<{
-	profile: Record<string, unknown>;
-	nonEmployee: Record<string, unknown>;
-	patient: Record<string, unknown>;
+	profile: Profile;
+	nonEmployee: NonEmployee;
+	patient: PatientDetails;
 	paid: boolean;
 }>();
 
 const { can } = useAccess();
 
-const postCodeCity = computed(
-	() => (props.nonEmployee?.PostCodeCity as Record<string, unknown>) ?? {}
-);
+const postCodeCity = computed(() => props.nonEmployee?.PostCodeCity ?? {});
 
 const profileFields = computed(() => [
 	{
@@ -69,7 +69,7 @@ const profileFields = computed(() => [
 	{
 		label: "Date of birth",
 		value: props.nonEmployee?.dob
-			? new Date(props.nonEmployee.dob as string).toDateString()
+			? new Date(props.nonEmployee.dob).toDateString()
 			: null,
 	},
 	{ label: "Diagnosis", value: props.patient?.diagnosis },

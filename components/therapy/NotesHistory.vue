@@ -28,8 +28,8 @@
 					</div>
 					<div class="text-sm text-gray-600">
 						{{
-							therapyTypes[note.therapyType] ||
-							note.therapyType
+							therapyTypes[String(note.therapyType)] ||
+							String(note.therapyType)
 						}}
 					</div>
 				</div>
@@ -65,19 +65,4 @@ defineEmits<{
 	"open-note": [note: TherapyNote];
 	"edit-note": [note: TherapyNote];
 }>();
-
-function formatDate(value?: string | Date | null) {
-	if (!value) return "No date";
-	const d = new Date(value);
-	if (isNaN(d.getTime())) return "No date";
-
-	return d.toLocaleString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "2-digit",
-		hour: "2-digit",
-		minute: "2-digit",
-		hour12: true,
-	});
-}
 </script>

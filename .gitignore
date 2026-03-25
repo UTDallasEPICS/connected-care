@@ -29,3 +29,6 @@ prisma/dev.db*
 # Claude files
 CLAUDE.md
 .claude
+
+# Old files
+OldComponentsAndFiles

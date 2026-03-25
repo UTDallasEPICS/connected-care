@@ -1,8 +1,5 @@
 <template>
-	<PatientTherapySection
-		ref="therapySectionRef"
-		:patient-id="patientId"
-	/>
+	<PatientTherapySection ref="therapySectionRef" :patient-id="patientId" />
 
 	<PatientProfileSection
 		ref="profileSectionRef"
@@ -16,7 +13,7 @@
 import PatientTherapySection from "~/components/patient/TherapySection.vue";
 import PatientProfileSection from "~/components/patient/ProfileSection.vue";
 
-const props = defineProps<{
+defineProps<{
 	patientId: string;
 	profile: Record<string, unknown>;
 }>();
@@ -25,8 +22,12 @@ const emit = defineEmits<{
 	"profile-updated": [];
 }>();
 
-const therapySectionRef = ref<InstanceType<typeof PatientTherapySection> | null>(null);
-const profileSectionRef = ref<InstanceType<typeof PatientProfileSection> | null>(null);
+const therapySectionRef = ref<InstanceType<
+	typeof PatientTherapySection
+> | null>(null);
+const profileSectionRef = ref<InstanceType<
+	typeof PatientProfileSection
+> | null>(null);
 
 // --- Forward exposed methods so the parent pages don't need changes ---
 function openRecommendationsModal() {

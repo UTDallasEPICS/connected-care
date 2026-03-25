@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { $fetch } from "ofetch";
-import type { TherapyNote } from "~/types/formTypes";
+import type { TherapyNote } from "~/types/FormConfig/TherapyForms/therapyInfo";
 
 interface TherapyNotesResponse {
 	data?: TherapyNote[];
@@ -10,13 +10,10 @@ export function useTherapyNotes(patientId: string | string[]) {
 	const therapyNotes = ref<TherapyNote[]>([]);
 
 	async function loadTherapyNotes() {
-		const res = await $fetch<TherapyNotesResponse>(
-			"/api/session/therapyNotes",
-			{
-				method: "GET",
-				params: { patientId },
-			}
-		);
+		const res = await $fetch<TherapyNotesResponse>("/api/session/notes", {
+			method: "GET",
+			params: { patientId },
+		});
 		const data = res.data;
 		therapyNotes.value = data || [];
 	}

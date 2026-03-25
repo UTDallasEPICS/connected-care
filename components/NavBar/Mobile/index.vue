@@ -49,7 +49,7 @@
 import { X } from "lucide-vue-next";
 import { useLocalePath } from "#imports";
 
-const { userLinks } = useAuthNav();
+const { userLinks } = useUserLinks();
 const localePath = useLocalePath();
 
 const { toggleMenu, isMenuOpen } = defineProps<{

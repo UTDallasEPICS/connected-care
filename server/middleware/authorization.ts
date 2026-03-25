@@ -25,5 +25,4 @@ export default defineEventHandler((event) => {
 			});
 		}
 	}
-	console.log("AUTHORIZING" + ` ${event.method} ${requestPath}`);
 });

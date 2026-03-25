@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { LogOut } from "lucide-vue-next";
 const { userId } = useAuthState();
-const { logout } = useAuthNav();
+const { logout } = useLogout();
 
 const desktopClass = "cursor-pointer";
 const mobileClass = "py-2 text-end text-lg hover:underline";

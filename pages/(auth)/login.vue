@@ -43,8 +43,7 @@ async function handleSubmit() {
 		method: "GET",
 	});
 
-	const { dashboardNavigation } = useAuthNav();
+	const { dashboardNavigation } = useDashboardNavigation();
 	dashboardNavigation();
-
 }
 </script>

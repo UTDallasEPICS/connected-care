@@ -33,7 +33,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	"dashboard-parentDashboard": AccessPermission.PARENT,
 	"childProfile-id": AccessPermission.PARENT,
 	// All Staff Pages
-	"patient-patientSearch": AccessPermission.STAFF,
+	// "patient-patientSearch": AccessPermission.STAFF,
 	"patientProfile-id": AccessPermission.STAFF,
 	"patient-viewContactForms": AccessPermission.STAFF,
 	// Therapist Pages
@@ -42,7 +42,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	"dashboard-userServiceDashboard": AccessPermission.USER_SERVICE,
 	// Admin Pages
 	"dashboard-admin": AccessPermission.ADMIN,
-	"admin-employeeSearch": AccessPermission.ADMIN,
+	// "admin-employeeSearch": AccessPermission.ADMIN,
 
 	// testing:
 	"patient-testingForm": AccessPermission.PATIENT,
@@ -67,7 +67,7 @@ const apiAccessMap: {
 	"/api/session/create": {
 		POST: AccessPermission.USER_SERVICE,
 	},
-	"/api/session/sessionType": {
+	"/api/session/types": {
 		GET: AccessPermission.USER_SERVICE || AccessPermission.ADMIN,
 	},
 };

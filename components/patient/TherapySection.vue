@@ -25,13 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TherapyNote } from "~/types/formTypes";
-
-interface Recommendation {
-	id: number;
-	familyRecommendations: string;
-	familyRecommendationsDate: string;
-}
+import type { TherapyNote, Recommendation } from "~/types/formTypes";
 
 const props = defineProps<{
 	patientId: string;

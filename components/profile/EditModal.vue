@@ -18,199 +18,22 @@
 		>
 			<h2 class="mb-4 text-xl font-bold">Edit Profile</h2>
 			<form @submit.prevent="$emit('save', formData)">
-				<!-- Name -->
-				<div
-					class="mb-4 flex w-full flex-col justify-between gap-4 lg:flex-row 2xl:gap-8"
+				<template
+					v-for="section in formBlueprint.slice(0, 3)"
+					:key="section.sectionTitle"
 				>
-					<div class="w-full">
-						<label class="mb-1 block font-medium" for="fname">
-							First Name <span class="text-red-500">*</span>
-						</label>
-						<input
-							id="fname"
-							v-model="formData.fName"
-							type="text"
-							required
-							class="input w-full"
-							placeholder="Enter your first name"
+					<h3 class="mb-2 font-semibold">
+						{{ section.sectionTitle }}
+					</h3>
+					<div v-for="(row, rowIdx) in section.fields" :key="rowIdx">
+						<FormDynamicInput
+							v-for="field in row"
+							:key="field.name"
+							v-model="formData[field.name]"
+							:field-config="field"
 						/>
 					</div>
-					<div class="lg:w-lg 2xl:w-xl w-full">
-						<label class="mb-1 block font-medium" for="minit">
-							Middle Initial
-						</label>
-						<input
-							id="minit"
-							v-model="formData.mInit"
-							type="text"
-							class="input w-full"
-							placeholder="Enter your initial"
-						/>
-					</div>
-					<div class="w-full">
-						<label class="mb-1 block font-medium" for="lname">
-							Last Name <span class="text-red-500">*</span>
-						</label>
-						<input
-							id="lname"
-							v-model="formData.lName"
-							type="text"
-							required
-							class="input w-full"
-							placeholder="Enter your last name"
-						/>
-					</div>
-				</div>
-
-				<!-- DOB -->
-				<div class="mb-4">
-					<label class="mb-1 block font-medium" for="dob">
-						DOB <span class="text-red-500">*</span>
-					</label>
-					<input
-						id="dob"
-						v-model="formData.dob"
-						type="date"
-						required
-						class="input w-full"
-						placeholder="Enter your email"
-					/>
-				</div>
-
-				<!-- Gender -->
-				<div class="mb-4">
-					<label class="mb-1 block font-medium">
-						Gender <span class="text-red-500">*</span>
-					</label>
-					<select v-model="formData.gender" class="input w-full">
-						<option v-for="(type, index) in gender" :key="index">
-							{{ type }}
-						</option>
-					</select>
-				</div>
-
-				<!-- Email -->
-				<div class="mb-4">
-					<label class="mb-1 block font-medium" for="email">
-						Email <span class="text-red-500">*</span>
-					</label>
-					<input
-						id="email"
-						v-model="formData.email"
-						type="email"
-						required
-						class="input w-full"
-						placeholder="Enter your email"
-					/>
-				</div>
-
-				<!-- Phone -->
-				<div class="mb-4">
-					<label class="mb-1 block font-medium" for="phone">
-						Phone <span class="text-red-500">*</span>
-					</label>
-					<input
-						id="phone"
-						v-model="formData.phone"
-						type="text"
-						required
-						class="input w-full"
-						placeholder="Enter your phone number"
-					/>
-				</div>
-
-				<!-- What's App -->
-				<div class="mb-4">
-					<label class="mb-1 block font-medium" for="whatsapp">
-						What's App <span class="text-red-500">*</span>
-					</label>
-					<input
-						id="whatsapp"
-						v-model="formData.whatsApp"
-						type="text"
-						required
-						class="input w-full"
-						placeholder="Enter your what's app number"
-					/>
-				</div>
-
-				<!-- Contact Preference -->
-				<div class="mb-4">
-					<label class="mb-1 block font-medium">
-						Contact Preference
-						<span class="text-red-500">*</span>
-					</label>
-					<select v-model="formData.contactPref" class="input w-full">
-						<option
-							v-for="(type, index) in contactType"
-							:key="index"
-						>
-							{{ type }}
-						</option>
-					</select>
-				</div>
-
-				<!-- Address -->
-				<div
-					class="mb-4 flex w-full flex-col justify-between gap-4 lg:flex-row 2xl:gap-8"
-				>
-					<div class="w-full">
-						<label class="mb-1 block font-medium" for="address">
-							Address
-						</label>
-						<input
-							id="address"
-							v-model="formData.address"
-							type="text"
-							class="input w-full"
-							placeholder="Enter your address"
-						/>
-					</div>
-					<div class="w-md">
-						<label class="mb-1 block font-medium" for="buildingNum">
-							Building Number
-						</label>
-						<input
-							id="buildingNum"
-							v-model="formData.buildNum"
-							type="number"
-							class="input w-full"
-							placeholder="Enter your address"
-						/>
-					</div>
-				</div>
-
-				<!-- City & Postcode -->
-				<div
-					class="mb-4 flex w-full flex-col justify-between gap-4 lg:flex-row 2xl:gap-8"
-				>
-					<div class="w-full">
-						<label class="mb-1 block font-medium" for="city">
-							City <span class="text-red-500">*</span>
-						</label>
-						<input
-							id="city"
-							v-model="formData.city"
-							type="text"
-							required
-							class="input w-full"
-							placeholder="Enter your city"
-						/>
-					</div>
-					<div class="w-full">
-						<label class="mb-1 block font-medium" for="postcode">
-							Post Code <span class="text-red-500">*</span>
-						</label>
-						<input
-							id="postcode"
-							v-model="formData.postCode"
-							type="number"
-							required
-							class="input w-full"
-							placeholder="Enter your post code"
-						/>
-					</div>
-				</div>
+				</template>
 
 				<!-- Action Buttons -->
 				<div class="flex justify-end space-x-2">
@@ -232,52 +55,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-
-const contactType = ["EMAIL", "PHONE", "WHATS_APP"];
-const gender = ["MALE", "FEMALE", "OTHER"];
-
-interface FormData {
-	fName: string;
-	mInit: string;
-	lName: string;
-	dob: string;
-	gender: string;
-	email: string;
-	phone: string;
-	whatsApp: string;
-	contactPref: string;
-	address: string;
-	buildNum: string | number;
-	city: string;
-	postCode: string;
-	identification?: string;
-	diagnosed?: boolean;
-}
-
-interface Profile {
-	fName?: string;
-	mInit?: string;
-	lName?: string;
-	email?: string;
-	phone?: string;
-	whatsApp?: string;
-	contactPref?: string;
-	NonEmployee?: {
-		dob?: string;
-		gender?: string;
-		streetNum?: string | number;
-		streetName?: string;
-		buildingNum?: string | number;
-		postCode?: string;
-		PostCodeCity?: {
-			city?: string;
-		};
-		Patient?: {
-			identification?: string;
-			diagnosed?: boolean;
-		};
-	};
-}
+import { formBlueprint } from "~/types/FormConfig/index";
+import type { FormFieldValue } from "~/types/FormConfig/formConfig";
+import type { Profile } from "~/types/formTypes";
 
 const props = defineProps<{
 	modelValue: boolean;
@@ -286,59 +66,40 @@ const props = defineProps<{
 
 defineEmits<{
 	"update:modelValue": [value: boolean];
-	save: [data: FormData];
+	save: [data: Record<string, FormFieldValue>];
 }>();
 
-const formData = ref<FormData>({
-	fName: "",
-	mInit: "",
-	lName: "",
-	dob: "",
-	gender: "",
-	email: "",
-	phone: "",
-	whatsApp: "",
-	contactPref: "",
-	address: "",
-	buildNum: "",
-	city: "",
-	postCode: "",
-});
+const formData = ref<Record<string, FormFieldValue>>({});
 
 watch(
 	() => props.modelValue,
 	(newVal) => {
 		if (newVal && props.profile) {
-			// Pre-populate form with profile data
-			formData.value.fName = props.profile.fName || "";
-			formData.value.mInit = props.profile.mInit || "";
-			formData.value.lName = props.profile.lName || "";
+			formData.value.firstName = props.profile.firstName || "";
+			formData.value.middleName = props.profile.middleInitial || "";
+			formData.value.lastName = props.profile.lastName || "";
 			formData.value.email = props.profile.email || "";
 			formData.value.phone = props.profile.phone || "";
-			formData.value.whatsApp = props.profile.whatsApp || "";
-			formData.value.contactPref = props.profile.contactPref || "";
+			formData.value.whatsapp = props.profile.whatsApp || "";
 
-			if (props.profile?.NonEmployee?.dob) {
-				formData.value.dob =
+			if (props.profile.NonEmployee?.dob) {
+				formData.value.DOB =
 					props.profile.NonEmployee.dob.split("T")[0];
 			}
-			if (props.profile?.NonEmployee?.gender) {
+			if (props.profile.NonEmployee?.gender) {
 				formData.value.gender = props.profile.NonEmployee.gender;
 			}
-			if (props.profile?.NonEmployee) {
+			if (props.profile.NonEmployee) {
+				const ne = props.profile.NonEmployee;
 				formData.value.address =
-					`${props.profile.NonEmployee.streetNum || ""} ${
-						props.profile.NonEmployee.streetName || ""
-					}`.trim();
-				formData.value.buildNum =
-					props.profile.NonEmployee.buildingNum || "";
+					`${ne.streetNum || ""} ${ne.streetName || ""}`.trim();
 			}
-			if (props.profile?.NonEmployee?.PostCodeCity?.city) {
+			if (props.profile.NonEmployee?.postCode) {
+				formData.value.postcode = props.profile.NonEmployee.postCode;
+			}
+			if (props.profile.NonEmployee?.PostCodeCity?.city) {
 				formData.value.city =
 					props.profile.NonEmployee.PostCodeCity.city;
-			}
-			if (props.profile?.NonEmployee?.postCode) {
-				formData.value.postCode = props.profile.NonEmployee.postCode;
 			}
 		}
 	}

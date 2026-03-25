@@ -57,12 +57,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useFetch, useCookie, navigateTo } from "#imports";
+import { useFetch, navigateTo } from "#imports";
 import { Search } from "lucide-vue-next";
-import { AccessPermission } from "~/types/permissions";
 
-const userId = useCookie("userId");
-const access = useCookie("AccessPermission");
+const { userId } = useAuthState();
+const { can } = useAccess();
 
 interface User {
 	id: number;
@@ -74,10 +73,10 @@ interface User {
 
 const goToProfile = async (id: number) => {
 	let name = "bad";
-	if (access.value[AccessPermission.PARENT]) {
+	if (can("PARENT")) {
 		name = "childProfile-id";
 	}
-	if (access.value[AccessPermission.STAFF]) {
+	if (can("STAFF")) {
 		name = "patientProfile-id";
 	}
 	await navigateTo({
@@ -92,10 +91,10 @@ const searchQuery = ref("");
 const { data: usersData, error } = await getUsers();
 
 async function getUsers() {
-	if (access.value[AccessPermission.STAFF]) {
+	if (can("STAFF")) {
 		return useFetch<User[]>("/api/search/all");
 	}
-	if (access.value[AccessPermission.PARENT]) {
+	if (can("PARENT")) {
 		return useFetch<User[]>("/api/search/children", {
 			query: { pId: userId },
 		});

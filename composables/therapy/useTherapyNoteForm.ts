@@ -37,19 +37,30 @@ export function useTherapyNoteForm() {
 		noteId: number | null,
 		onSuccess: () => Promise<void>
 	) {
-		const objectives = formData.objectives as Record<string, unknown> ?? {};
-		const goals = formData.goals as Record<string, unknown> ?? {};
-		const reinforcers = formData.reinforcers as Record<string, string> ?? {};
-		const famRecs = formData.famRecs as Record<string, string> ?? {};
-		const progressNotes = formData.progressNotes as Record<string, string> ?? {};
-		const nextSeshObjectives = formData.nextSeshObjectives as Record<string, string> ?? {};
-		const incidents = formData.incidents as Record<string, string> ?? {};
-		const observations = formData.observations as Record<string, string> ?? {};
-		const goalsGoals = goals.goals as Record<string, string> ?? {};
+		const objectives =
+			(formData.objectives as Record<string, unknown>) ?? {};
+		const goals = (formData.goals as Record<string, unknown>) ?? {};
+		const reinforcers =
+			(formData.reinforcers as Record<string, string>) ?? {};
+		const famRecs = (formData.famRecs as Record<string, string>) ?? {};
+		const progressNotes =
+			(formData.progressNotes as Record<string, string>) ?? {};
+		const nextSeshObjectives =
+			(formData.nextSeshObjectives as Record<string, string>) ?? {};
+		const incidents = (formData.incidents as Record<string, string>) ?? {};
+		const observations =
+			(formData.observations as Record<string, string>) ?? {};
+		const goalsGoals = (goals.goals as Record<string, string>) ?? {};
 
 		const objectiveNames = (objectives.objectiveNames as string[]) ?? [];
-		const objectiveDetails = (objectives.objectiveDetails as Record<string, string>) ?? {};
-		const customGoals = (goals.customGoals as Array<{ id: number; label: string; details: string }>) ?? [];
+		const objectiveDetails =
+			(objectives.objectiveDetails as Record<string, string>) ?? {};
+		const customGoals =
+			(goals.customGoals as Array<{
+				id: number;
+				label: string;
+				details: string;
+			}>) ?? [];
 
 		const objectivesPayload: {
 			goalKey?: string | null;
@@ -78,27 +89,34 @@ export function useTherapyNoteForm() {
 			patientId,
 			therapyType: formData.therapy,
 			objectives: objectivesPayload,
-			objectivesDate: dateStringWithCurrentTime(objectives.objectivesDate as string),
+			objectivesDate: dateStringWithCurrentTime(
+				objectives.objectivesDate as string
+			),
 			reinforcersUsed: reinforcers.value || null,
 			reinforcersDate: dateStringWithCurrentTime(reinforcers.date),
 			familyRecommendations: famRecs.value || null,
 			familyRecommendationsDate: dateStringWithCurrentTime(famRecs.date),
-			groupRecommendationParents: (formData.groupRecommendationParents as string) || null,
+			groupRecommendationParents:
+				(formData.groupRecommendationParents as string) || null,
 			goalsAchieved: goalsGoals.value || null,
 			goalsAchievedDate: dateStringWithCurrentTime(goalsGoals.date),
 			progressNotes: progressNotes.value || null,
 			progressNotesDate: dateStringWithCurrentTime(progressNotes.date),
 			nextSessionObjectives: nextSeshObjectives.value || null,
-			nextSessionObjectivesDate: dateStringWithCurrentTime(nextSeshObjectives.date),
+			nextSessionObjectivesDate: dateStringWithCurrentTime(
+				nextSeshObjectives.date
+			),
 			incidents: incidents.value || null,
 			incidentsDate: dateStringWithCurrentTime(incidents.date),
 			generalObservations: observations.value || null,
-			generalObservationsDate: dateStringWithCurrentTime(observations.date),
+			generalObservationsDate: dateStringWithCurrentTime(
+				observations.date
+			),
 		};
 
 		const url = noteId
-			? `/api/session/therapyNotes/${noteId}`
-			: "/api/session/therapyNotes";
+			? `/api/session/notes/${noteId}`
+			: "/api/session/notes";
 
 		const method = noteId ? "PUT" : "POST";
 
