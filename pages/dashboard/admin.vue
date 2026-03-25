@@ -3,16 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useCookie, navigateTo } from "#imports";
-import { AccessPermission } from "~/types/permissions";
 import { Calendar, FileText, Users, UserPlus } from "lucide-vue-next";
-import DashboardButtonGrid from "~/components/DashboardButtonGrid.vue";
 
-const access = useCookie("AccessPermission");
-
-if (!access.value?.[AccessPermission.ADMIN]) {
-	navigateTo("/dashboard");
-}
+useDashboardGuard("ADMIN");
 
 const adminButtons = [
 	{

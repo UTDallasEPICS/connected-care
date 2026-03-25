@@ -1,7 +1,4 @@
 // server/api/search/employees.get.ts
-// Return all employees mapped to a summary object (similar style to server/api/search/all.get.ts)
-import { defineEventHandler } from "h3";
-import { prisma } from "../../utils/prisma";
 
 export default defineEventHandler(async () => {
 	// Fetch employees (users with non-null `type`) and include useful relations
@@ -20,14 +17,9 @@ export default defineEventHandler(async () => {
 	});
 
 	return employeeUsers.map((u) => {
-		// build full name
-		const name = [u.fName, u.mInit ? `${u.mInit}.` : null, u.lName]
-			.filter(Boolean)
-			.join(" ");
-
 		return {
 			id: u.id,
-			name,
+			name: formatFullName(u.fName, u.mInit, u.lName),
 			email: u.email ?? null,
 			phone: u.phone ?? null,
 			whatsApp: u.whatsApp ?? null,

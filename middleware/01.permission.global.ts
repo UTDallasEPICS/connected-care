@@ -5,6 +5,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const userId = useCookie("userId");
 	const accessCookie = useCookie("AccessPermission");
 	const permissions = accessCookie.value;
+	const { dashboardNavigation } = useDashboardNavigation();
 
 	console.log(
 		"Attempting to navigating\nfrom: " +
@@ -19,7 +20,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// TODO, handle when navigating back to index page while logged in
 	if (to.path == "/") {
 		console.log("Navigation authorized");
-		return;
+		return dashboardNavigation();
 	}
 
 	// page does not exist in pageAccessMap
@@ -27,8 +28,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		console.log("Route not found in pageAccessMap. to.name:", to.name);
 		console.log("pageAccessMap keys:", Object.keys(pageAccessMap));
 		if (!from.path || to.path == from.path) {
-			console.log("Unknown path, navigating to index");
-			return navigateTo("/");
+			console.log("Unknown path, navigating to home");
+			return dashboardNavigation();
 		} else {
 			console.log("Unknown path, returning to: " + from.path);
 			return abortNavigation();
@@ -53,8 +54,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		)
 	) {
 		if (!from.path || to.path == from.path) {
-			console.log("Unauthorized path, navigating to index");
-			return navigateTo("/");
+			console.log("Unauthorized path, navigating to home");
+			return dashboardNavigation();
 		} else {
 			console.log("Unauthorized path, returning to: " + from.path);
 			return abortNavigation();
@@ -64,8 +65,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// enforce patient can only view their own profile
 	if (to.name === "myProfile-id" && to.params.id !== userId.value) {
 		if (!from.path || to.path == from.path) {
-			console.log("Unauthorized path, navigating to index");
-			return navigateTo("/");
+			console.log("Unauthorized path, navigating to home");
+			return dashboardNavigation();
 		} else {
 			console.log("Unauthorized path, returning to: " + from.path);
 			return abortNavigation();
@@ -80,8 +81,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 		);
 		if (!childIds.includes(to.params.id)) {
 			if (!from.path || to.path == from.path) {
-				console.log("Unauthorized path, navigating to index");
-				return navigateTo("/");
+				console.log("Unauthorized path, navigating to home");
+				return dashboardNavigation();
 			} else {
 				console.log("Unauthorized path, returning to: " + from.path);
 				return abortNavigation();

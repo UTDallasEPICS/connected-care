@@ -50,10 +50,10 @@ export default defineNuxtConfig({
 					path: "/login",
 					file: "~/pages/auth/login.vue",
 				},
-				"patient-patientSearch": {
-					path: "/patientSearch",
-					file: "~/pages/patient/patientSearch.vue",
-				},
+				//				"patient-patientSearch": {
+				//path: "/patientSearch",
+				//file: "~/pages/patient/patientSearch.vue",
+				//},
 				"patient-contactForm": {
 					path: "/contactForm",
 					file: "~/pages/patient/contactForm.vue",
@@ -62,10 +62,14 @@ export default defineNuxtConfig({
 					path: "/viewContactForms",
 					file: "~/pages/patient/viewContactForms.vue",
 				},
-				"admin-employeeSearch": {
-					path: "/employeeSearch",
-					file: "~/pages/admin/employeeSearch.vue",
+				"patient-testingForm": {
+					path: "/testingForm",
+					file: "~/pages/patient/testingForm.vue",
 				},
+				// "admin-employeeSearch": {
+				// 	path: "/employeeSearch",
+				// 	file: "~/pages/admin/employeeSearch.vue",
+				// },
 				"admin-scheduleView": {
 					path: "/scheduleView",
 					file: "~/pages/admin/scheduleView.vue",
@@ -92,11 +96,11 @@ export default defineNuxtConfig({
 				path: "/childProfile/:id",
 				file: "~/pages/patient/patientProfile/[id].vue",
 			});
-			pages.push({
-				name: "childSearch",
-				path: "/myChildren",
-				file: "~/pages/patient/patientSearch.vue",
-			});
+			// pages.push({
+			// 	name: "childSearch",
+			// 	path: "/myChildren",
+			// 	file: "~/pages/patient/patientSearch.vue",
+			// });
 		},
 	},
 	// This is so nuxt can auto import files that aren't directly under composables but are instead nested

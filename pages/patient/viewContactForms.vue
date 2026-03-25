@@ -8,147 +8,62 @@
 					<h1 class="text-2xl">View Incoming Contact Forms</h1>
 				</div>
 				<div class="flex w-full flex-row md:w-1/3">
-					<Listbox
+					<ViewContactFormSortControl
 						v-model="sortBy"
-						as="div"
-						class="fill-smoky bg-smoky md:w-66 w-2/3"
-					>
-						<div>
-							<ListboxButton
-								class="bg-smoky w-full cursor-pointer py-2"
-								>{{
-									sortBy == ""
-										? "Sort By:"
-										: "Sort By: " + sortBy
-								}}</ListboxButton
-							>
-							<ListboxOptions
-								as="div"
-								class="bg-smoky md:w-66 absolute w-1/5"
-							>
-								<ListboxOption
-									as="div"
-									class="bg-smoky w-full cursor-pointer px-5 hover:bg-blue-500"
-									v-for="(option, index) in sortOptions"
-									:key="index"
-									:value="option"
-								>
-									<div class="">
-										{{ option }}
-									</div>
-								</ListboxOption>
-							</ListboxOptions>
-						</div>
-					</Listbox>
+						:options="sortOptions"
+					/>
 				</div>
 			</div>
 			<div class="flex flex-col gap-5">
-				<table
-					class="font-cormorant-garamond w-full border-collapse border-2 border-b-black text-2xl"
-				>
-					<thead>
-						<tr class="border-collapse border-2 border-b-black">
-							<th
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								First Name
-							</th>
-							<th
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								Last Name
-							</th>
-							<th
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								SSN
-							</th>
-							<th
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								Insurance
-							</th>
-							<th
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								Comments
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr
-							class="font-sc-encode border-collapse border-2 border-b-black text-lg"
-							v-for="(user, index) in processingPatients"
-							:key="index"
-						>
-							<td
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								{{ user.fName }}
-							</td>
-							<td
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								{{ user.lName }}
-							</td>
-							<td
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								{{ user.NonEmployee?.Patient?.identification }}
-							</td>
-							<td
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								{{
-									user.NonEmployee?.Patient?.ContactForm
-										?.insurance
-								}}
-							</td>
-							<td
-								class="border-collapse border-2 border-b-black px-2"
-							>
-								{{
-									user.NonEmployee?.Patient?.ContactForm
-										?.comment == ""
-										? "None"
-										: user.NonEmployee?.Patient?.ContactForm
-												?.comment
-								}}
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<ViewContactFormTable
+					:columns="columns"
+					:patients="processingPatients"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
-<script setup>
-import { ref, onMounted, watch } from "vue";
-import {
-	Listbox,
-	ListboxButton,
-	ListboxOptions,
-	ListboxOption,
-} from "@headlessui/vue";
+
+<script setup lang="ts">
+import { ref, watch, onMounted } from "vue";
 import { $fetch } from "ofetch";
+
+interface Patient {
+	fName: string;
+	lName: string;
+	NonEmployee?: {
+		Patient?: {
+			identification?: string;
+			ContactForm?: {
+				insurance?: string;
+				comment?: string;
+			};
+		};
+	};
+}
+
+const columns = [
+	{ key: "fName", label: "First Name" },
+	{ key: "lName", label: "Last Name" },
+	{ key: "identification", label: "SSN" },
+	{ key: "insurance", label: "Insurance" },
+	{ key: "comments", label: "Comments" },
+];
 
 const sortOptions = ["SSN", "Last Name"];
 const sortBy = ref("");
-const processingPatients = ref([]);
+const processingPatients = ref<Patient[]>([]);
 
 async function getPatients() {
 	try {
-		const getData = {
-			term: "PROCESSING",
-		};
-		const response = await $fetch("/api/contactForm/viewForm", {
+		const response = await $fetch<Patient[]>("/api/contactForm/viewForm", {
 			method: "GET",
-			params: getData,
+			params: { term: "PROCESSING" },
 		});
 
 		processingPatients.value = response;
 
-		if (response == null || !response) {
+		if (!response) {
 			throw new Error("Could not submit form");
 		}
 	} catch {
@@ -156,37 +71,17 @@ async function getPatients() {
 	}
 }
 
-async function sort(sortByCategory) {
-	if (sortByCategory == "Last Name")
-		processingPatients.value = processingPatients.value.sort(compareFn1);
-	else if (sortByCategory == "SSN")
-		processingPatients.value = processingPatients.value.sort(compareFn2);
-}
-
-function compareFn1(a, b) {
-	if (a.lName < b.lName) {
-		return -1;
-	} else if (a.lName > b.lName) {
-		return 1;
-	}
-	// a must be equal to b
-	return 0;
-}
-
-function compareFn2(a, b) {
-	if (
-		a.NonEmployee?.Patient?.identification <
-		b.NonEmployee?.Patient?.identification
-	) {
-		return -1;
-	} else if (
-		a.NonEmployee?.Patient?.identification >
-		b.NonEmployee?.Patient?.identification
-	) {
-		return 1;
-	}
-	// a must be equal to b
-	return 0;
+function sort(category: string) {
+	if (category === "Last Name")
+		processingPatients.value = [...processingPatients.value].sort((a, b) =>
+			a.lName.localeCompare(b.lName)
+		);
+	else if (category === "SSN")
+		processingPatients.value = [...processingPatients.value].sort((a, b) =>
+			(a.NonEmployee?.Patient?.identification ?? "").localeCompare(
+				b.NonEmployee?.Patient?.identification ?? ""
+			)
+		);
 }
 
 watch(sortBy, (newSortBy) => {
@@ -195,6 +90,5 @@ watch(sortBy, (newSortBy) => {
 
 onMounted(() => {
 	getPatients();
-	sort(sortBy);
 });
 </script>

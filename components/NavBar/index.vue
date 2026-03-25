@@ -41,7 +41,8 @@
 import { useLocalePath, ref } from "#imports";
 
 const localePath = useLocalePath();
-const { dashboardNavigation, userLinks } = useAuthNav();
+const { dashboardNavigation } = useDashboardNavigation();
+const { userLinks } = useUserLinks();
 
 const isMenuOpen = ref(false);
 
