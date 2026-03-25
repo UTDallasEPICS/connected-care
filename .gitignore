@@ -25,10 +25,3 @@ prisma/dev.db*
 .env
 .env.*
 !.env.example
-
-# Claude files
-CLAUDE.md
-.claude
-
-# Old files
-OldComponentsAndFiles
