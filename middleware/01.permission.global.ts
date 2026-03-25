@@ -19,8 +19,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
 	// TODO, handle when navigating back to index page while logged in
 	if (to.path == "/") {
-		console.log("Navigation authorized");
-		return dashboardNavigation();
+		if (from.path !== "/") {
+			console.log("Navigation authorized");
+			return dashboardNavigation();
+		}
 	}
 
 	// page does not exist in pageAccessMap
