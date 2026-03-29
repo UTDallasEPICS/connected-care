@@ -41,9 +41,8 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Admin Pages
 	admin: AccessPermission.ADMIN,
 	employeeSearch: AccessPermission.ADMIN,
-<<<<<<< HEAD:permissions.ts
+
 	createAccount: AccessPermission.ADMIN,
-=======
 
 	"dashboard-admin": AccessPermission.ADMIN,
 
@@ -58,7 +57,6 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Contact & About
 	contact: AccessPermission.USER,
 	about: AccessPermission.USER,
->>>>>>> db7427d9e980512972ef7b966ecb0b66ba40f013:types/permissions.ts
 };
 
 const apiAccessMap: {
