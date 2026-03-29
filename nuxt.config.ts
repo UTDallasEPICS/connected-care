@@ -21,8 +21,6 @@ export default defineNuxtConfig({
 	},
 	hooks: {
 		"pages:extend"(pages) {
-<<<<<<< HEAD
-=======
 			// Override auto-generated routes for moved pages to maintain backward compatibility
 			const routeOverrides: Record<
 				string,
@@ -96,7 +94,7 @@ export default defineNuxtConfig({
 			});
 
 			// Add custom patient profile routes
->>>>>>> db7427d9e980512972ef7b966ecb0b66ba40f013
+
 			pages.push({
 				name: "myProfile-id",
 				path: "/myProfile/:id",
