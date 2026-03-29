@@ -42,6 +42,8 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	admin: AccessPermission.ADMIN,
 	employeeSearch: AccessPermission.ADMIN,
 	createAccount: AccessPermission.ADMIN,
+
+	requestForm:AccessPermission.PUBLIC
 };
 
 const apiAccessMap: {

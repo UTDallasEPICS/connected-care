@@ -24,14 +24,32 @@
 			</form>
 		</div>
 	</div>
+	<div class=" flex justify-center">
+		<NuxtLink
+  			:to="localePath({ name: 'requestForm' })"
+  			class="mt-[140px] inline-block rounded-md bg-blue-950 p-2 text-white hover:bg-blue-400 active:bg-blue-300"
+			>
+  			{{ $t("requestAppointmentForm") }}
+		</NuxtLink>
+	</div>
+	
 </template>
 
 <script lang="ts" setup>
-import { $fetch } from "ofetch";
+import { $fetch } from 'ofetch';
 import { ref, useCookie, navigateTo } from "#imports";
 import { AccessPermission } from "~/permissions";
+import { onMounted } from 'vue'
+import { useLocalePath } from "#imports";
+/* Nothing special yet — you can add props or logic later */
+const localePath = useLocalePath();
 
 const email = ref("");
+const loggedin = useState("loggedin", () => false);
+const router = useRouter();
+onMounted(() => {
+  loggedin.value = false;
+});
 
 async function handleSubmit() {
 	await $fetch("/api/login", {
@@ -47,6 +65,9 @@ async function handleSubmit() {
 	// Get updated cookie values
 	const userId = useCookie("userId");
 	const access = useCookie("AccessPermission");
+	if (email.value){
+		loggedin.value=true;
+	}
 
 	// Redirect based on permissions
 	if (userId.value && access.value) {
@@ -64,5 +85,6 @@ async function handleSubmit() {
 			await navigateTo("/Dashboard");
 		}
 	}
+	
 }
 </script>
