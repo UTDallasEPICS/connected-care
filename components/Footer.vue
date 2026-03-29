@@ -11,17 +11,23 @@
 				<NuxtLink to="/" class="hover:underline">{{
 					$t("Home")
 				}}</NuxtLink>
-				<NuxtLink to="/about" class="hover:underline">{{
-					$t("About")
-				}}</NuxtLink>
-				<NuxtLink to="/contact" class="hover:underline">{{
-					$t("Contact")
-				}}</NuxtLink>
+				<NuxtLink
+					to="https://www.manosunidasporautismo.org/"
+					class="hover:underline"
+					>{{ $t("About") }}</NuxtLink
+				>
+				<NuxtLink
+					:to="localePath({ name: 'contact', params: {} })"
+					class="hover:underline"
+					>{{ $t("Contact") }}</NuxtLink
+				>
 			</nav>
 		</div>
 	</footer>
 </template>
 
 <script lang="ts" setup>
+import { useLocalePath } from "#imports";
 /* Nothing special yet — you can add props or logic later */
+const localePath = useLocalePath();
 </script>
