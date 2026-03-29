@@ -66,6 +66,10 @@ export default defineNuxtConfig({
 					path: "/testingForm",
 					file: "~/pages/patient/testingForm.vue",
 				},
+				"admin-userSearch": {
+					path: "/userSearch",
+					file: "~/pages/admin/userSearch.vue",
+				},
 				// "admin-employeeSearch": {
 				// 	path: "/employeeSearch",
 				// 	file: "~/pages/admin/employeeSearch.vue",
