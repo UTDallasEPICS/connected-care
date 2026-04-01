@@ -1,5 +1,5 @@
-import type { AccessPermission } from "~/types/permissions";
-import { pageAccessMap, apiAccessMap } from "~/types/permissions";
+import type { AccessPermission } from "~/permissions";
+import { pageAccessMap, apiAccessMap } from "~/permissions";
 
 export default defineEventHandler((event) => {
 	const requestPath = getRequestURL(event).pathname;
@@ -25,4 +25,5 @@ export default defineEventHandler((event) => {
 			});
 		}
 	}
+	console.log("AUTHORIZING" + ` ${event.method} ${requestPath}`);
 });

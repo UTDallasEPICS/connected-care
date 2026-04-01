@@ -1,5 +1,7 @@
 import { z } from "zod";
-import type { Status } from "@prisma/client";
+import { PrismaClient, Status } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const schema = z.object({
 	term: z.enum(["PROCESSING", "COMPLETED", "PENDING"]),
@@ -8,9 +10,21 @@ const schema = z.object({
 const validateSchema = schema.strict();
 
 export default defineEventHandler(async (event) => {
-	const { term } = await validateQuery(event, validateSchema);
+	const queries = await getValidatedQuery(event, (query) =>
+		validateSchema.safeParse(query)
+	);
+	if (!queries.success) {
+		const zodError = queries.error.format();
+		throw createError({
+			statusCode: 400,
+			statusMessage: "Bad Request",
+			data: zodError,
+		});
+	}
 
-	const items = await prisma.user.findMany({
+	const { term } = queries.data;
+
+	const items = prisma.user.findMany({
 		where: {
 			NonEmployee: {
 				Patient: {

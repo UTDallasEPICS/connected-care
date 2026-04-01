@@ -1,3 +1,9 @@
+import { PrismaClient, SessionType } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
 export default defineEventHandler(async () => {
-	return prisma.sessionType.findMany();
+	// get all the type ids
+	const types: SessionType[] = await prisma.sessionType.findMany();
+	return types;
 });

@@ -1,4 +1,7 @@
+import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+
+const prisma = new PrismaClient();
 
 // Schema for updating a session (appointment)
 const updateSessionSchema = z.object({
@@ -12,10 +15,25 @@ const updateSessionSchema = z.object({
 });
 
 export default defineEventHandler(async (event) => {
-	const { id, ...updateData } = await validateBody(
-		event,
-		updateSessionSchema
-	);
+	if (event.method !== "PUT") {
+		throw createError({
+			statusCode: 405,
+			statusMessage: "Method not allowed",
+		});
+	}
+
+	const body = await readBody(event);
+	const parsed = updateSessionSchema.safeParse(body);
+
+	if (!parsed.success) {
+		throw createError({
+			statusCode: 400,
+			statusMessage: "Invalid request body",
+			data: parsed.error.format(),
+		});
+	}
+
+	const { id, ...updateData } = parsed.data;
 
 	try {
 		const updatedSession = await prisma.session.update({

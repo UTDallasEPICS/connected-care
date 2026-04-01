@@ -41,6 +41,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// User Service Pages
 	"dashboard-userServiceDashboard": AccessPermission.USER_SERVICE,
 	// Admin Pages
+<<<<<<< HEAD
 <<<<<<< HEAD:permissions.ts
 <<<<<<< HEAD:permissions.ts
 =======
@@ -56,6 +57,9 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 
 	"dashboard-admin": AccessPermission.ADMIN,
 	"admin-userSearch": AccessPermission.ADMIN,
+=======
+	"dashboard-admin": AccessPermission.ADMIN,
+>>>>>>> parent of 4207ea6 (165 task pages for about and contact in footer not implemented (#179))
 	// "admin-employeeSearch": AccessPermission.ADMIN,
 
 	// testing:
