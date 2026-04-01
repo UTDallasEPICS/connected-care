@@ -70,10 +70,6 @@ export default defineNuxtConfig({
 					path: "/testingForm",
 					file: "~/pages/patient/testingForm.vue",
 				},
-				"admin-userSearch": {
-					path: "/userSearch",
-					file: "~/pages/admin/userSearch.vue",
-				},
 				// "admin-employeeSearch": {
 				// 	path: "/employeeSearch",
 				// 	file: "~/pages/admin/employeeSearch.vue",
@@ -94,7 +90,6 @@ export default defineNuxtConfig({
 			});
 
 			// Add custom patient profile routes
-
 			pages.push({
 				name: "myProfile-id",
 				path: "/myProfile/:id",

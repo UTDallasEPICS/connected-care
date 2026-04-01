@@ -5,6 +5,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const userId = useCookie("userId");
 	const accessCookie = useCookie("AccessPermission");
 	const permissions = accessCookie.value;
+	const dashboardNavigation = useDashboardNavigation();
 
 	console.log(
 		"Attempting to navigating\nfrom: " +
@@ -19,12 +20,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	// TODO, handle when navigating back to index page while logged in
 	if (to.path == "/") {
 		console.log("Navigation authorized");
-		return;
-
-		if (from.path !== "/") {
-			console.log("Navigation authorized");
-			return dashboardNavigation();
-		}
+		return dashboardNavigation();
 	}
 
 	// page does not exist in pageAccessMap

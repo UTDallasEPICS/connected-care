@@ -3,17 +3,17 @@
  -->
 <template>
 	<div
-		class="font-sc-encode fixed right-0 top-0 z-50 h-full w-full items-center text-left"
+		class="font-sc-encode fixed top-0 right-0 z-50 h-full w-full items-center text-left"
 	>
 		<!-- Background -->
 		<div
-			class="z-51 fixed h-full w-full bg-black/70"
+			class="fixed z-51 h-full w-full bg-black/70"
 			@click="closeWindow"
 		></div>
 
 		<!-- Window -->
 		<div
-			class="text-md z-52 relative m-7 flex max-h-full flex-col overflow-y-auto bg-white p-4 text-black"
+			class="text-md relative z-52 m-7 flex max-h-full flex-col overflow-y-auto bg-white p-4 text-black"
 		>
 			<div
 				class="flex cursor-pointer justify-end pr-2 text-right"
