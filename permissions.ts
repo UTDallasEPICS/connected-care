@@ -39,6 +39,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// User Service Pages
 	userServiceDashboard: AccessPermission.USER_SERVICE,
 	// Admin Pages
+<<<<<<< HEAD:permissions.ts
 	admin: AccessPermission.ADMIN,
 	employeeSearch: AccessPermission.ADMIN,
 
@@ -46,6 +47,10 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	"admin-employeeSearch": AccessPermission.ADMIN,
 	"admin-createAccount": AccessPermission.ADMIN,
 
+=======
+	"dashboard-admin": AccessPermission.ADMIN,
+	"admin-userSearch": AccessPermission.ADMIN,
+>>>>>>> parent of 7465499 (Merge pull request #182 from UTDallasEPICS/165-task-pages-for-about-and-contact-in-footer-not-implemented):types/permissions.ts
 	// "admin-employeeSearch": AccessPermission.ADMIN,
 
 	// testing:
