@@ -3,9 +3,14 @@
 <template>
 	<div class="font-sc-encode pb-8">
 		<!-- Filter modal window -->
+<<<<<<<< HEAD:OldComponentsAndFiles/oldScheduleFiles/pages/admin/scheduleView.vue
 		<AppointmentFilter
 			v-if="showFilterWindow"
+========
+		<FilterAppointments
+>>>>>>>> dev:pages/scheduleView.vue
 			:filter="filters"
+			v-if="showFilterWindow"
 			@close-filter-window="showFilterWindow = false"
 			@add-filters="(filter) => addFilters(filter)"
 		/>
@@ -24,9 +29,9 @@
 					<AppointmentCreate v-if="permissions.editAppointments" />
 					<!-- placeholder style for the button so it's not just text lmao -->
 					<button
-						v-if="permissions.filter"
-						class="btn cursor-pointer"
 						@click="showFilterWindow = true"
+						class="btn cursor-pointer"
+						v-if="permissions.filter"
 					>
 						Filter
 					</button>
@@ -54,12 +59,12 @@
 
 <script setup lang="ts">
 import { ref, computed, useCookie } from "#imports";
-import { AccessPermission } from "~/types/permissions";
+import { AccessPermission } from "~/permissions";
 
 const access = useCookie("AccessPermission");
 
 const permissions = computed(() => {
-	const actions = {
+	let actions = {
 		filter: false, // user service/admin = true, admin/patient/therapist = false
 		editAppointments: false, // user service = true, admin/patient/therapist = false
 	};
@@ -106,9 +111,9 @@ function getCurrentWeek() {
 		date.value.getDate() -
 		date.value.getDay() +
 		(date.value.getDay() == 0 ? -6 : 1);
-	const monday = new Date(date.value.getTime());
+	let monday = new Date(date.value.getTime());
 	monday.setDate(firstDay);
-	const friday = new Date(date.value.getTime());
+	let friday = new Date(date.value.getTime());
 	friday.setDate(firstDay + 4);
 
 	const result =

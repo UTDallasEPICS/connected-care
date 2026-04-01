@@ -3,7 +3,6 @@
 		<NavBar />
 		<NuxtPage class="grow" />
 		<Footer />
-		
 	</div>
 </template>
 

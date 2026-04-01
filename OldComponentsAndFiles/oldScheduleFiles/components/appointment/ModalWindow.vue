@@ -29,17 +29,17 @@
 				<h2 class="text-xl">
 					{{ $t("Therapist") }}: {{ props.session.Therapist.fName }}
 				</h2>
-				<h3 v-if="!permissions.nonEmployee" class="font-bold">
+				<h3 class="font-bold" v-if="!permissions.nonEmployee">
 					{{ $t("Maximum Patients") }}:
 					{{ props.session.maxAttendance }}
 				</h3>
-				<h3 v-else class="font-bold">
+				<h3 class="font-bold" v-else>
 					{{ $t("Space Left") }}: {{ remainingSpace }}
 				</h3>
 				<button
-					v-if="!permissions.nonEmployee"
 					class="grid cursor-pointer grid-cols-2 bg-blue-950 text-white"
 					@click="showPatients = !showPatients"
+					v-if="!permissions.nonEmployee"
 				>
 					<span class="col-span-1 px-2 py-1 text-left font-bold">{{
 						$t("Patients Attending")
@@ -97,19 +97,19 @@
 			<div class="flex flex-col justify-center gap-3">
 				<div class="flex justify-center">
 					<button
-						v-if="!permissions.nonEmployee"
 						class="btn cursor-pointer"
+						v-if="!permissions.nonEmployee"
 					>
 						{{ $t("Therapy Notes") }}
 					</button>
 				</div>
 				<div class="flex justify-center">
 					<button
+						class="btn cursor-pointer"
 						v-if="
 							!permissions.nonEmployee &&
 							permissions.editAppointments
 						"
-						class="btn cursor-pointer"
 						@click="showEditAppointment()"
 					>
 						{{ $t("Edit Appointment") }}
@@ -131,7 +131,7 @@
 import { computed, ref, useCookie, navigateTo } from "#imports";
 import type { Session } from "@prisma/client";
 import { X, ChevronDown, ChevronUp } from "lucide-vue-next";
-import { AccessPermission } from "~/types/permissions";
+import { AccessPermission } from "~/permissions";
 import { Gender } from "@prisma/client";
 
 const props = defineProps<{
@@ -147,7 +147,7 @@ function closeWindow() {
 const access = useCookie("AccessPermission");
 
 const permissions = computed(() => {
-	const actions = {
+	let actions = {
 		nonEmployee: true, // patient = true, user service/admin/therapist = false
 		editAppointments: false, // user service = true, admin/patient/therapist = false
 	};
@@ -189,7 +189,7 @@ const duration = computed(() => {
 	const startMins = date.getMinutes();
 
 	// get end time
-	const endTime = getSessionEndTime(date, props.session.duration);
+	let endTime = getSessionEndTime(date, props.session.duration);
 	const endHour = endTime.getHours();
 	const endMins = endTime.getMinutes();
 
@@ -205,7 +205,7 @@ const duration = computed(() => {
 });
 
 function getSessionEndTime(d: Date, sessionLength: number): Date {
-	const endTime = new Date(d.getTime());
+	let endTime = new Date(d.getTime());
 	endTime.setMinutes(d.getMinutes() + sessionLength);
 	return endTime;
 }
