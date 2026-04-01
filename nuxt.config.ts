@@ -1,8 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-	modules: ["@nuxtjs/i18n"],
+	modules: ["@nuxtjs/i18n", "@nuxtjs/tailwindcss", "@nuxt/eslint"],
 	i18n: {
 		locales: [
 			{ code: "en", iso: "en-US", file: "en.json" },
@@ -16,9 +15,6 @@ export default defineNuxtConfig({
 	compatibilityDate: "2024-11-01",
 	devtools: { enabled: false },
 	css: ["~/assets/css/main.css"],
-	vite: {
-		plugins: [tailwindcss()],
-	},
 	hooks: {
 		"pages:extend"(pages) {
 			// Override auto-generated routes for moved pages to maintain backward compatibility
@@ -93,18 +89,23 @@ export default defineNuxtConfig({
 			pages.push({
 				name: "myProfile-id",
 				path: "/myProfile/:id",
-				file: "~/pages/patientProfile/[id].vue",
+				file: "~/pages/patient/patientProfile/[id].vue",
 			});
 			pages.push({
 				name: "childProfile-id",
 				path: "/childProfile/:id",
-				file: "~/pages/patientProfile/[id].vue",
+				file: "~/pages/patient/patientProfile/[id].vue",
 			});
-			pages.push({
-				name: "childSearch",
-				path: "/myChildren",
-				file: "~/pages/patientSearch.vue",
-			});
+			// pages.push({
+			// 	name: "childSearch",
+			// 	path: "/myChildren",
+			// 	file: "~/pages/patient/patientSearch.vue",
+			// });
 		},
+	},
+	// This is so nuxt can auto import files that aren't directly under composables but are instead nested
+	// within a folder inside of composables
+	imports: {
+		dirs: ["composables", "composables/**"],
 	},
 });
