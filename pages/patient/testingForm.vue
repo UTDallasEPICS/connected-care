@@ -1,8 +1,8 @@
 <template>
 	<div class="font-karla">
 		<div class="flex h-auto place-content-center overflow-y-auto">
-			<div class="md:w-180 flex-col flex-wrap font-light">
-				<h1 class="ml-5 mt-5 text-4xl sm:ml-0 sm:mr-5">
+			<div class="flex-col flex-wrap font-light md:w-180">
+				<h1 class="mt-5 ml-5 text-4xl sm:mr-5 sm:ml-0">
 					Patient Contact Form
 				</h1>
 				<div class="justify-start p-5 text-lg">
@@ -14,7 +14,7 @@
 							v-for="section in userFormBlueprint"
 							:key="section.sectionTitle"
 						>
-							<h2 class="mb-3 mt-5 text-2xl font-semibold">
+							<h2 class="mt-5 mb-3 text-2xl font-semibold">
 								{{ section.sectionTitle }}
 							</h2>
 							<div class="flex w-full flex-wrap gap-5 py-5">
@@ -45,6 +45,7 @@
 <script setup lang="ts">
 import { userFormBlueprint } from "~/types/FormConfig";
 import type { FormFieldValue } from "~/types/FormConfig/formConfig";
+import { ref } from "vue";
 
 const formData = ref<Record<string, FormFieldValue>>({});
 
