@@ -28,8 +28,7 @@
 
 <script lang="ts" setup>
 import { $fetch } from "ofetch";
-import { ref, useCookie, navigateTo } from "#imports";
-import { AccessPermission } from "~/permissions";
+import { ref } from "#imports";
 
 const email = ref("");
 
@@ -44,25 +43,7 @@ async function handleSubmit() {
 		method: "GET",
 	});
 
-	// Get updated cookie values
-	const userId = useCookie("userId");
-	const access = useCookie("AccessPermission");
-
-	// Redirect based on permissions
-	if (userId.value && access.value) {
-		if (access.value[AccessPermission.ADMIN]) {
-			await navigateTo("/admin");
-		} else if (access.value[AccessPermission.USER_SERVICE]) {
-			await navigateTo("/userServiceDashboard");
-		} else if (access.value[AccessPermission.PARENT]) {
-			await navigateTo("/parentDashboard");
-		} else if (access.value[AccessPermission.PATIENT]) {
-			await navigateTo("/patientDashboard");
-		} else if (access.value[AccessPermission.THERAPIST]) {
-			await navigateTo("/therapistDashboard");
-		} else {
-			await navigateTo("/Dashboard");
-		}
-	}
+	const { dashboardNavigation } = useDashboardNavigation();
+	dashboardNavigation();
 }
 </script>

@@ -19,6 +19,9 @@ export default defineNuxtConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
+	imports: {
+		dirs: ["composables/**"],
+	},
 	hooks: {
 		"pages:extend"(pages) {
 			// Override auto-generated routes for moved pages to maintain backward compatibility
@@ -70,18 +73,10 @@ export default defineNuxtConfig({
 					path: "/testingForm",
 					file: "~/pages/patient/testingForm.vue",
 				},
-				"admin-userSearch": {
-					path: "/userSearch",
-					file: "~/pages/admin/userSearch.vue",
-				},
 				// "admin-employeeSearch": {
 				// 	path: "/employeeSearch",
 				// 	file: "~/pages/admin/employeeSearch.vue",
 				// },
-				"admin-scheduleView": {
-					path: "/scheduleView",
-					file: "~/pages/admin/scheduleView.vue",
-				},
 			};
 
 			// Update existing routes
@@ -94,22 +89,21 @@ export default defineNuxtConfig({
 			});
 
 			// Add custom patient profile routes
-
 			pages.push({
 				name: "myProfile-id",
 				path: "/myProfile/:id",
-				file: "~/pages/patientProfile/[id].vue",
+				file: "~/pages/patient/patientProfile/[id].vue",
 			});
-			pages.push({
-				name: "childProfile-id",
-				path: "/childProfile/:id",
-				file: "~/pages/patientProfile/[id].vue",
-			});
-			pages.push({
-				name: "childSearch",
-				path: "/myChildren",
-				file: "~/pages/patientSearch.vue",
-			});
+			//pages.push({
+			//name: "childProfile-id",
+			//path: "/childProfile/:id",
+			//file: "~/pages/patientProfile/[id].vue",
+			//});
+			// pages.push({
+			// 	name: "childSearch",
+			// 	path: "/myChildren",
+			// 	file: "~/pages/patient/patientSearch.vue",
+			// });
 		},
 	},
 });
