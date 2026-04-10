@@ -1,7 +1,8 @@
 <template>
 	<div class="font-karla">
 		<div
-			class="flex min-h-[70vh] flex-col items-center justify-center gap-8"
+			class="flex min-h-[70vh] flex-col items-center justify-center gap-8 mt-[170px]"
+		>"
 		>
 			<!-- Logo -->
 			<img src="/manos-unidas-logo.jpg" alt="Logo" class="w-60" />
@@ -22,6 +23,19 @@
 					Submit
 				</button>
 			</form>
+			<div class="flex justify-center mt-[100px]">
+			<h2 class="font-bold text-[50px] text-red-500">
+				OR
+			</h2>
+			</div>
+		<div class="flex justify-center">
+		<button @click="gotocontactform" class="text-[50px] hover:text-blue-800 mt-[50px] ">
+			Sign Up
+		</button>
+			
+				
+			</div>	
+			
 		</div>
 	</div>
 </template>
@@ -31,6 +45,11 @@ import { $fetch } from "ofetch";
 import { ref } from "#imports";
 
 const email = ref("");
+function gotocontactform(){
+	navigateTo('/contactForm')
+
+
+}
 
 async function handleSubmit() {
 	await $fetch("/api/login", {

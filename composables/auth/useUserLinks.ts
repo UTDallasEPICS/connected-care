@@ -15,6 +15,13 @@ export function useUserLinks() {
 		const legalRoutes: Route[] = [];
 		const val = access.value;
 
+		if (!userId.value) {
+			legalRoutes.push({ to: "login", label: "Login" });
+			legalRoutes.push({ to: "requestForm", label: "Request Form" });
+			
+			
+    }
+
 		// protect against undefined access throwind error
 		if (!val) {
 			return legalRoutes;
