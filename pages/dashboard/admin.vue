@@ -24,7 +24,7 @@ const adminButtons = [
 		label: "View Employees",
 	},
 	{
-		path: "/createAccount",
+		path: "/admin/createAccount",
 		icon: UserPlus,
 		label: "Create Account",
 	},
