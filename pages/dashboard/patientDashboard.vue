@@ -4,6 +4,7 @@
 
 <script lang="ts" setup>
 import { Calendar, User } from "lucide-vue-next";
+import { Clipboard } from "lucide-vue-next";
 
 useDashboardGuard("PATIENT");
 const { userId } = useAuthState();
@@ -19,5 +20,10 @@ const patientButtons = [
 		icon: User,
 		label: "VIEW PROFILE",
 	},
+	{
+	path: { name: "requestForm" },
+	icon: Clipboard,
+	label: "REQUEST SERVICES",
+     }
 ];
 </script>

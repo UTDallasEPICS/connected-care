@@ -20,6 +20,7 @@ model User {
   NonEmployee     NonEmployee?
   Sessions        Session[]
   Specializations Specialization[] @relation("SpecializationToUser")
+  loggedInRequests LoggedInRequest[]
 }
 
 model NonEmployee {
@@ -235,4 +236,27 @@ enum Status {
   PROCESSING
   SCHEDULING
   COMPLETED
+}
+
+model Request {
+  id                        Int      @id @default(autoincrement())
+  firstName                 String
+  middleName                String?
+  lastName                  String
+  email                     String
+  phone                     String
+  whatsapp                  String
+  idNumber                  String
+  services                  String   // store selected services as JSON or CSV
+  createdAt                 DateTime @default(now())
+}
+
+model LoggedInRequest {
+  id        Int      @id @default(autoincrement())
+  services  String   // store selected services as CSV or JSON
+  createdAt DateTime @default(now())
+  userId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  
 }
