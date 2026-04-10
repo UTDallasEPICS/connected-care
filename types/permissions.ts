@@ -1,3 +1,5 @@
+import RequestForm from "~/pages/requestForm.vue";
+
 enum AccessPermission {
 	PUBLIC = "PUBLIC",
 	USER = "USER",
@@ -57,6 +59,8 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// Contact & About
 	contact: AccessPermission.USER,
 	about: AccessPermission.USER,
+
+	requestForm:AccessPermission.PUBLIC
 };
 
 const apiAccessMap: {
