@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Calendar, Users, FileText } from "lucide-vue-next";
+import { Calendar, Users, FileText, Plus, ClipboardCheck } from "lucide-vue-next";
 
 useDashboardGuard("USER_SERVICE");
 
