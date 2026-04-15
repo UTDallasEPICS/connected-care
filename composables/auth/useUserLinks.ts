@@ -1,7 +1,8 @@
 import { AccessPermission as AP } from "~/types/permissions";
 
 type Route = {
-	to: string;
+	to?: string;
+	path?: string;
 	params?: {
 		id: string;
 	};
@@ -14,6 +15,11 @@ export function useUserLinks() {
 	const userLinks = computed(() => {
 		const legalRoutes: Route[] = [];
 		const val = access.value;
+
+		if (!userId.value) {
+			legalRoutes.push({ path: "/login", label: "Login" });
+			legalRoutes.push({ path: "/requestForm", label: "Request Form" });
+		}
 
 		// protect against undefined access throwind error
 		if (!val) {

@@ -21,7 +21,7 @@
 				<NuxtLink
 					v-for="(link, idx) in userLinks"
 					:key="idx"
-					:to="localePath({ name: link.to, params: link.params })"
+					:to="resolveLink(link)"
 					class="hover:underline"
 				>
 					{{ link.label }}
@@ -39,6 +39,8 @@
 
 <script setup lang="ts">
 import { useLocalePath, ref } from "#imports";
+import { useDashboardNavigation } from "~/composables/auth/useDashboardNavigation";
+import { useUserLinks } from "~/composables/auth/useUserLinks";
 
 const localePath = useLocalePath();
 const { dashboardNavigation } = useDashboardNavigation();
@@ -48,5 +50,21 @@ const isMenuOpen = ref(false);
 
 function toggleMenu() {
 	isMenuOpen.value = !isMenuOpen.value;
+}
+
+function resolveLink(link: {
+	to?: string;
+	path?: string;
+	params?: { id: string };
+}) {
+	if (link.path) {
+		return localePath(link.path);
+	}
+
+	if (link.to) {
+		return localePath({ name: link.to, params: link.params });
+	}
+
+	return localePath("/");
 }
 </script>
