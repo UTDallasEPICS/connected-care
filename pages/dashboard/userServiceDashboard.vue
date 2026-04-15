@@ -23,5 +23,15 @@ const userServiceButtons = [
 		icon: FileText,
 		label: "VIEW NEW CONTACT FORMS",
 	},
+	{
+		path: "/viewAppointmentRequests",
+		icon: Plus,
+		label: "VIEW APPOINTMENT REQUESTS",
+	},
+	{
+		path: "/assignNeuroSpecialist",
+		icon: ClipboardCheck,
+		label: "ASSIGN NEURODEVELOPMENT SPECIALIST",
+	},
 ];
 </script>
