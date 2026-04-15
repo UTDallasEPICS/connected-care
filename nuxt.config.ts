@@ -57,10 +57,10 @@ export default defineNuxtConfig({
 					path: "/login",
 					file: "~/pages/auth/login.vue",
 				},
-				//				"patient-patientSearch": {
-				//path: "/patientSearch",
-				//file: "~/pages/patient/patientSearch.vue",
-				//},
+				"patient-patientSearch": {
+					path: "/patientSearch",
+					file: "~/pages/patient/patientSearch.vue",
+				},
 				"patient-contactForm": {
 					path: "/contactForm",
 					file: "~/pages/patient/contactForm.vue",
