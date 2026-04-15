@@ -3,6 +3,7 @@
 </template>
 <script lang="ts" setup>
 import { Calendar, Users, FileText } from "lucide-vue-next";
+import { useDashboardGuard } from "~/composables/auth/useDashboardGuard";
 
 useDashboardGuard("THERAPIST");
 
@@ -13,7 +14,7 @@ const therapistButtons = [
 		label: "VIEW SCHEDULE",
 	},
 	{
-		path: "/patientSearch",
+		path: { name: "patient-patientSearch" },
 		icon: Users,
 		label: "VIEW PATIENTS",
 	},

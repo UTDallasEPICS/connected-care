@@ -1,5 +1,3 @@
-import RequestForm from "~/pages/requestForm.vue";
-
 enum AccessPermission {
 	PUBLIC = "PUBLIC",
 	USER = "USER",
@@ -35,7 +33,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	"dashboard-parentDashboard": AccessPermission.PARENT,
 	"childProfile-id": AccessPermission.PARENT,
 	// All Staff Pages
-	// "patient-patientSearch": AccessPermission.STAFF,
+	"patient-patientSearch": AccessPermission.STAFF,
 	"patientProfile-id": AccessPermission.STAFF,
 	"patient-viewContactForms": AccessPermission.STAFF,
 	// Therapist Pages
@@ -60,7 +58,7 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	contact: AccessPermission.USER,
 	about: AccessPermission.USER,
 
-	requestForm:AccessPermission.PUBLIC
+	requestForm: AccessPermission.PUBLIC,
 };
 
 const apiAccessMap: {
