@@ -8,7 +8,7 @@
 		>
 			<!-- Backdrop -->
 			<div
-				class="fixed inset-0 z-10 bg-opacity-50"
+				class="bg-opacity-50 fixed inset-0 z-10"
 				@click="toggleMenu"
 			></div>
 
@@ -32,7 +32,7 @@
 					<NuxtLink
 						v-for="(link, idx) in userLinks"
 						:key="idx"
-						:to="localePath({ name: link.to, params: link.params })"
+						:to="resolveLink(link)"
 						class="py-2 text-end text-lg hover:underline"
 						@click="toggleMenu"
 					>
@@ -48,6 +48,7 @@
 <script setup lang="ts">
 import { X } from "lucide-vue-next";
 import { useLocalePath } from "#imports";
+import { useUserLinks } from "~/composables/auth/useUserLinks";
 
 const { userLinks } = useUserLinks();
 const localePath = useLocalePath();
@@ -56,6 +57,22 @@ const { toggleMenu, isMenuOpen } = defineProps<{
 	toggleMenu: () => void;
 	isMenuOpen: boolean;
 }>();
+
+function resolveLink(link: {
+	to?: string;
+	path?: string;
+	params?: { id: string };
+}) {
+	if (link.path) {
+		return localePath(link.path);
+	}
+
+	if (link.to) {
+		return localePath({ name: link.to, params: link.params });
+	}
+
+	return localePath("/");
+}
 </script>
 
 <style scoped>
