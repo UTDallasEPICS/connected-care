@@ -1,39 +1,31 @@
 <template>
-	<div class="font-karla">
-		<div class="flex min-h-[70vh] flex-col items-center justify-center">
-			<!-- Logo -->
-			<img src="/manos-unidas-logo.jpg" alt="Logo" class="mb-16 w-60" />
+  <div class="flex flex-col items-center pt-10 gap-6 ">
 
-			<!-- Buttons -->
-			<div class="flex w-64 flex-col gap-4">
-				<!-- Login Button -->
-				<button
-					@click="goToLogin"
-					class="rounded-md bg-blue-950 px-8 py-4 text-center text-lg font-medium text-white transition hover:bg-blue-900"
-				>
-					Log In
-				</button>
+    <!-- HEADER -->
+    <div class="flex items-center gap-4">
+      <img src="/manos-unidas-logo.jpg" alt="Logo" class="w-[150px] h-[150px]" />
 
-				<!-- Sign Up Button -->
-				<button
-					@click="goToSignUp"
-					class="rounded-md border-2 border-blue-950 bg-white px-8 py-4 text-center text-lg font-medium text-blue-950 transition hover:bg-gray-50"
-				>
-					Sign Up
-				</button>
-			</div>
-		</div>
-	</div>
+      <h1 class="text-[30px] font-bold text-center">
+        Manos Unidas Foundation for Autism
+      </h1>
+    </div>
+
+    <!-- HERO IMAGE -->
+    <img
+      src="/home.png"
+      alt="Home"
+      class="w-[2700px] max-w-full h-[1400px] object-cover"
+    />
+	<p class="font-bold text-[20px] mt-[5px] text-center mb-[20px]">
+            For more inquiries, you can contact us at 
+        <a href="tel:+18499251246" class="text-blue-500 hover:text-red-500">
+            (849) 925-1246
+        </a>. Our email is fundación@manosunidasporautismo.org.
+        </p>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { navigateTo } from "#imports";
 
-function goToLogin() {
-	navigateTo("/login");
-}
 
-function goToSignUp() {
-	navigateTo("/contactForm");
-}
 </script>
