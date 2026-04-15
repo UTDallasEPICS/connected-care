@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Calendar, Users, FileText } from "lucide-vue-next";
+import { Calendar, Users, FileText, Plus, ClipboardCheck } from "lucide-vue-next";
 
 useDashboardGuard("USER_SERVICE");
 
@@ -22,6 +22,16 @@ const userServiceButtons = [
 		path: "/viewContactForms",
 		icon: FileText,
 		label: "VIEW NEW CONTACT FORMS",
+	},
+	{
+		path: "/viewAppointmentRequests",
+		icon: Plus,
+		label: "VIEW APPOINTMENT REQUESTS",
+	},
+	{
+		path: "/assignNeuroSpecialist",
+		icon: ClipboardCheck,
+		label: "ASSIGN NEURODEVELOPMENT SPECIALIST",
 	},
 ];
 </script>
