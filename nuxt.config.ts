@@ -73,6 +73,14 @@ export default defineNuxtConfig({
 					path: "/testingForm",
 					file: "~/pages/patient/testingForm.vue",
 				},
+				"userService-viewAppointmentRequests": {
+					path: "/viewAppointmentRequests",
+					file: "~/pages/userService/viewAppointmentRequests.vue",
+				},
+				"userService-assignNeuroSpecialist": {
+					path: "/assignNeuroSpecialist",
+					file: "~/pages/userService/assignNeuroSpecialist.vue",
+				},
 				// "admin-employeeSearch": {
 				// 	path: "/employeeSearch",
 				// 	file: "~/pages/admin/employeeSearch.vue",
