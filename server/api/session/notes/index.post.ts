@@ -3,6 +3,8 @@ import { z } from "zod";
 const therapyNoteSchema = z.object({
 	patientId: z.string(),
 	therapyType: z.string(),
+	submitterID: z.number().int().optional().nullable(),
+	submitterId: z.number().int().optional().nullable(),
 	goalsAchieved: z.string().min(1, "Goals Achieved is required"),
 	progressNotes: z.string().min(1, "Progress Notes is required"),
 	nextSessionObjectives: z
@@ -28,6 +30,7 @@ export default defineEventHandler(async (event) => {
 		data: {
 			patientId: data.patientId,
 			therapyType: data.therapyType,
+			submitterId: data.submitterID ?? data.submitterId ?? null,
 
 			otherTherapies: data.otherTherapies ?? null,
 
