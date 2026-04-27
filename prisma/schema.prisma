@@ -20,6 +20,10 @@ model User {
   NonEmployee     NonEmployee?
   Sessions        Session[]
   Specializations Specialization[] @relation("SpecializationToUser")
+  EvaluatedRequests AppointmentRequest[] @relation("EvaluatorRequests")
+
+  TherapistReferralsAsTherapist TherapistReferral[] @relation("TherapistReferrals")
+  TherapistReferralsAsEvaluator TherapistReferral[] @relation("EvaluatorReferrals")
   loggedInRequests LoggedInRequest[]
 }
 
@@ -56,6 +60,8 @@ model Patient {
   Appointments    SessionPatient[]
   Parents         NonEmployee[]    @relation(name: "parent")
   TherapyNotes    TherapyNote[]
+  AppointmentRequests AppointmentRequest[]
+  TherapistReferrals TherapistReferral[]
 }
 
 model Specialization {
@@ -177,6 +183,8 @@ model TherapyNote {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  submitterId Int?
+
   objectives TherapyNoteObjective[]
 }
 
@@ -236,6 +244,53 @@ enum Status {
   PROCESSING
   SCHEDULING
   COMPLETED
+}
+
+enum ServiceType {
+  EVALUATION
+  THERAPY
+  CONSULTATION
+  FOLLOW_UP
+}
+
+model AppointmentRequest {
+  id String @id @default(uuid())
+
+  firstName  String
+  middleName String?
+  lastName   String
+  email      String
+  phone      String
+  whatsApp   String
+  domRepId   String
+
+  serviceType   ServiceType
+  scheduledDate DateTime
+
+  patientId String
+  Patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  evaluatorId String?
+  Evaluator   User? @relation("EvaluatorRequests", fields: [evaluatorId], references: [id], onDelete: Cascade)
+
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model TherapistReferral {
+  id String @id @default(uuid())
+
+  patientId   String
+  therapistId String?
+  evaluatorId String
+  submittedAt DateTime @default(now())
+
+  therapyRecommendation String
+  therapistType         String
+
+  Patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  Therapist User?   @relation("TherapistReferrals", fields: [therapistId], references: [id], onDelete: Cascade)
+  Evaluator User    @relation("EvaluatorReferrals", fields: [evaluatorId], references: [id], onDelete: Cascade)
 }
 
 model Request {
