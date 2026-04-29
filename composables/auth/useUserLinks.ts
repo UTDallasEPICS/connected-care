@@ -56,6 +56,13 @@ export function useUserLinks() {
 				label: "Employees",
 			});
 		}
+
+		if (val[AP.EVALUATOR]) {
+			legalRoutes.push({
+				to: "dashboard-evaluatorDashboard",
+				label: "Evaluators",
+			});
+}
 		return legalRoutes;
 	});
 

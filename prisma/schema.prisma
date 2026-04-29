@@ -209,6 +209,7 @@ enum UserType {
   ADMIN
   USER_SERVICE
   THERAPIST
+  EVALUATOR
 }
 
 enum Gender {

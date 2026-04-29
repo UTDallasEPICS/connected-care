@@ -373,62 +373,113 @@ const parents = [
 	},
 ];
 
+const evaluators = [
+  {
+    fName: "Neurodevelopmental Evaluator",
+    type: "EVALUATOR",
+    email: "evaluator@email.com",
+    lName: "Doe",
+    phone: "469-100-0001"
+  }
+];
+
 const therapistIds = [];
 const patientIds = [];
 
+
 const createUsers = async () => {
-	for (const user of admin) {
-		await prisma.user.create({ data: user });
-	}
-	for (const user of therapists) {
-		const { id } = await prisma.user.create({ data: user.user });
+  for (const user of admin) {
+    await prisma.user.upsert({
+      where: { email: user.email },
+      update: {},
+      create: user,
+    });
+  }
 
-		therapistIds.push(id);
+  for (const user of evaluators) {
+    await prisma.user.upsert({
+      where: { email: user.email },
+      update: {},
+      create: user,
+    });
+  }
 
-		// add list of specializations
-		for (const specialization of user.specializations) {
-			await prisma.user.update({
-				where: { id: id },
-				data: {
-					Specializations: {
-						connect: { id: specializationIds[specialization] },
-					},
-				},
-			});
-		}
-	}
-	for (const user of patients) {
-		const { id } = await prisma.user.create({ data: user.user });
+  for (const user of therapists) {
+    const { id } = await prisma.user.upsert({
+      where: { email: user.user.email },
+      update: {},
+      create: user.user,
+    });
 
-		patientIds.push(id);
+    therapistIds.push(id);
 
-		user.nonEmployee.id = id;
-		await prisma.nonEmployee.create({ data: user.nonEmployee });
-		user.patient.id = id;
-		await prisma.patient.create({ data: user.patient });
-	}
-	for (const user of parents) {
-		const { id } = await prisma.user.create({ data: user.user });
-		user.nonEmployee.id = id;
-		await prisma.nonEmployee.create({ data: user.nonEmployee });
+    for (const specialization of user.specializations) {
+      await prisma.user.update({
+        where: { id },
+        data: {
+          Specializations: {
+            connect: { id: specializationIds[specialization] },
+          },
+        },
+      });
+    }
+  }
 
-		// add every patient with the same address as a child
-		const children = await prisma.patient.findMany({
-			where: {
-				User: {
-					streetName: user.nonEmployee.streetName,
-					streetNum: user.nonEmployee.streetNum,
-					buildingNum: user.nonEmployee.buildingNum,
-				},
-			},
-		});
-		for (const child of children) {
-			await prisma.patient.update({
-				where: { id: child.id },
-				data: { Parents: { connect: { id: id } } },
-			});
-		}
-	}
+  for (const user of patients) {
+    const { id } = await prisma.user.upsert({
+      where: { email: user.user.email },
+      update: {},
+      create: user.user,
+    });
+
+    patientIds.push(id);
+
+    user.nonEmployee.id = id;
+    await prisma.nonEmployee.upsert({
+      where: { id },
+      update: {},
+      create: user.nonEmployee,
+    });
+
+    user.patient.id = id;
+    await prisma.patient.upsert({
+      where: { id },
+      update: {},
+      create: user.patient,
+    });
+  }
+
+  for (const user of parents) {
+    const { id } = await prisma.user.upsert({
+      where: { email: user.user.email },
+      update: {},
+      create: user.user,
+    });
+
+    user.nonEmployee.id = id;
+    await prisma.nonEmployee.upsert({
+      where: { id },
+      update: {},
+      create: user.nonEmployee,
+    });
+
+    const children = await prisma.patient.findMany({
+      where: {
+        User: {
+          streetName: user.nonEmployee.streetName,
+          streetNum: user.nonEmployee.streetNum,
+          buildingNum: user.nonEmployee.buildingNum,
+        },
+      },
+    });
+
+    for (const child of children) {
+      await prisma.patient.update({
+        where: { id: child.id },
+        data: { Parents: { connect: { id } } },
+      });
+    }
+  }
 };
 
 // currently only creates one sponsor
