@@ -7,6 +7,7 @@ enum AccessPermission {
 	THERAPIST = "THERAPIST",
 	USER_SERVICE = "USER_SERVICE",
 	ADMIN = "ADMIN",
+	EVALUATOR="EVALUATOR"
 }
 
 type AccessVal = Partial<Record<AccessPermission, boolean>>;
@@ -59,6 +60,9 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	about: AccessPermission.USER,
 
 	requestForm: AccessPermission.PUBLIC,
+	"dashboard-evaluatorDashboard": AccessPermission.EVALUATOR,
+
+
 };
 
 const apiAccessMap: {
