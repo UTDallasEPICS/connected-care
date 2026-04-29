@@ -51,12 +51,6 @@ interface Appointment {
     name: string;
     email: string;
 
-    
-    /*id: string;
-	name: string;
-	type: string | null;
-	contactPref: string | null;
-	email: string | null;*/
 }
 
 const { data: usersData, error } = await getAppointments();
