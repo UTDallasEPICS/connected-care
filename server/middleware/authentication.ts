@@ -53,6 +53,10 @@ export default defineEventHandler(async (event) => {
 			if (user.NonEmployee?.Patient) {
 				event.context.permissions[AccessPermission.PATIENT] = true;
 			}
+			if (user.type === UserType.EVALUATOR) {
+				event.context.permissions[AccessPermission.EVALUATOR] = true;
+				event.context.permissions[AccessPermission.STAFF] = true;
+}
 		}
 	}
 });
