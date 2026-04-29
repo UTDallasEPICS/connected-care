@@ -4,23 +4,23 @@
 		<table class="w-full table-auto border-collapse">
 			<thead class="bg-gray-100">
 				<tr>
-					<th class="px-4 py-2 text-left">Name</th>
-					<th class="px-4 py-2 text-left">Type</th>
+					<th class="px-4 py-2 text-left">firstName</th>
+					<th class="px-4 py-2 text-left">lastName</th>
 					<th class="px-4 py-2 text-left">Email</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr
-					v-for="appoinment in getAppointments"
+					v-for="appoinment in filterAppointments"
 					:key="appointment.id"
 					class="cursor-pointer border-t hover:bg-gray-100"
 					@click="openAppointmentModule(appointment.id)"
 				>
-					<td class="px-4 py-2">{{ appointment.name }}</td>
-					<td class="px-4 py-2">{{ appointment.type || "—" }}</td>
+					<td class="px-4 py-2">{{ appointment.firstName }}</td>
+					<td class="px-4 py-2">{{ appointment.lastName || "—" }}</td>
 					<td class="px-4 py-2">{{ appointment.email || "—" }}</td>
 				</tr>
-                <tr v-if="!getAppointments.length" class="border-t">
+                <tr v-if="!filterAppointments.length" class="border-t">
 					<td colspan="3" class="px-4 py-2 text-center">
 						No appointment requests found.
 					</td>
@@ -39,7 +39,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useFetch, useCookie } from "#imports";
-import { Search } from "lucide-vue-next";
 import { AccessPermission } from "~/types/permissions";
 
 const access = useCookie<Record<AccessPermission, boolean> | null>(
@@ -48,21 +47,31 @@ const access = useCookie<Record<AccessPermission, boolean> | null>(
 
 interface Appointment {
 	
-    name: string;
+    firstName: string;
+	lastName: string;
     email: string;
+	serviceType: string;
 
 }
 
-const { data: usersData, error } = await getAppointments();
+const { data: appointmentData, error } = await getAppointments();
 
-async function getAppoitments() {
+async function getAppointments() {
 	if (access.value?.[AccessPermission.USER_SERVICE]) {
-		return useFetch<User[]>("/api/search/employees");
+		return useFetch<Appointment[]>("/api/search/employees");
 	}
 	return {
 		data: { value: [] },
 		error: "User not authorized to view appointment requests",
 	};
 }
+
+// Filter for Request with Evaluation Service
+const filteredAppointments = computed(() => {
+	const list: User[] = usersData?.value ?? [];
+	return list.filter((u) =>
+		u.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+	);
+});
 
 </script>
