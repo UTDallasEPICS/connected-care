@@ -6,8 +6,9 @@ enum AccessPermission {
 	STAFF = "STAFF",
 	THERAPIST = "THERAPIST",
 	USER_SERVICE = "USER_SERVICE",
+	IT_SERVICE = "IT_SERVICE",
 	ADMIN = "ADMIN",
-	EVALUATOR="EVALUATOR"
+	EVALUATOR = "EVALUATOR",
 }
 
 type AccessVal = Partial<Record<AccessPermission, boolean>>;
@@ -43,6 +44,8 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	"dashboard-userServiceDashboard": AccessPermission.USER_SERVICE,
 	"userService-viewAppointmentRequests": AccessPermission.USER_SERVICE,
 	"userService-assignNeuroSpecialist": AccessPermission.USER_SERVICE,
+	// IT Service Pages
+	"dashboard-iTServiceDashboard": AccessPermission.IT_SERVICE,
 	// Admin Pages
 
 	"admin-employeeSearch": AccessPermission.ADMIN,
@@ -61,8 +64,6 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 
 	requestForm: AccessPermission.PUBLIC,
 	"dashboard-evaluatorDashboard": AccessPermission.EVALUATOR,
-
-
 };
 
 const apiAccessMap: {
