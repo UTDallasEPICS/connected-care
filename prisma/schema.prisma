@@ -208,6 +208,7 @@ enum ContactType {
 enum UserType {
   ADMIN
   USER_SERVICE
+  IT_SERVICE
   THERAPIST
   EVALUATOR
 }
