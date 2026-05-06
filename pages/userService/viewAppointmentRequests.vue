@@ -1,10 +1,13 @@
 <template>
 	<div class="font-sc-encode p-4">
 		<!-- Header -->
-		<div class="mb-4">
+		<div class="mb-2">
 			<h1 class="font-cormorant-garamond text-2xl font-bold">
 				Evaluation Appointment Requests
 			</h1>
+		</div>
+		<div class="mb-4 flex justify-end">
+			<RefreshButton :onRefresh="refreshAppointments" />
 		</div>
 
 		<!-- Appointments Table -->
@@ -14,11 +17,12 @@
 					<th class="px-4 py-2 text-left">Name</th>
 					<th class="px-4 py-2 text-left">Email</th>
 					<th class="px-4 py-2 text-left">Phone</th>
+					<th class="px-4 py-2 text-left">Service Type</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr
-					v-for="appointment in filteredAppointments"
+					v-for="appointment in appointmentRequests"
 					:key="appointment.id"
 					class="border-t hover:bg-gray-100"
 				>
@@ -29,10 +33,11 @@
 					</td>
 					<td class="px-4 py-2">{{ appointment.email || "—" }}</td>
 					<td class="px-4 py-2">{{ appointment.phone || "—" }}</td>
+					<td class="px-4 py-2">{{ appointment.serviceType || "—" }}</td>
 				</tr>
-				<tr v-if="!filteredAppointments.length" class="border-t">
-					<td colspan="3" class="px-4 py-2 text-center">
-						No evaluation requests found.
+				<tr v-if="!appointmentRequests.length" class="border-t">
+					<td colspan="4" class="px-4 py-2 text-center">
+						No appointment requests found.
 					</td>
 				</tr>
 			</tbody>
@@ -46,7 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import RefreshButton from "./refreshButton.vue";
 import { useFetch, useCookie } from "#imports";
 import { AccessPermission } from "~/types/permissions";
 
@@ -63,7 +69,7 @@ interface Appointment {
 	serviceType: string;
 }
 
-const { data: appointmentData, error } = await getAppointments();
+const { data: appointmentData, error, refresh: refreshAppointmentData } = await getAppointments();
 
 async function getAppointments() {
 	if (access.value?.[AccessPermission.USER_SERVICE]) {
@@ -75,9 +81,10 @@ async function getAppointments() {
 	};
 }
 
-// Filter for Requests with Evaluation Service
-const filteredAppointments = computed(() => {
-	const list: Appointment[] = appointmentData?.value ?? [];
-	return list.filter((appointment) => appointment.serviceType === "EVALUATION");
-});
+const appointmentRequests = computed(() => appointmentData?.value ?? []);
+
+async function refreshAppointments() {
+	await refreshAppointmentData();
+}
+
 </script>
