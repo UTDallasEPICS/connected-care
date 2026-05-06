@@ -14,6 +14,7 @@ export function useDashboardNavigation() {
 
 		if (val[AP.ADMIN]) return navigateTo("/admin");
 		if (val[AP.USER_SERVICE]) return navigateTo("/userServiceDashboard");
+		if (val[AP.IT_SERVICE]) return navigateTo("/iTServiceDashboard");
 		if (val[AP.PARENT]) return navigateTo("/parentDashboard");
 		if (val[AP.PATIENT]) return navigateTo("/patientDashboard");
 		if (val[AP.THERAPIST]) return navigateTo("/therapistDashboard");

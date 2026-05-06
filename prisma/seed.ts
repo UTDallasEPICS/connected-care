@@ -87,6 +87,16 @@ const admin = [
 		contactPref: "EMAIL",
 		type: "USER_SERVICE",
 	},
+	{
+		fName: "IT-Service",
+		mInit: null,
+		lName: "Account",
+		email: "it-service@email.com",
+		phone: "182-256-1937",
+		whatsApp: "Technology Tips",
+		contactPref: "EMAIL",
+		type: "IT_SERVICE",
+	},
 ];
 const therapists = [
 	// therapists
