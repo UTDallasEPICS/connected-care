@@ -1,3 +1,5 @@
+import { prisma } from "~/server/utils/prisma";
+
 type TherapistReferralFindManyDelegate = {
 	findMany: () => Promise<unknown>;
 };

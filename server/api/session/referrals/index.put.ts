@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { prisma } from "~/server/utils/prisma";
 
 type TherapistReferralUpdateDelegate = {
 	update: (args: {

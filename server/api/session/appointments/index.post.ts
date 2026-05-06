@@ -3,6 +3,7 @@ import {
 	getMissingRequiredFields,
 	validateScheduledDateTime,
 } from "~/composables/form/useRequestValidation";
+import { prisma } from "~/server/utils/prisma";
 
 const appointmentRequestSchema = z.object({
 	firstName: z.string().min(1),

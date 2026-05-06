@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getMissingRequiredFields } from "~/composables/form/useRequestValidation";
+import { prisma } from "~/server/utils/prisma";
 
 type TherapistReferralCreateDelegate = {
 	create: (args: { data: Record<string, unknown> }) => Promise<unknown>;
