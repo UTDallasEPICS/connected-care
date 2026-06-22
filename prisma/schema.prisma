@@ -12,7 +12,14 @@ model User {
   fName           String
   mInit           String?
   lName           String
-  email           String?          @unique
+  name            String?
+  email           String           @unique
+  emailVerified   Boolean          @default(false)
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt @default(now())
+  authSessions    AuthSession[]
+  accounts        Account[]
   phone           String           @unique
   whatsApp        String?          @unique
   contactPref     ContactType      @default(EMAIL)
@@ -316,4 +323,49 @@ model LoggedInRequest {
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   
+}
+
+model AuthSession {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt @default(now())
+
+  @@index([identifier])
 }
