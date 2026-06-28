@@ -75,7 +75,7 @@
 <script lang="ts" setup>
 import { $fetch } from "ofetch";
 import { ref } from "#imports";
-import { authClient } from "~/server/utils/auth-client";
+import { authClient } from "~/utils/auth-client";
 import { useDashboardNavigation } from "~/composables/auth/useDashboardNavigation";
 
 const email = ref("");
