@@ -24,9 +24,11 @@
 		"@vueuse/core": "^13.1.0",
 		"@xenova/transformers": "^2.17.2",
 		"axios": "^1.12.2",
+		"better-auth": "^1.6.19",
 		"franc": "^6.2.0",
 		"h3": "^1.15.1",
 		"lucide-vue-next": "^0.487.0",
+		"nodemailer": "^9.0.1",
 		"nuxt": "^4.2.1",
 		"tailwindcss": "^4.0.1",
 		"vue": "latest",
@@ -40,6 +42,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.19.0",
 		"@types/node": "^22.12.0",
+		"@types/nodemailer": "^8.0.1",
 		"eslint": "^9.19.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-vue": "^9.32.0",
@@ -63,5 +66,17 @@
 	"bugs": {
 		"url": "https://github.com/UTDallasEPICS/manos-unidas-for-autismo/issues"
 	},
-	"homepage": "https://github.com/UTDallasEPICS/manos-unidas-for-autismo#readme"
+	"homepage": "https://github.com/UTDallasEPICS/manos-unidas-for-autismo#readme",
+	"allowScripts": {
+		"@parcel/watcher@2.5.1": true,
+		"@prisma/client@6.19.0": true,
+		"@prisma/engines@6.19.3": true,
+		"@tailwindcss/oxide@4.1.13": true,
+		"esbuild@0.25.12": true,
+		"esbuild@0.27.4": true,
+		"esbuild@0.27.7": true,
+		"prisma@6.19.3": true,
+		"protobufjs@6.11.4": true,
+		"sharp@0.32.6": true
+	}
 }
