@@ -35,17 +35,18 @@ model User {
 }
 
 model NonEmployee {
-  id           String       @id @unique
-  dob          DateTime
-  gender       Gender
-  streetName   String
-  streetNum    Int
-  buildingNum  Int?
-  postCode     Int
-  PostCodeCity PostCodeCity @relation(fields: [postCode], references: [postCode])
-  User         User         @relation(fields: [id], references: [id], onDelete: Cascade)
-  Patient      Patient?
-  Children     Patient[]    @relation("parent")
+  id              String       @id @unique
+  identification  String?
+  dob             DateTime?
+  gender          Gender?
+  streetName      String
+  streetNum       Int
+  buildingNum     Int?
+  postCode        Int
+  PostCodeCity    PostCodeCity? @relation(fields: [postCode], references: [postCode])
+  User            User         @relation(fields: [id], references: [id], onDelete: Cascade)
+  Patient         Patient?
+  Children        Patient[]    @relation("parent")
 }
 
 model PostCodeCity {
@@ -55,18 +56,19 @@ model PostCodeCity {
 }
 
 model Patient {
-  id              String           @id @unique
-  identification  String           @unique
-  diagnosed       Boolean
-  sponsorId       String?
-  ContactForm     ContactForm?
-  MedicalRecords  MedicalRecord[]
-  Sponsor         Sponsor?         @relation(fields: [sponsorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
-  User            NonEmployee      @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ProgressReports Report[]
-  Appointments    SessionPatient[]
-  Parents         NonEmployee[]    @relation(name: "parent")
-  TherapyNotes    TherapyNote[]
+  id                String           @id @unique
+  identification    String           @unique
+  ageAtRegistration Int?
+  diagnosed         Boolean
+  sponsorId         String?
+  ContactForm       ContactForm?
+  MedicalRecords    MedicalRecord[]
+  Sponsor           Sponsor?         @relation(fields: [sponsorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  User              NonEmployee      @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ProgressReports   Report[]
+  Appointments      SessionPatient[]
+  Parents           NonEmployee[]    @relation(name: "parent")
+  TherapyNotes      TherapyNote[]
   AppointmentRequests AppointmentRequest[]
   TherapistReferrals TherapistReferral[]
 }
@@ -308,11 +310,87 @@ model Request {
   middleName                String?
   lastName                  String
   email                     String
-  phone                     String
+  phone                     RequestPhone[]
   whatsapp                  String
   idNumber                  String
-  services                  String   // store selected services as JSON or CSV
+
+  streetName                String
+  streetNum                 String
+  buildingNum               String?
+  postCode                  String
+
+  isAdult                   Boolean
+  patientFirstName          String
+  patientMiddleName         String?
+  patientLastName           String
+  patientAge                Int
+  diagnosed                 Boolean
+
+  returnPatient             Boolean
+  previousVisitDate         DateTime?
+  wantsEval                 Boolean
+  hasReferral               Boolean
   createdAt                 DateTime @default(now())
+
+  therapies                 RequestTherapy[]
+  complementaryServices     RequestComplementaryService[]
+  workshops                 RequestWorkshop[]
+}
+
+model RequestPhone {
+  id        Int     @id @default(autoincrement())
+  number    String
+  request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  requestId Int
+}
+
+enum TherapyType {
+  DIAGNOSTIC_ASSESSMENT
+  EARLY_INTERVENTION
+  BEHAVIORAL_THERAPY
+  LEARNING_THERAPY
+  SPEECH_THERAPY
+  SOCIAL_SKILLS
+  SEFVI
+}
+
+enum ComplementaryServiceType {
+  MUSICAL_STIMULATION
+  PHYSICAL_COGNITIVE_ACTIVITY
+  LEARNING_IN_MOTION
+  DYNAMIC_THINKING
+  FAMILY_THERAPY
+  COUPLES_THERAPY
+  SEXUALITY_THERAPY
+  CHILD_ADOLESCENT_PSYCHOLOGICAL_THERAPY
+  NUTRITIONAL_CONSULTATION
+  SCHOOL_VISIT
+}
+
+enum WorkshopType {
+  THEATRE_COMMUNICATION
+  TALKS_AND_WORKSHOPS
+}
+
+model RequestTherapy {
+  id        String  @id @default(uuid())
+  name      TherapyType
+  requestId Int
+  Request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+}
+
+model RequestComplementaryService {
+  id        String  @id @default(uuid())
+  name      ComplementaryServiceType
+  requestId Int
+  Request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+}
+
+model RequestWorkshop {
+  id        String  @id @default(uuid())
+  name      WorkshopType
+  requestId Int
+  Request   Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
 }
 
 model LoggedInRequest {
