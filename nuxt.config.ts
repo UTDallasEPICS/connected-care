@@ -22,6 +22,12 @@ export default defineNuxtConfig({
 	imports: {
 		dirs: ["composables/**"],
 	},
+	components: [
+		{
+			path: "~/components",
+			pathPrefix: true,
+		},
+	],
 	hooks: {
 		"pages:extend"(pages) {
 			// Override auto-generated routes for moved pages to maintain backward compatibility

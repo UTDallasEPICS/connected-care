@@ -2,7 +2,7 @@
 	<div class="font-sc-encode m-5 flex justify-center">
 		<div class="flex flex-col gap-10">
 			<div
-				class="md:w-200 flex w-4/5 flex-col justify-between md:flex-row"
+				class="flex w-4/5 flex-col justify-between md:w-200 md:flex-row"
 			>
 				<div class="font-cormorant-garamond">
 					<h1 class="text-2xl">View Incoming Contact Forms</h1>
@@ -15,12 +15,19 @@
 				</div>
 			</div>
 			<div class="flex flex-col gap-5">
-				<ViewContactFormTable
+				<RequestViewRequestTable
 					:columns="columns"
-					:patients="processingPatients"
+					:requests="processingRequests"
+					@view="openModal"
 				/>
 			</div>
 		</div>
+
+		<!-- Modal -->
+		<RequestViewRequestModal
+			:request="selectedRequest"
+			@close="closeModal"
+		/>
 	</div>
 </template>
 
@@ -28,60 +35,80 @@
 import { ref, watch, onMounted } from "vue";
 import { $fetch } from "ofetch";
 
-interface Patient {
-	fName: string;
-	lName: string;
-	NonEmployee?: {
-		Patient?: {
-			identification?: string;
-			ContactForm?: {
-				insurance?: string;
-				comment?: string;
-			};
-		};
-	};
+interface Request {
+	id: number;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	email: string;
+	phone: { id: number; number: string; requestId: number }[];
+	whatsapp: string;
+	idNumber: string;
+	status: string;
+	streetName: string;
+	streetNum: string;
+	buildingNum?: string;
+	postCode: string;
+	isAdult: boolean;
+	patientFirstName: string;
+	patientMiddleName?: string;
+	patientLastName: string;
+	patientAge: number;
+	diagnosed: boolean;
+	returnPatient: boolean;
+	previousVisitDate?: string;
+	wantsEval: boolean;
+	hasReferral: boolean;
+	createdAt: string;
+	therapies: { name: string }[];
+	complementaryServices: { name: string }[];
+	workshops: { name: string }[];
 }
 
 const columns = [
-	{ key: "fName", label: "First Name" },
-	{ key: "lName", label: "Last Name" },
-	{ key: "identification", label: "SSN" },
-	{ key: "insurance", label: "Insurance" },
-	{ key: "comments", label: "Comments" },
+	{ key: "contactName", label: "Contact Name" },
+	{ key: "email", label: "Email" },
+	{ key: "phone", label: "Phone" },
+	{ key: "patientName", label: "Patient Name" },
+	{ key: "createdAt", label: "Date Submitted" },
 ];
 
-const sortOptions = ["SSN", "Last Name"];
+const sortOptions = ["Last Name", "Date Submitted"];
 const sortBy = ref("");
-const processingPatients = ref<Patient[]>([]);
+const processingRequests = ref<Request[]>([]);
+const selectedRequest = ref<Request | null>(null);
 
-async function getPatients() {
+async function getRequests() {
 	try {
-		const response = await $fetch<Patient[]>("/api/contactForm/viewForm", {
+		const response = await $fetch<Request[]>("/api/request/processing", {
 			method: "GET",
-			params: { term: "PROCESSING" },
 		});
-
-		processingPatients.value = response;
-
-		if (!response) {
-			throw new Error("Could not submit form");
-		}
+		processingRequests.value = response;
 	} catch {
-		console.log("Could not submit form");
+		console.log("Could not fetch processing requests");
 	}
 }
 
 function sort(category: string) {
-	if (category === "Last Name")
-		processingPatients.value = [...processingPatients.value].sort((a, b) =>
-			a.lName.localeCompare(b.lName)
+	if (category === "Last Name") {
+		processingRequests.value = [...processingRequests.value].sort((a, b) =>
+			a.lastName.localeCompare(b.lastName)
 		);
-	else if (category === "SSN")
-		processingPatients.value = [...processingPatients.value].sort((a, b) =>
-			(a.NonEmployee?.Patient?.identification ?? "").localeCompare(
-				b.NonEmployee?.Patient?.identification ?? ""
-			)
+	} else if (category === "Date Submitted") {
+		processingRequests.value = [...processingRequests.value].sort(
+			(a, b) =>
+				new Date(b.createdAt).getTime() -
+				new Date(a.createdAt).getTime()
 		);
+	}
+}
+
+function openModal(request: Request) {
+	selectedRequest.value = request;
+}
+
+function closeModal() {
+	selectedRequest.value = null;
 }
 
 watch(sortBy, (newSortBy) => {
@@ -89,6 +116,6 @@ watch(sortBy, (newSortBy) => {
 });
 
 onMounted(() => {
-	getPatients();
+	getRequests();
 });
 </script>

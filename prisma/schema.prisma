@@ -313,6 +313,7 @@ model Request {
   phone                     RequestPhone[]
   whatsapp                  String
   idNumber                  String
+  status                    Status           @default(PROCESSING)
 
   streetName                String
   streetNum                 String
