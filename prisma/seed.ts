@@ -58,6 +58,16 @@ const admin = [
 		type: "ADMIN",
 	},
 	{
+		fName: "Tushar",
+		mInit: null,
+		lName: "Wani",
+		email: "tushar.wani@npts.tech",
+		phone: "000-000-0000",
+		whatsApp: "N/A",
+		contactPref: "EMAIL",
+		type: "ADMIN",
+	},
+	{
 		fName: "Mahmud",
 		mInit: null,
 		lName: "Jenk",
