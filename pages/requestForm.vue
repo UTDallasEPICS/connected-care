@@ -125,10 +125,7 @@
 					</p>
 				</div>
 				<div>
-					<label class="text-lg font-medium"
-						>Secondary Phone:
-						<span class="text-red-500">*</span></label
-					>
+					<label class="text-lg font-medium">Secondary Phone: </label>
 					<input
 						v-model="secondaryPhone"
 						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -805,9 +802,7 @@ async function sendRequest() {
 		errors.primaryPhone = "Not a valid phone number (10 digits)";
 		valid = false;
 	}
-	if (!cleanSecondaryPhone) {
-		valid = true;
-	} else if (!/^\d{10}$/.test(cleanSecondaryPhone)) {
+	if (cleanSecondaryPhone && !/^\d{10}$/.test(cleanSecondaryPhone)) {
 		errors.secondaryPhone = "Not a valid phone number (10 digits)";
 		valid = false;
 	}
