@@ -56,7 +56,7 @@ npm run dev -- -o
 # Initialize the database and test data seeding
 npx prisma migrate dev --name init
 
-# Seed the database with test data
+# Database seeding
 npx prisma db seed
 ```
 
