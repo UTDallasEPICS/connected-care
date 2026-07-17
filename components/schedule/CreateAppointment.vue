@@ -52,7 +52,11 @@
 							>{{ $t("Session Type") }}
 							<span class="text-red-500">*</span></label
 						>
+						<p v-if="!hasSessionTypes" class="text-sm text-red-600">
+							{{ $t("No session types configured") }}
+						</p>
 						<select
+							v-else
 							v-model="form.sessionType"
 							required
 							class="input w-full"
@@ -197,6 +201,10 @@ const therapistOptions = computed(() =>
 		name: `${t.fName} ${t.lName}`,
 	}))
 );
+
+const hasSessionTypes = computed(() => {
+	return typeOptions.value && typeOptions.value.length > 0;
+});
 
 const typeOptions = computed(() =>
 	(typesData.value || []).map((st) => ({
