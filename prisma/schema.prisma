@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:dev.db"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -401,7 +401,7 @@ model LoggedInRequest {
   userId    String
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  
+
 }
 
 model AuthSession {

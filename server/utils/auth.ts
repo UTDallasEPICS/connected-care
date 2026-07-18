@@ -35,6 +35,8 @@ export const auth = betterAuth({
 				const subject = "Your sign-in code";
 				const text = `Your sign-in code is: ${otp}\n\nThis code will expire shortly. If you didn't request this, you can ignore this email.`;
 
+				console.log(`process.env.NODE_ENV`);
+
 				if (process.env.NODE_ENV === "development") {
 					console.log(`[DEV] OTP for ${email} (sign-in): ${otp}`);
 					return;
