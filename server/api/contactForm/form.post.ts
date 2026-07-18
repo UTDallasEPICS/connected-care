@@ -10,6 +10,7 @@ const validateSchema = patientBaseSchema
 		wantsEval: z.boolean(),
 		status: z.nativeEnum(Status),
 		comment: z.string().optional(),
+		email: z.string().email(),
 	})
 	.strict();
 
@@ -29,7 +30,7 @@ export default defineEventHandler(async (event) => {
 					fName: data.fName,
 					mInit: data.mInit,
 					lName: data.lName,
-					email: data.email || "",
+					email: data.email,
 					phone: data.phone,
 					whatsApp: data.whatsapp,
 					contactPref: data.contactPref,
