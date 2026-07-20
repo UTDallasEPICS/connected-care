@@ -10,7 +10,9 @@ const validateSchema = patientBaseSchema
 		wantsEval: z.boolean(),
 		status: z.nativeEnum(Status),
 		comment: z.string().optional(),
-		email: z.string().email(),
+		medication: z.string().optional(),
+		allergies: z.string().optional(),
+		diet: z.string().optional(),
 	})
 	.strict();
 
@@ -30,7 +32,7 @@ export default defineEventHandler(async (event) => {
 					fName: data.fName,
 					mInit: data.mInit,
 					lName: data.lName,
-					email: data.email,
+					email: data.email || "",
 					phone: data.phone,
 					whatsApp: data.whatsapp,
 					contactPref: data.contactPref,
@@ -68,6 +70,31 @@ export default defineEventHandler(async (event) => {
 					patientId: patient.id,
 				},
 			});
+
+			if (data.medication) {
+				await tx.medicalRecord.create({
+					data: {
+						patientId: patient.id,
+						data: `Medication: ${data.medication}`,
+					},
+				});
+			}
+			if (data.allergies) {
+				await tx.medicalRecord.create({
+					data: {
+						patientId: patient.id,
+						data: `Allergies: ${data.allergies}`,
+					},
+				});
+			}
+			if (data.diet) {
+				await tx.medicalRecord.create({
+					data: {
+						patientId: patient.id,
+						data: `Diet: ${data.diet}`,
+					},
+				});
+			}
 
 			return { user, nonEmployee, patient, form };
 		});
