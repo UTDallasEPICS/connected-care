@@ -7,6 +7,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "#imports";
+import { useProfileSave } from "~/composables/patient/useProfileSave";
+import { useModalToggle } from "~/composables/ui/useModalToggle";
+
 const props = defineProps<{
 	patientId: string;
 	profile: Record<string, unknown>;
@@ -34,7 +38,13 @@ defineExpose({ openEditModal });
 
 // --- Internal handlers ---
 async function handleEditProfileSave(formData: Record<string, unknown>) {
-	await saveProfile(formData);
-	closeModal("edit");
+	try {
+		await saveProfile(formData);
+		closeModal("edit");
+		alert("Profile updated successfully.");
+	} catch (err) {
+		console.error("Could not save profile changes:", err);
+		alert("Could not save profile changes. Please try again.");
+	}
 }
 </script>
