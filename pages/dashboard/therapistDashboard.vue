@@ -2,7 +2,7 @@
 	<DashboardButtonGrid :buttons="therapistButtons" />
 </template>
 <script lang="ts" setup>
-import { Calendar, Users, FileText } from "lucide-vue-next";
+import { Calendar, Users } from "lucide-vue-next";
 import { useDashboardGuard } from "~/composables/auth/useDashboardGuard";
 
 useDashboardGuard("THERAPIST");
@@ -17,11 +17,6 @@ const therapistButtons = [
 		path: { name: "patient-patientSearch" },
 		icon: Users,
 		label: "VIEW PATIENTS",
-	},
-	{
-		path: "/viewContactForms",
-		icon: FileText,
-		label: "VIEW NEW CONTACT FORMS",
 	},
 ];
 </script>

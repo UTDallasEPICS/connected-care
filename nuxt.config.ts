@@ -2,7 +2,7 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-	modules: ["@nuxtjs/i18n", "@nuxt/ui"],
+	modules: ["@nuxtjs/i18n", "@nuxt/eslint", "@nuxt/ui"],
 	i18n: {
 		locales: [
 			{ code: "en", iso: "en-US", file: "en.json" },
@@ -22,6 +22,12 @@ export default defineNuxtConfig({
 	imports: {
 		dirs: ["composables/**"],
 	},
+	components: [
+		{
+			path: "~/components",
+			pathPrefix: true,
+		},
+	],
 	hooks: {
 		"pages:extend"(pages) {
 			// Override auto-generated routes for moved pages to maintain backward compatibility

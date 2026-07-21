@@ -1,535 +1,938 @@
 <template>
-    <div v-if="loggedin" class="mt-[50px] flex justify-center p-5">
-        <div class="w-full max-w-4xl h-[1150px]">
-        <div class="flex justify-center">
-            <h1 class="text-[40px] mb-[30px]">
-                Request Apointment Form
-            </h1>
-        </div>
-        <h1 class="text-[30px]">
-            What service do you want to schedule?
-        </h1>
-        <div class="flex flex-col mt-[20px] mb-[20px] gap-y-[20px]">
-            
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('First interview', (e.target as HTMLInputElement).checked)" />
-                First interview (Entrevista inicial)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <text class="text-[20px]">
-                    Recurrent therapies (Terapias recurrentes):
-                </text>
-            </div>
+	<div class="mt-[50px] flex justify-center p-5">
+		<div class="w-full max-w-4xl">
+			<div class="flex justify-center">
+				<h1 class="mb-[30px] text-[40px]">Request Appointment Form</h1>
+			</div>
 
-            <div class="flex flex-col ml-[40px] mb-[20px] gap-y-[20px] ">
-                <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Early intention', (e.target as HTMLInputElement).checked)" />
-                Early Intervention (Intervención temprana)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Behavior therapy', (e.target as HTMLInputElement).checked)" />
-                Behavior Therapy (Terapia conductual)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Occupational therapy', (e.target as HTMLInputElement).checked)" />
-                Occupational Therapy (Terapia ocupacional)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Lanuguage therapy', (e.target as HTMLInputElement).checked)" />
-                Language Therapy (Terapia del lenguaje)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Learning therapy', (e.target as HTMLInputElement).checked)" />
-                Learning Therapy (Terapia de aprendizaje)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Independent living training service', (e.target as HTMLInputElement).checked)" />
-                Independent Living Training Service (Entrenamiento para la vida independiente)
-            </div>
+			<!-- ADULT/CHILD TOGGLE -->
+			<div class="mb-[30px]">
+				<p class="mb-[10px] text-[20px] font-medium">
+					Who is this request for? <span class="text-red-500">*</span>
+				</p>
+				<div class="flex flex-col gap-y-[10px]">
+					<label class="flex flex-row items-center gap-x-[10px]">
+						<input type="radio" v-model="isAdult" :value="true" />
+						I am requesting services for myself
+					</label>
+					<label class="flex flex-row items-center gap-x-[10px]">
+						<input type="radio" v-model="isAdult" :value="false" />
+						I am requesting services for a child or family member
+					</label>
+				</div>
+				<p
+					v-if="errors.isAdult"
+					class="mt-[5px] text-[18px] text-red-500"
+				>
+					{{ errors.isAdult }}
+				</p>
+			</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Social skills therapy', (e.target as HTMLInputElement).checked)" />
-                Social Skills Therapy (Terapia de habilidades sociales)
-            </div>
+			<!-- CONTACT PERSON INFO -->
+			<h2 class="mb-[20px] text-[25px] font-medium">
+				{{
+					isAdult
+						? "Your Information"
+						: "Your Information (Parent / Guardian)"
+				}}
+			</h2>
 
-            </div>
-            
+			<div class="grid grid-cols-3 gap-9">
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>First name: <span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="contactFirstName"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p
+						v-if="errors.contactFirstName"
+						class="text-[18px] text-red-500"
+					>
+						{{ errors.contactFirstName }}
+					</p>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Evaluation appointment', (e.target as HTMLInputElement).checked)" />
-                Evaluation appointment (Cita de evaluación)
-            </div>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium">Middle name:</label>
+					<input
+						v-model="contactMiddleName"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Diagnostic tests', (e.target as HTMLInputElement).checked)" />
-                Diagnostic Tests application (Aplicación de pruebas diagnósticas)
-            </div>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>Last name: <span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="contactLastName"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p
+						v-if="errors.contactLastName"
+						class="text-[18px] text-red-500"
+					>
+						{{ errors.contactLastName }}
+					</p>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Delivery diagnostic report', (e.target as HTMLInputElement).checked)" />
-                Delivery of diagnostic test report (Entrega de informe de pruebas diagnósticas)
-            </div>
+				<div class="col-span-3 flex flex-col">
+					<label class="text-lg font-medium"
+						>Dominican ID (Cédula):
+						<span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="idNumber"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						placeholder="000-0000000-0"
+					/>
+					<p v-if="errors.idNumber" class="text-[18px] text-red-500">
+						{{ errors.idNumber }}
+					</p>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Therapy program evaluation', (e.target as HTMLInputElement).checked)" />
-                Therapy Program Evaluation (Evaluación de Programa terapéutico)
-            </div>
+				<div class="col-span-3 flex flex-col">
+					<label class="text-lg font-medium"
+						>Email: <span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="email"
+						type="email"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p v-if="errors.email" class="text-[18px] text-red-500">
+						{{ errors.email }}
+					</p>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Psychological consultation', (e.target as HTMLInputElement).checked)" />
-                Psychological consultation (Consulta psicológica)
-            </div>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>Primary Phone:
+						<span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="primaryPhone"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						placeholder="000-000-0000"
+					/>
+					<p
+						v-if="errors.primaryPhone"
+						class="text-[18px] text-red-500"
+					>
+						{{ errors.primaryPhone }}
+					</p>
+				</div>
+				<div>
+					<label class="text-lg font-medium">Secondary Phone: </label>
+					<input
+						v-model="secondaryPhone"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						placeholder="000-000-0000"
+					/>
+					<p
+						v-if="errors.secondaryPhone"
+						class="text-[18px] text-red-500"
+					>
+						{{ errors.secondaryPhone }}
+					</p>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Sexuality consultation', (e.target as HTMLInputElement).checked)" />
-                Sexuality Consultation for Young People with ASD (Consulta Sexualidad para Jóvenes con TEA)
-            </div>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>WhatsApp: <span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="whatsapp"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p v-if="errors.whatsapp" class="text-[18px] text-red-500">
+						{{ errors.whatsapp }}
+					</p>
+				</div>
+			</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox"
-                @change="e => toggleService('Other', (e.target as HTMLInputElement).checked)" />
-                Other (we are planning to add other services like family therapy, and so on)
-            </div>
+			<!-- ADDRESS -->
+			<h2 class="mt-[30px] mb-[20px] text-[25px] font-medium">
+				Address (Dirección)
+			</h2>
+			<div class="grid grid-cols-3 gap-9">
+				<div class="col-span-2 flex flex-col">
+					<label class="text-lg font-medium"
+						>Street name: <span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="streetName"
+						type="text"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p
+						v-if="errors.streetName"
+						class="text-[18px] text-red-500"
+					>
+						{{ errors.streetName }}
+					</p>
+				</div>
 
-        </div>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>Street number:
+						<span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="streetNum"
+						type="text"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p v-if="errors.streetNum" class="text-[18px] text-red-500">
+						{{ errors.streetNum }}
+					</p>
+				</div>
 
-        <div class="flex justify-center">
-            <button  @click.prevent="sendRequest" class="border-2 border-black bg-red-500 mt-[50px] w-[150px] h-[50px] text-bold-600 text-[20px] hover:bg-red-400 active:bg-red-300">
-                Send Request
-            </button>
-        </div>
-        <p class="font-bold text-[16px] mt-[50px] text-center">
-            Once your request has been received, our team will review it and get in touch with you to continue with the process.
-        </p>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>Building / Apartment number:</label
+					>
+					<input
+						v-model="buildingNum"
+						type="text"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+				</div>
 
-        <p class="font-bold text-[16px] mt-[5px] text-center">
-            If you have any inconvenience filling out this form, you can contact us at 
-        <a href="tel:+18499251246" class="text-blue-500 hover:text-red-500">
-            (849) 925-1246
-        </a>. This form is for exclusive use by the Foundation's clients and your information will be treated with strict confidentiality.
-        </p>
-        </div>
-        
-    </div>
+				<div class="flex flex-col">
+					<label class="text-lg font-medium"
+						>Postal code: <span class="text-red-500">*</span></label
+					>
+					<input
+						v-model="postCode"
+						type="text"
+						class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+					/>
+					<p v-if="errors.postCode" class="text-[18px] text-red-500">
+						{{ errors.postCode }}
+					</p>
+				</div>
+			</div>
 
-    <div v-else class="mt-[50px] flex justify-center p-5">
-    <div class="w-full max-w-4xl h-[1500px]">
-        <div class="flex justify-center">
-            <h1 class="text-[40px] mb-[30px]">
-                Request Apointment Form
-            </h1>
-        </div>
-        <h1 class="text-[30px]">
-            What service do you want to schedule?
-        </h1>
+			<!-- PATIENT INFO (only shown if filling out for someone else) -->
+			<div v-if="isAdult === false" class="mt-[30px]">
+				<h2 class="mb-[20px] text-[25px] font-medium">
+					Patient Information
+				</h2>
+				<div class="grid grid-cols-3 gap-9">
+					<div class="flex flex-col">
+						<label class="text-lg font-medium"
+							>Patient first name:
+							<span class="text-red-500">*</span></label
+						>
+						<input
+							v-model="patientFirstName"
+							class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+						<p
+							v-if="errors.patientFirstName"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.patientFirstName }}
+						</p>
+					</div>
 
-        <div class="flex flex-col mt-[20px] mb-[20px] gap-y-[20px]">
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="First interview" v-model="services" />
-                First interview (entrevista inicial)
-            </div>
-            
-            <div class="flex flex-row gap-x-[10px]">
-                <text class="text-[20px]">
-                    Recurrent therapies (Terapias recurrentes):
-                </text>
-            </div>
+					<div class="flex flex-col">
+						<label class="text-lg font-medium"
+							>Patient middle name:</label
+						>
+						<input
+							v-model="patientMiddleName"
+							class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+					</div>
 
-            <div class="flex flex-col ml-[40px] mb-[20px] gap-y-[20px] ">
-            <div class="flex flex-row gap-x-[10px] ">
-                <input type="checkbox" value="Early intervention" v-model="services" />
-                Early Intervention (Intervención temprana)
-            </div>
+					<div class="flex flex-col">
+						<label class="text-lg font-medium"
+							>Patient last name:
+							<span class="text-red-500">*</span></label
+						>
+						<input
+							v-model="patientLastName"
+							class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+						<p
+							v-if="errors.patientLastName"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.patientLastName }}
+						</p>
+					</div>
+				</div>
+			</div>
 
-            <div class="flex flex-row gap-x-[10px] ">
-                <input type="checkbox" value="Behavior therapy" v-model="services" />
-                Behavior Therapy (Terapia conductual)
-            </div>
+			<!-- PATIENT DETAILS (always shown, label changes based on isAdult) -->
+			<div class="mt-[30px]">
+				<h2 class="mb-[20px] text-[25px] font-medium">
+					{{ isAdult ? "Additional Information" : "Patient Details" }}
+				</h2>
+				<div class="grid grid-cols-3 gap-9">
+					<div class="flex flex-col">
+						<label class="text-lg font-medium">
+							{{ isAdult ? "Your age:" : "Patient's age:" }}
+							<span class="text-red-500">*</span>
+						</label>
+						<input
+							v-model="patientAge"
+							type="number"
+							min="0"
+							class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+						<p
+							v-if="errors.patientAge"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.patientAge }}
+						</p>
+					</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Occupational therapy" v-model="services" />
-                Occupational Therapy (Terapia ocupacional)
-            </div>
+					<div class="col-span-2 flex flex-col">
+						<label class="text-lg font-medium">
+							{{
+								isAdult
+									? "Have you been diagnosed?"
+									: "Has the patient been diagnosed?"
+							}}
+							<span class="text-red-500">*</span>
+						</label>
+						<div class="mt-[10px] flex flex-row gap-x-[20px]">
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="diagnosed"
+									:value="true"
+								/>
+								Yes
+							</label>
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="diagnosed"
+									:value="false"
+								/>
+								No
+							</label>
+						</div>
+						<p
+							v-if="errors.diagnosed"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.diagnosed }}
+						</p>
+					</div>
+				</div>
+			</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Lanugaue therapy" v-model="services" />
-                Language Therapy (Terapia del lenguaje)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Learning therapy" v-model="services" />
-                Learning Therapy (Terapia de aprendizaje)
-            </div>
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Independent living training service" v-model="services" />
-                Independent Living Training Service (Entrenamiento para la vida independiente)
-            </div>
-             <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Social skills therapy" v-model="services" />
-                Social Skills Therapy (Terapia de habilidades sociales)
-            </div>
+			<!-- HISTORY -->
+			<div class="mt-[30px]">
+				<h2 class="mb-[20px] text-[25px] font-medium">History</h2>
+				<div class="flex flex-col gap-y-[20px]">
+					<div>
+						<label class="text-lg font-medium">
+							Have you used our institution before?
+							<span class="text-red-500">*</span>
+						</label>
+						<div class="mt-[10px] flex flex-row gap-x-[20px]">
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="returnPatient"
+									:value="true"
+								/>
+								Yes
+							</label>
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="returnPatient"
+									:value="false"
+								/>
+								No
+							</label>
+						</div>
+						<p
+							v-if="errors.returnPatient"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.returnPatient }}
+						</p>
+					</div>
 
-            </div>
+					<div v-if="returnPatient">
+						<label class="text-lg font-medium"
+							>When did you last visit?</label
+						>
+						<input
+							v-model="previousVisitDate"
+							type="date"
+							class="input mt-[10px] h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+						/>
+					</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Evaluation appointment" v-model="services" />
-                Evaluation appointment (Cita de evaluación)
-            </div>
+					<div>
+						<label class="text-lg font-medium">
+							Do you want to schedule a diagnostic evaluation?
+							<span class="text-red-500">*</span>
+						</label>
+						<div class="mt-[10px] flex flex-row gap-x-[20px]">
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="wantsEval"
+									:value="true"
+								/>
+								Yes
+							</label>
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="wantsEval"
+									:value="false"
+								/>
+								No
+							</label>
+						</div>
+						<p
+							v-if="errors.wantsEval"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.wantsEval }}
+						</p>
+					</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Diagnostic tests" v-model="services" />
-                Diagnostic Tests application (Aplicación de pruebas diagnósticas)
-            </div>
+					<div>
+						<label class="text-lg font-medium">
+							Do you have a referral for the requested service?
+							<span class="text-red-500">*</span>
+						</label>
+						<div class="mt-[10px] flex flex-row gap-x-[20px]">
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="hasReferral"
+									:value="true"
+								/>
+								Yes
+							</label>
+							<label class="flex items-center gap-x-[5px]">
+								<input
+									type="radio"
+									v-model="hasReferral"
+									:value="false"
+								/>
+								No
+							</label>
+						</div>
+						<p
+							v-if="errors.hasReferral"
+							class="text-[18px] text-red-500"
+						>
+							{{ errors.hasReferral }}
+						</p>
+					</div>
+				</div>
+			</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Delivery diagnostic report" v-model="services" />
-                Delivery of diagnostic test report (Entrega de informe de pruebas diagnósticas)
-            </div>
+			<!-- SERVICES -->
+			<div class="mt-[30px]">
+				<h2 class="mb-[20px] text-[25px] font-medium">
+					Services Requested
+				</h2>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Therapy program evaluation" v-model="services" />
-                Therapy Program Evaluation (Evaluación de Programa terapéutico)
-            </div>
+				<p class="mb-[10px] text-[20px] font-medium">
+					Therapies (Terapias):
+				</p>
+				<div class="mb-[20px] ml-[20px] flex flex-col gap-y-[15px]">
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="DIAGNOSTIC_ASSESSMENT"
+							v-model="therapies"
+						/>
+						Diagnostic Assessment (Evaluación Diagnóstica)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="EARLY_INTERVENTION"
+							v-model="therapies"
+						/>
+						Early Intervention (Intervención Temprana)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="BEHAVIORAL_THERAPY"
+							v-model="therapies"
+						/>
+						Behavioral Therapy (Terapia Conductual)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="LEARNING_THERAPY"
+							v-model="therapies"
+						/>
+						Learning Therapy (Terapia de Aprendizaje)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="SPEECH_THERAPY"
+							v-model="therapies"
+						/>
+						Speech Therapy (Terapia del Lenguaje)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="SOCIAL_SKILLS"
+							v-model="therapies"
+						/>
+						Social Skills (Habilidades Sociales)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="SEFVI"
+							v-model="therapies"
+						/>
+						SEFVI
+					</label>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Psychological consultation" v-model="services" />
-                Psychological consultation (Consulta psicológica)
-            </div>
+				<p class="mb-[10px] text-[20px] font-medium">
+					Complementary Services (Servicios Complementarios):
+				</p>
+				<div class="mb-[20px] ml-[20px] flex flex-col gap-y-[15px]">
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="MUSICAL_STIMULATION"
+							v-model="complementaryServices"
+						/>
+						Musical Stimulation (Estimulación Musical)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="PHYSICAL_COGNITIVE_ACTIVITY"
+							v-model="complementaryServices"
+						/>
+						Physical and Cognitive Activity (Actividad Física y
+						Cognitiva)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="LEARNING_IN_MOTION"
+							v-model="complementaryServices"
+						/>
+						Learning in Motion (Aprendiendo en Movimiento)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="DYNAMIC_THINKING"
+							v-model="complementaryServices"
+						/>
+						Dynamic Thinking (Pensamiento Dinámico)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="FAMILY_THERAPY"
+							v-model="complementaryServices"
+						/>
+						Family Therapy (Terapia Familiar)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="COUPLES_THERAPY"
+							v-model="complementaryServices"
+						/>
+						Couples Therapy (Terapia de Parejas)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="SEXUALITY_THERAPY"
+							v-model="complementaryServices"
+						/>
+						Sexuality Therapy and Consultations (Terapia y Consultas
+						de Sexualidad)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="CHILD_ADOLESCENT_PSYCHOLOGICAL_THERAPY"
+							v-model="complementaryServices"
+						/>
+						Child and Adolescent Psychological Therapy (Terapia
+						Psicológica Infanto-Juvenil)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="NUTRITIONAL_CONSULTATION"
+							v-model="complementaryServices"
+						/>
+						Nutritional Consultation (Consulta Nutricional)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="SCHOOL_VISIT"
+							v-model="complementaryServices"
+						/>
+						School Visit (Visita Escolar)
+					</label>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Sexuality consultation" v-model="services" />
-                Sexuality Consultation for Young People with ASD (Consulta Sexualidad para Jóvenes con TEA)
-            </div>
+				<p class="mb-[10px] text-[20px] font-medium">
+					Workshops / Classes (Talleres / Clases):
+				</p>
+				<div class="mb-[20px] ml-[20px] flex flex-col gap-y-[15px]">
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="THEATRE_COMMUNICATION"
+							v-model="workshops"
+						/>
+						Theatre and Communication Classes (Clases de Teatro y
+						Comunicación)
+					</label>
+					<label class="flex flex-row gap-x-[10px]">
+						<input
+							type="checkbox"
+							value="TALKS_AND_WORKSHOPS"
+							v-model="workshops"
+						/>
+						Request for Talks and Workshops (Solicitud de Charla y
+						Talleres)
+					</label>
+				</div>
 
-            <div class="flex flex-row gap-x-[10px]">
-                <input type="checkbox" value="Other" v-model="services" />
-                Other (we are planning to add other services like family therapy, and so on)
-            </div>
-            <p v-if="errors.services" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.services }}
-                </p>
+				<p v-if="errors.services" class="text-[18px] text-red-500">
+					{{ errors.services }}
+				</p>
+			</div>
 
-        </div>
+			<div class="flex justify-center">
+				<button
+					@click.prevent="sendRequest"
+					class="mt-[50px] h-[50px] w-[150px] border-2 border-black bg-red-500 text-[20px] hover:bg-red-400 active:bg-red-300"
+				>
+					Send Request
+				</button>
+			</div>
+			<div class="mt-4 flex justify-center">
+				<p
+					v-if="formError"
+					class="max-w-lg text-center font-medium text-red-600"
+				>
+					{{ formError }}
+				</p>
+			</div>
 
-        <!-- FORM (UNCHANGED) -->
-        <div class="grid grid-cols-3 gap-9 mt-[70px]">
-            <div class="flex flex-col">
-                <label  class="text-lg font-medium">First name: <span class="text-red-500">*</span></label>
-                <input v-model="firstName" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                <p v-if="errors.firstName" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.firstName }}
-                </p>
-            </div>
-
-            <div class="flex flex-col">
-                <label class="text-lg font-medium">Middle name:</label>
-                <input v-model="middleName" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                
-            </div>
-
-            <div class="flex flex-col">
-                <label class="text-lg font-medium">Last name: <span class="text-red-500">*</span></label>
-                <input v-model="lastName" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                <p v-if="errors.lastName" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.lastName }}
-                </p>
-            </div>
-
-            <div class="flex flex-col col-span-3">
-                <label class="text-lg font-medium">Email: <span class="text-red-500">*</span></label>
-                <input v-model="email" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                <p v-if="errors.email" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.email }}
-                </p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-9 mt-[35px]">
-            <div class="flex flex-col">
-                <label class="text-lg font-medium">Phone: <span class="text-red-500">*</span></label>
-                <input v-model="phone" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                <p v-if="errors.phone" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.phone }}
-                </p>
-            </div>
-
-            <div class="flex flex-col">
-                <label class="text-lg font-medium">Whatsapp: <span class="text-red-500">*</span></label>
-                <input v-model="whatsapp" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                <p v-if="errors.whatsapp" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.whatsapp }}
-                </p>
-            </div>
-
-            
-            
-
-            
-
-            <div class="flex flex-col">
-                <label class="text-lg font-medium">ID number: <span class="text-red-500">*</span></label>
-                <input v-model="idNumber" class="input h-[40px] w-full rounded-md border border-gray-300 p-2 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                <p v-if="errors.idNumber" class="h-[40px] w-[250px] rounded-md  p-2 text-[18px] text-red-500 mr-[20px] ">
-                {{ errors.idNumber }}
-                </p>
-            </div>
-        </div>
-
-        <div class="flex justify-center">
-            <button @click.prevent="sendRequest" class="border-2 border-black bg-red-500 mt-[50px] w-[150px] h-[50px] text-bold-600 text-[20px] hover:bg-red-400 active:bg-red-300">
-                Send Request
-            </button>
-        </div>
-
-        <p class="font-bold text-[16px] mt-[50px] text-center">
-            Once your request has been received, our team will review it and get in touch with you to continue with the process.
-        </p>
-
-        <p class="font-bold text-[16px] mt-[5px] text-center">
-            If you have any inconvenience filling out this form, you can contact us at 
-        <a href="tel:+18499251246" class="text-blue-500 hover:text-red-500">
-            (849) 925-1246
-        </a>. This form is for exclusive use by the Foundation's clients and your information will be treated with strict confidentiality.
-        </p>
-
-    </div>
-</div>
+			<p class="mt-[50px] text-center text-[16px] font-bold">
+				Once your request has been received, our team will review it and
+				get in touch with you to continue with the process.
+			</p>
+			<p class="mt-[5px] text-center text-[16px] font-bold">
+				If you have any inconvenience filling out this form, you can
+				contact us at
+				<a
+					href="tel:+18499251246"
+					class="text-blue-500 hover:text-red-500"
+					>(849) 925-1246</a
+				>. This form is for exclusive use by the Foundation's clients
+				and your information will be treated with strict
+				confidentiality.
+			</p>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive } from "vue";
 
-const userId = useState("userId")
-const loggedin = useState("loggedin");
+// Adult/child toggle
+const isAdult = ref<boolean | null>(null);
 
-const firstName = ref('')
-const middleName = ref('')
-const lastName = ref('')
-const email = ref('')
-const phone = ref('')
-const idNumber = ref('')
-const whatsapp=ref('');
-const services = ref<string[]>([])
+// Contact person fields
+const contactFirstName = ref("");
+const contactMiddleName = ref("");
+const contactLastName = ref("");
+const idNumber = ref("");
+const email = ref("");
+const primaryPhone = ref("");
+const secondaryPhone = ref("");
+const whatsapp = ref("");
 
-function toggleService(service: string, checked: boolean) {
-  if (checked) services.value.push(service)
-  else services.value = services.value.filter(s => s !== service)
+// Address fields
+const streetName = ref("");
+const streetNum = ref("");
+const buildingNum = ref("");
+const postCode = ref("");
+
+// Patient fields (only used when isAdult === false)
+const patientFirstName = ref("");
+const patientMiddleName = ref("");
+const patientLastName = ref("");
+const patientAge = ref<number | null>(null);
+const diagnosed = ref<boolean | null>(null);
+
+// History fields
+const returnPatient = ref<boolean | null>(null);
+const previousVisitDate = ref("");
+const wantsEval = ref<boolean | null>(null);
+const hasReferral = ref<boolean | null>(null);
+
+// Services
+const therapies = ref<string[]>([]);
+const complementaryServices = ref<string[]>([]);
+const workshops = ref<string[]>([]);
+
+const errors = reactive({
+	isAdult: "",
+	contactFirstName: "",
+	contactLastName: "",
+	idNumber: "",
+	email: "",
+	primaryPhone: "",
+	secondaryPhone: "",
+	whatsapp: "",
+	streetName: "",
+	streetNum: "",
+	postCode: "",
+	patientFirstName: "",
+	patientLastName: "",
+	patientAge: "",
+	diagnosed: "",
+	returnPatient: "",
+	wantsEval: "",
+	hasReferral: "",
+	services: "",
+});
+const formError = ref("");
+
+const router = useRouter();
+
+type IdValidationResult =
+	| { valid: true }
+	| {
+			valid: false;
+			reason: "length" | "checksum";
+	  };
+
+function validateId(id: string): IdValidationResult {
+	const cleanId = id.replace(/[-\s]/g, "");
+	if (!/^\d{11}$/.test(cleanId)) return { valid: false, reason: "length" };
+	const digits = cleanId.split("").map(Number);
+	const weights = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2];
+	let sum = 0;
+	for (let i = 0; i < 10; i++) {
+		let prod = digits[i]! * weights[i]!;
+		if (prod > 9) prod = Math.floor(prod / 10) + (prod % 10);
+		sum += prod;
+	}
+	const valid = (10 - (sum % 10)) % 10 === digits[10];
+	return valid ? { valid: true } : { valid: false, reason: "checksum" };
 }
-const errors = reactive({ firstName: '', middleName:'', lastName:'', email:'', phone:'', whatsapp:'',  idNumber:'', services:''})
-
-const router = useRouter()
-
 
 async function sendRequest() {
-    errors.firstName='';
-    errors.lastName='';
-    errors.middleName='';
-    errors.email='';
-    errors.phone='';
-    errors.whatsapp='';
-    errors.idNumber='';
-    errors.services='';
+	// Reset errors
+	formError.value = "";
+	Object.keys(errors).forEach(
+		(k) => ((errors as Record<string, string>)[k] = "")
+	);
 
-    if (services.value.length==0){
-        errors.services = 'You must pick at least one';
-        return;
-    }
-    else{
-        errors.services = '';
-    }
-    
-    if (!loggedin.value){
+	let valid = true;
 
-    if (firstName.value==""){
-        errors.firstName = 'Please fill out this field!';
-        return;
-    }
-    else{
-        errors.firstName = '';
-    }
-    if (lastName.value==""){
-        errors.lastName = 'Please fill out this field!';
-        return;
-    }
-    else{
-        errors.lastName = '';
-    }
+	// Who is this for?
+	if (isAdult.value === null) {
+		errors.isAdult = "Please select who this request is for";
+		valid = false;
+	}
 
-     if (email.value==""){
-        errors.email = 'Please fill out this field!';
-        return;
-    }
-    else{
-        errors.email = '';
-    }
-    if (phone.value==""){
-        errors.phone = 'Please fill out this field!';
-        return;
-    }
-    else{
-        errors.phone = '';
-    }
-    if (whatsapp.value==""){
-        errors.whatsapp = 'Please fill out this field!';
-        return;
-    }
-    else{
-        errors.whatsapp = '';
-    }
+	// Contact person
+	if (!contactFirstName.value) {
+		errors.contactFirstName = "Please fill out this field";
+		valid = false;
+	}
+	if (!contactLastName.value) {
+		errors.contactLastName = "Please fill out this field";
+		valid = false;
+	}
+	if (!idNumber.value) {
+		errors.idNumber = "Please fill out this field";
+		valid = false;
+	} else {
+		const result = validateId(idNumber.value);
+		if (!result.valid) {
+			errors.idNumber =
+				result.reason === "length"
+					? "ID must be 11 digits"
+					: "Invalid checksum — please verify your ID number";
+			valid = false;
+		}
+	}
+	if (!email.value) {
+		errors.email = "Please fill out this field";
+		valid = false;
+	} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+		errors.email = "Not a valid email";
+		valid = false;
+	}
+	const cleanPrimaryPhone = primaryPhone.value.replace(/\D/g, "");
+	const cleanSecondaryPhone = secondaryPhone.value.replace(/\D/g, "");
+	if (!cleanPrimaryPhone) {
+		errors.primaryPhone = "Please fill out this field";
+		valid = false;
+	} else if (!/^\d{10}$/.test(cleanPrimaryPhone)) {
+		errors.primaryPhone = "Not a valid phone number (10 digits)";
+		valid = false;
+	}
+	if (cleanSecondaryPhone && !/^\d{10}$/.test(cleanSecondaryPhone)) {
+		errors.secondaryPhone = "Not a valid phone number (10 digits)";
+		valid = false;
+	}
+	if (!whatsapp.value) {
+		errors.whatsapp = "Please fill out this field";
+		valid = false;
+	} else if (!/^\d{10}$/.test(whatsapp.value)) {
+		errors.whatsapp = "Not a valid WhatsApp number (10 digits)";
+		valid = false;
+	}
 
-    if (idNumber.value==""){
-        errors.idNumber = 'Please fill out this field!';
-        return;
-    }
-    else{
-        errors.idNumber = '';
-    }
+	// Address
+	if (!streetName.value) {
+		errors.streetName = "Please fill out this field";
+		valid = false;
+	}
+	if (!streetNum.value) {
+		errors.streetNum = "Please fill out this field";
+		valid = false;
+	}
+	if (!postCode.value) {
+		errors.postCode = "Please fill out this field";
+		valid = false;
+	}
 
-    if (!(email.value.endsWith("@email.com") || email.value.endsWith("@gmail.com") || email.value.endsWith("@hotmail.com") || email.value.endsWith("@yahoo.com"))){
-        errors.email='Not a valid email';
-        return;
-    }
-    else{
-        errors.email='';
-    }
-    if (phone.value.length!=10){
-        errors.phone='Not a valid phone';
-        return;
-    }
-    
-    for (let i = 0; i < phone.value.length; i++) {
-    if (!Number.isInteger(Number(phone.value[i]))) {
-        errors.phone = 'Not a valid phone';
-        return;
-    }
-    }   
-        errors.phone = ''; // after loop
+	// Patient info (only if filling out for someone else)
+	if (isAdult.value === false) {
+		if (!patientFirstName.value) {
+			errors.patientFirstName = "Please fill out this field";
+			valid = false;
+		}
+		if (!patientLastName.value) {
+			errors.patientLastName = "Please fill out this field";
+			valid = false;
+		}
+	}
 
+	// Patient details
+	if (!patientAge.value) {
+		errors.patientAge = "Please fill out this field";
+		valid = false;
+	}
+	if (diagnosed.value === null) {
+		errors.diagnosed = "Please select an option";
+		valid = false;
+	}
 
-    if (whatsapp.value.length != 10) {
-        errors.whatsapp = 'Not a valid WhatsApp number';
-        return;
-    }
+	// History
+	if (returnPatient.value === null) {
+		errors.returnPatient = "Please select an option";
+		valid = false;
+	}
+	if (wantsEval.value === null) {
+		errors.wantsEval = "Please select an option";
+		valid = false;
+	}
+	if (hasReferral.value === null) {
+		errors.hasReferral = "Please select an option";
+		valid = false;
+	}
 
-    for (let i = 0; i < whatsapp.value.length; i++) {
-        if (!Number.isInteger(Number(whatsapp.value[i]))) {
-        errors.whatsapp = 'Not a valid WhatsApp number';
-        return;
-    }
-    }
-errors.whatsapp = '';
+	// Services — at least one must be selected across all three categories
+	if (
+		therapies.value.length === 0 &&
+		complementaryServices.value.length === 0 &&
+		workshops.value.length === 0
+	) {
+		errors.services = "Please select at least one service";
+		valid = false;
+	}
 
+	if (!valid) {
+		formError.value =
+			"Some fields were not filled out correctly. Please check all information entered.";
+		return;
+	}
+	formError.value = "";
 
-    if (!validateId(idNumber.value)) {
-        errors.idNumber = 'Not a valid Dominican ID';
-        return;
-    } 
-    else {
-        errors.idNumber = '';
-    }
-    
-    
-    
+	const phones = [cleanPrimaryPhone];
 
+	if (cleanSecondaryPhone) {
+		phones.push(cleanSecondaryPhone);
+	}
 
-  try {
-    const res = await $fetch('/api/sendRequest/form', {
-      method: 'POST',
-      body: {
-        firstName: firstName.value,
-        middleName: middleName.value,
-        lastName: lastName.value,
-        email: email.value,
-        phone: phone.value,
-        whatsapp:whatsapp.value,
-        idNumber: idNumber.value,
-        services: services.value
-      }
-    })
+	try {
+		const res = await $fetch("/api/sendRequest/form", {
+			method: "POST",
+			body: {
+				contactFirstName: contactFirstName.value,
+				contactMiddleName: contactMiddleName.value || null,
+				contactLastName: contactLastName.value,
+				idNumber: idNumber.value,
+				email: email.value,
+				phone: [cleanPrimaryPhone, cleanSecondaryPhone].filter(Boolean),
+				whatsapp: whatsapp.value,
+				streetName: streetName.value,
+				streetNum: streetNum.value,
+				buildingNum: buildingNum.value || null,
+				postCode: postCode.value,
+				isAdult: isAdult.value,
+				patientFirstName: isAdult.value
+					? contactFirstName.value
+					: patientFirstName.value,
+				patientMiddleName: isAdult.value
+					? contactMiddleName.value
+					: patientMiddleName.value,
+				patientLastName: isAdult.value
+					? contactLastName.value
+					: patientLastName.value,
+				patientAge: patientAge.value,
+				diagnosed: diagnosed.value,
+				returnPatient: returnPatient.value,
+				previousVisitDate: previousVisitDate.value || null,
+				wantsEval: wantsEval.value,
+				hasReferral: hasReferral.value,
+				therapies: therapies.value,
+				complementaryServices: complementaryServices.value,
+				workshops: workshops.value,
+			},
+		});
 
-    if (res.success) {
-      alert('Request sent successfully!')
-    } else {
-      alert('Failed to send request.')
-    }
-  } catch (err) {
-    console.error(err)
-    alert('Error sending request.')
-  }
-
-  router.push("/login");
+		if (res.success) {
+			alert("Request sent successfully!");
+			router.push("/login");
+		} else {
+			alert("Failed to send request.");
+		}
+	} catch (err) {
+		console.error(err);
+		alert("Error sending request.");
+	}
 }
-else{
-    try {
-    const res = await $fetch('/api/sendRequest/form', {
-      method: 'POST',
-      body: {
-        services: services.value.length ? services.value : [],
-        userId: userId.value
-      }
-    })
-
-    if (res.success) {
-      alert('Request sent successfully!')
-    } else {
-      alert('Failed to send request.')
-    }
-  } catch (err) {
-    console.error(err)
-    alert('Error sending request.')
-    console.log('userId at send time:', JSON.stringify(userId.value))
-  }
-
-  router.push("/patientDashboard");
-}
-
-}
-
-function validateId(id: string): boolean {
-  // Remove dashes and whitespace
-  const cleanId = id.replace(/[-\s]/g, '');
-
-  // Must be exactly 11 digits
-  if (!/^\d{11}$/.test(cleanId)) return false;
-
-  const digits: number[] = cleanId.split('').map(d => Number(d));
-  const weights: number[] = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2]; // first 10 digits
-
-  if (digits.length !== 11) return false; // extra safety
-  if (weights.length !== 10) return false;
-
-  let sum = 0;
-
-  for (let i = 0; i < 10; i++) {
-    const digit = digits[i];
-    const weight = weights[i];
-
-    if (digit === undefined || weight === undefined) return false; // safety check
-
-    let prod = digit * weight;
-    if (prod > 9) prod = Math.floor(prod / 10) + (prod % 10); // sum digits if >9
-    sum += prod;
-  }
-
-  const checkDigit = (10 - (sum % 10)) % 10;
-
-  return checkDigit === digits[10];
-}
-
-
-
-
 </script>

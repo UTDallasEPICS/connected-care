@@ -37,13 +37,13 @@ const pageAccessMap: { [routeName: string]: AccessPermission } = {
 	// All Staff Pages
 	"patient-patientSearch": AccessPermission.STAFF,
 	"patientProfile-id": AccessPermission.STAFF,
-	"patient-viewContactForms": AccessPermission.STAFF,
 	// Therapist Pages
 	"dashboard-therapistDashboard": AccessPermission.THERAPIST,
 	// User Service Pages
 	"dashboard-userServiceDashboard": AccessPermission.USER_SERVICE,
 	"userService-viewAppointmentRequests": AccessPermission.USER_SERVICE,
 	"userService-assignNeuroSpecialist": AccessPermission.USER_SERVICE,
+	"patient-viewContactForms": AccessPermission.USER_SERVICE,
 	// IT Service Pages
 	"dashboard-iTServiceDashboard": AccessPermission.IT_SERVICE,
 	// Admin Pages
