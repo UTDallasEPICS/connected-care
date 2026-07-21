@@ -28,10 +28,9 @@ export const generalInfoFields: FormFieldConfig[] = [
 		label: "Gender",
 		type: "select",
 		options: [
-			{ label: "Female", value: "female" },
-			{ label: "Male", value: "male" },
-			{ label: "Non-binary", value: "non-binary" },
-			{ label: "Prefer not to say", value: "unspecified" },
+			{ label: "Female", value: "FEMALE" },
+			{ label: "Male", value: "MALE" },
+			{ label: "Other", value: "OTHER" },
 		],
 	},
 ];
