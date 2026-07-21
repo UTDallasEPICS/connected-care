@@ -16,27 +16,32 @@ export function useProfileSave(
 			(profile.value?.NonEmployee as Record<string, unknown>) ?? {};
 		const pt = (ne?.Patient as Record<string, unknown>) ?? {};
 
-		await $fetch("/api/profile/patient", {
-			method: "Put",
-			body: {
-				id: patientId,
-				fName: formData.firstName,
-				mInit: formData.middleName || "",
-				lName: formData.lastName,
-				gender: formData.gender,
-				dob: new Date(String(formData.DOB)).toISOString(),
-				streetName,
-				streetNum,
-				buildingNum: formData.buildNum,
-				postcode: formData.postcode,
-				identification: pt?.identification,
-				city: formData.city,
-				email: formData.email,
-				phone: formData.phone,
-				whatsapp: formData.whatsapp,
-				isDiagnosed: pt?.diagnosed,
-			},
-		});
+		try {
+			await $fetch("/api/profile/patient", {
+				method: "Put",
+				body: {
+					id: patientId,
+					fName: formData.firstName,
+					mInit: formData.middleName || "",
+					lName: formData.lastName,
+					gender: formData.gender,
+					dob: new Date(String(formData.DOB)).toISOString(),
+					streetName,
+					streetNum,
+					postcode: formData.postcode,
+					identification: pt?.identification,
+					city: formData.city,
+					email: formData.email,
+					phone: formData.phone,
+					whatsapp: formData.whatsapp,
+					isDiagnosed: pt?.diagnosed,
+					contactPref: profile.value?.contactPref,
+				},
+			});
+		} catch (err) {
+			console.error("Failed to save profile:", err);
+			throw err;
+		}
 		await onDone();
 	}
 
