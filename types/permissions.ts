@@ -84,6 +84,9 @@ const apiAccessMap: {
 	"/api/session/types": {
 		GET: AccessPermission.USER_SERVICE || AccessPermission.ADMIN,
 	},
+	"/api/session/referrals": {
+		GET: AccessPermission.STAFF,
+	},
 };
 
 export { AccessPermission, pageAccessMap, apiAccessMap };
