@@ -21,7 +21,7 @@
 			</div>
 		</div>
 
-		<!-- Patients Table (REFERRALS ONLY) -->
+		<!-- Patients Table -->
 		<table class="w-full table-auto border-collapse">
 			<thead class="bg-gray-100">
 				<tr>
@@ -33,17 +33,17 @@
 
 			<tbody>
 				<tr
-					v-for="ref in filteredReferrals"
-					:key="ref.id"
+					v-for="patient in filteredPatients"
+					:key="patient.id"
 					class="cursor-pointer border-t hover:bg-gray-100"
-					@click="openModal(ref)"
+					@click="openModal(patient)"
 				>
-					<td class="px-4 py-2">{{ ref.patient.name }}</td>
-					<td class="px-4 py-2">{{ ref.patient.age ?? "—" }}</td>
-					<td class="px-4 py-2">{{ ref.patient.gender ?? "—" }}</td>
+					<td class="px-4 py-2">{{ patient.name }}</td>
+					<td class="px-4 py-2">{{ patient.age ?? "—" }}</td>
+					<td class="px-4 py-2">{{ patient.gender ?? "—" }}</td>
 				</tr>
 
-				<tr v-if="!filteredReferrals.length" class="border-t">
+				<tr v-if="!filteredPatients.length" class="border-t">
 					<td colspan="3" class="px-4 py-2 text-center">
 						No patients found.
 					</td>
@@ -55,24 +55,20 @@
 		<PatientModal
 			v-if="is_clicked && selectedItem"
 			:patient="{
-				id: selectedItem.patient.id,
-				name: selectedItem.patient.name,
-				gender: selectedItem.patient.gender,
-				age: selectedItem.patient.age,
-				identification: selectedItem.patient.identification,
+				id: selectedItem.id,
+				name: selectedItem.name,
+				gender: selectedItem.gender,
+				age: selectedItem.age,
+				identification: selectedItem.identification,
 
-				email: selectedItem.patient.email,
-				phone: selectedItem.patient.phone,
-				whatsApp: selectedItem.patient.whatsApp,
-				contactPref: selectedItem.patient.contactPref,
+				email: selectedItem.email,
+				phone: selectedItem.phone,
+				whatsApp: selectedItem.whatsApp,
+				contactPref: selectedItem.contactPref,
 
-				diagnosed: selectedItem.patient.diagnosed,
-				sponsorId: selectedItem.patient.sponsorId
+				diagnosed: selectedItem.diagnosed,
+				sponsorId: selectedItem.sponsorId,
 			}"
-			:therapist="selectedItem.therapist"
-			:therapyRecommendation="selectedItem.therapyRecommendation"
-			:therapistType="selectedItem.therapistType"
-			:createdAt="selectedItem.createdAt"
 			@close="is_clicked = false"
 		/>
 	</div>
@@ -83,31 +79,40 @@ import { ref, computed } from "vue";
 import { Search } from "lucide-vue-next";
 import PatientModal from "~/components/therapy/PatientModal.vue";
 
-/* AUTH */
-const { userId } = useAuthState();
+interface Patient {
+	id: string;
+	name: string;
+	age: number | null;
+	gender: string;
+	identification: string;
+	diagnosed: boolean;
+	sponsorId: string | null;
+	email: string;
+	phone: string;
+	whatsApp: string | null;
+	contactPref: string;
+}
 
 /* STATE */
 const searchQuery = ref("");
 const is_clicked = ref(false);
-const selectedItem = ref<any>(null);
+const selectedItem = ref<Patient | null>(null);
 
-/* FETCH REFERRALS (THIS IS THE ONLY DATA SOURCE YOU NEED) */
-const { data: referrals } = await useFetch("/api/session/referrals");
+/* FETCH PATIENTS */
+const { data: patients } = await useFetch<Patient[]>("/api/search/all");
 
 /* SEARCH FILTER */
-const filteredReferrals = computed(() => {
-	if (!referrals.value) return [];
+const filteredPatients = computed(() => {
+	if (!patients.value) return [];
 
-	return referrals.value.filter((r: any) =>
-		r.patient.name
-			.toLowerCase()
-			.includes(searchQuery.value.toLowerCase())
+	return patients.value.filter((p) =>
+		p.name.toLowerCase().includes(searchQuery.value.toLowerCase())
 	);
 });
 
 /* OPEN MODAL */
-function openModal(ref: any) {
-	selectedItem.value = ref;
+function openModal(patient: Patient) {
+	selectedItem.value = patient;
 	is_clicked.value = true;
 }
 </script>
