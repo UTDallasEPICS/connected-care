@@ -45,6 +45,8 @@ export function useUserLinks() {
 				to: "patient-patientSearch",
 				label: "Patients",
 			});
+		}
+		if (val[AP.USER_SERVICE]) {
 			legalRoutes.push({
 				to: "patient-viewContactForms",
 				label: "Review Forms",
@@ -62,7 +64,7 @@ export function useUserLinks() {
 				to: "dashboard-evaluatorDashboard",
 				label: "Evaluators",
 			});
-}
+		}
 		return legalRoutes;
 	});
 
