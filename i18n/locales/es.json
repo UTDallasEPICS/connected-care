@@ -763,8 +763,8 @@
 		"rescheduleError": "No se pudo reprogramar la cita."
 	},
 	"therapyNote": {
-		"selectTherapy": "Seleccione una terapia",
-		"selectTherapyFirst": "Seleccione primero una terapia para ver sus objetivos.",
+		"selectTherapy": "Seleccione terapias",
+		"selectTherapyFirst": "Seleccione al menos una terapia para ver sus objetivos.",
 		"objectivesByTherapy": "Objetivos trabajados (según la terapia)",
 		"noOptions": "No hay opciones disponibles.",
 		"selectAll": "Seleccionar todo",

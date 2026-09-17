@@ -763,8 +763,8 @@
 		"rescheduleError": "Failed to reschedule appointment."
 	},
 	"therapyNote": {
-		"selectTherapy": "Select a therapy",
-		"selectTherapyFirst": "Select a therapy first to see its objectives.",
+		"selectTherapy": "Select therapies",
+		"selectTherapyFirst": "Select at least one therapy to see its objectives.",
 		"objectivesByTherapy": "Objectives worked on (according to therapy)",
 		"noOptions": "No options available.",
 		"selectAll": "Select all",
