@@ -34,6 +34,8 @@ export function useTherapyFormData(
 		getFieldValue
 	);
 
+	const { objectivesFor } = useTherapyTypes();
+
 	const formData = computed({
 		get: () => baseFormData.value as unknown as TherapyNoteForm,
 		set: (val) => {
@@ -43,16 +45,22 @@ export function useTherapyFormData(
 
 	// --- Custom inputs (not driven by blueprint) ---
 
+	function sameTherapies(a: string[], b: string[]): boolean {
+		return a.length === b.length && a.every((v) => b.includes(v));
+	}
+
 	const therapyDrilldownValue = computed({
 		get: (): DrilldownValue => ({
-			selected: formData.value.selectedTherapy ?? "",
+			selected: formData.value.selectedTherapies ?? [],
 			checked: formData.value.selectedObjectives ?? [],
 		}),
 		set: (val: DrilldownValue) => {
-			if (val.selected !== formData.value.selectedTherapy) {
+			if (
+				!sameTherapies(val.selected, formData.value.selectedTherapies)
+			) {
 				formData.value.objectiveDetails = {};
 			}
-			formData.value.selectedTherapy = val.selected;
+			formData.value.selectedTherapies = val.selected;
 			formData.value.selectedObjectives = val.checked;
 		},
 	});
@@ -109,7 +117,7 @@ export function useTherapyFormData(
 	function resetForm() {
 		resetBlueprint();
 		Object.assign(formData.value, {
-			selectedTherapy: "",
+			selectedTherapies: [],
 			selectedObjectives: [],
 			objectiveDetails: {},
 			objectivesDate: "",
@@ -120,7 +128,9 @@ export function useTherapyFormData(
 
 	function isRowVisible(row: FormFieldConfig[]): boolean {
 		if (row.some((f) => f.name === "groupRecommendationParents")) {
-			return formData.value.selectedTherapy === "INDEPENDENT_LIVING";
+			return formData.value.selectedTherapies.includes(
+				"INDEPENDENT_LIVING"
+			);
 		}
 		return true;
 	}
@@ -128,8 +138,8 @@ export function useTherapyFormData(
 	// --- Validation ---
 
 	function validate(): boolean {
-		if (!formData.value.selectedTherapy) {
-			alert("Please select a therapy.");
+		if (!formData.value.selectedTherapies.length) {
+			alert("Please select at least one therapy.");
 			return false;
 		}
 
@@ -154,7 +164,7 @@ export function useTherapyFormData(
 	// --- Populate from existing note ---
 
 	function populateFromNote(note: TherapyNote) {
-		formData.value.selectedTherapy = note.therapyType || "";
+		formData.value.selectedTherapies = note.therapyTypes ?? [];
 		formData.value.objectivesDate = note.objectivesDate
 			? note.objectivesDate.slice(0, 10)
 			: "";
@@ -203,15 +213,34 @@ export function useTherapyFormData(
 		formData.value.objectiveDetails = {};
 		formData.value.customGoals = [];
 
+		// Objectives saved before multi-select stored a bare label as goalKey;
+		// the checklist now keys each one `${therapyType}::${label}`. Map the
+		// legacy keys forward so reopening an older note still shows its
+		// objectives checked (an unmapped key would render as unchecked and be
+		// dropped on the next save). Where the same label appears under
+		// several of the note's types the first one wins — those notes carried
+		// a single type before the split, and BEHAVIORAL_EARLY's two
+		// replacements share an identical checklist.
+		const legacyKeyMap = new Map<string, string>();
+		for (const type of formData.value.selectedTherapies) {
+			for (const item of objectivesFor(type)) {
+				if (typeof item !== "string") continue;
+				if (!legacyKeyMap.has(item)) {
+					legacyKeyMap.set(item, `${type}::${item}`);
+				}
+			}
+		}
+		const resolveGoalKey = (key: string): string =>
+			key.includes("::") ? key : (legacyKeyMap.get(key) ?? key);
+
 		if (note.objectives && Array.isArray(note.objectives)) {
 			for (const obj of note.objectives) {
 				if (obj.goalKey) {
-					if (
-						!formData.value.selectedObjectives.includes(obj.goalKey)
-					) {
-						formData.value.selectedObjectives.push(obj.goalKey);
+					const goalKey = resolveGoalKey(obj.goalKey);
+					if (!formData.value.selectedObjectives.includes(goalKey)) {
+						formData.value.selectedObjectives.push(goalKey);
 					}
-					formData.value.objectiveDetails[obj.goalKey] =
+					formData.value.objectiveDetails[goalKey] =
 						obj.details || "";
 				} else {
 					formData.value.customGoals.push({
