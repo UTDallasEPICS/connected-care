@@ -8,6 +8,8 @@
  * fetched once. `therapyTypeLabel` and `therapyTypeOptions` keep their previous
  * shapes so existing consumers (ViewNoteModal, NotesHistory, TherapyDrilldown)
  * don't change; `objectivesFor` is added for the drilldown's objectives list.
+ * A note may cover several types at once (stored as `TherapyNoteType` rows),
+ * hence `therapyTypeLabels` for rendering a list of them.
  */
 interface ModalityObjective {
 	kind: string; // "objective" | "header" | "subheader"
@@ -65,5 +67,29 @@ export function useTherapyTypes() {
 		});
 	}
 
-	return { therapyTypeLabel, therapyTypeOptions, objectivesFor };
+	function therapyTypeLabels(keys: string[] | null | undefined): string {
+		if (!keys?.length) return "";
+		return keys.map(therapyTypeLabel).join(", ");
+	}
+
+	/**
+	 * TherapyDrilldown namespaces each objective checkbox's value as
+	 * `${therapyType}::${label}` so the same objective label under two
+	 * selected therapies doesn't collide. Strip that prefix back off for
+	 * display (e.g. in the per-objective details textareas). Notes saved
+	 * before multi-select stored bare labels, so keys without the separator
+	 * are returned unchanged.
+	 */
+	function objectiveLabel(key: string): string {
+		const sep = key.indexOf("::");
+		return sep === -1 ? key : key.slice(sep + 2);
+	}
+
+	return {
+		therapyTypeLabel,
+		therapyTypeLabels,
+		therapyTypeOptions,
+		objectivesFor,
+		objectiveLabel,
+	};
 }

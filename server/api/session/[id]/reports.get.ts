@@ -1,12 +1,11 @@
-// server/api/session/[id]/notes.get.ts
+// server/api/session/[id]/reports.get.ts
 import { AccessPermission } from "~/types/permissions";
 
 export default defineAuthedHandler(
 	{
 		access: [AccessPermission.THERAPIST, AccessPermission.USER_SERVICE],
 		// PHI: only staff who may manage the session (USER_SERVICE / ADMIN) or
-		// the therapist who owns it can read its notes. Prevents a therapist
-		// from reading notes for a session they aren't attached to.
+		// the therapist who owns it can read its reports.
 		ownership: async (event) => {
 			const sessionId = getRouterParam(event, "id");
 			if (!sessionId) return false;
@@ -17,20 +16,9 @@ export default defineAuthedHandler(
 		const sessionId = getRouterParam(event, "id");
 		if (!sessionId) return [];
 
-		const notes = await prisma.therapyNote.findMany({
+		return await prisma.therapyReport.findMany({
 			where: { sessionId },
-			include: {
-				objectives: true,
-				types: true,
-			},
-			orderBy: {
-				createdAt: "desc",
-			},
+			orderBy: { createdAt: "desc" },
 		});
-
-		return notes.map(({ types, ...note }) => ({
-			...note,
-			therapyTypes: types.map((t) => t.therapyType),
-		}));
 	}
 );
