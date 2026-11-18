@@ -58,6 +58,11 @@ export default defineNuxtConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
+	nitro: {
+		// Bundle our own zod (v3). Prisma 7 pulls zod v4 into the tree, and an
+		// external import of "zod" resolves to whichever copy Nitro hoists.
+		externals: { inline: ["zod"] },
+	},
 	imports: {
 		dirs: ["composables/**"],
 	},
