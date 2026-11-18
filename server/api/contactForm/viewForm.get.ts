@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Status } from "@prisma/client";
+import type { Status } from "~~/prisma/generated/client";
 import { AccessPermission } from "~/types/permissions";
 
 const schema = z.object({

@@ -1,4 +1,4 @@
-import { Status } from "@prisma/client";
+import { Status } from "~~/prisma/generated/client";
 import { AccessPermission } from "~/types/permissions";
 
 export default defineAuthedHandler(

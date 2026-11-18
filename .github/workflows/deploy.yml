@@ -1,6 +1,6 @@
 name: Deploy Project Environment
 
-# Reusable deploy pipeline shared by main.yml (prod) and stage.yml (stage).
+# Reusable deploy pipeline shared by prod.yml (prod) and stage.yml (stage).
 # Pipeline order is deliberate: build -> migrate -> push -> deploy,
 # so a failed migration never publishes an image.
 on:

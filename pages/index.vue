@@ -70,10 +70,17 @@ async function verify() {
 			class="relative z-10 mx-auto flex min-h-[80vh] w-full max-w-md flex-col justify-center gap-6 py-8"
 		>
 			<div class="text-center">
+				<!-- Dark variant swaps the wordmark paths to white so the
+				     name stays legible on the dark scrim. -->
 				<img
 					src="/fmua-logo.svg"
 					alt="FMUA"
-					class="mx-auto h-auto w-64 max-w-[80%] sm:w-72"
+					class="mx-auto h-auto w-64 max-w-[80%] sm:w-72 dark:hidden"
+				/>
+				<img
+					src="/fmua-logo-dark.svg"
+					alt="FMUA"
+					class="mx-auto hidden h-auto w-64 max-w-[80%] sm:w-72 dark:block"
 				/>
 			</div>
 

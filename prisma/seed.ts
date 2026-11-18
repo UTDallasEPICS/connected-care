@@ -1,7 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import "dotenv/config";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaClient } from "./generated/client";
 import { therapyTypeSeed } from "./therapyTypeSeedData";
 
-const prisma: PrismaClient = new PrismaClient();
+const prisma: PrismaClient = new PrismaClient({
+	adapter: new PrismaLibSql({ url: process.env.DATABASE_URL! }),
+});
 
 const postCodes = [
 	{ postCode: 216646, city: "Casal da Serra" },

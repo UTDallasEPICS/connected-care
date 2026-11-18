@@ -2,7 +2,7 @@ import { z } from "zod";
 import { AccessPermission } from "~/types/permissions";
 
 // Create a therapy modality (type) + its objectives. ADMIN-only. The stable
-// `key` (stored on TherapyNote.therapyType) is auto-generated from the English
+// `key` (stored on TherapyNoteType.therapyType) is auto-generated from the English
 // label and de-duplicated, so admins never manage keys by hand.
 const objectiveSchema = z.object({
 	kind: z.enum(["objective", "header", "subheader"]),

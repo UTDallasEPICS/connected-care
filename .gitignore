@@ -38,3 +38,6 @@ docs/client-files/
 docs/files/
 docs/resources/
 docs/.DS_Store
+
+# Prisma generated client
+prisma/generated/
