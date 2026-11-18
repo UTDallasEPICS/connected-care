@@ -17,8 +17,6 @@ const { profile, nonEmployee, patient, getProfile, paid } =
 	usePatientProfile(uId);
 
 const patientSection = ref<InstanceType<typeof PatientSection> | null>(null);
-
-getProfile();
 </script>
 
 <template>

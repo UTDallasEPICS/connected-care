@@ -217,8 +217,13 @@ const sessionColumns = computed(() => [
 	},
 ]);
 
+// Session times are shown in the viewer's timezone, which the server can't
+// know: format only after mount so SSR and hydration render the same text.
+const mounted = ref(false);
+
 function formatSessionTime(timeValue: unknown): string {
 	if (!timeValue) return "—";
+	if (!mounted.value) return "";
 
 	try {
 		const date = new Date(timeValue as string | number | Date);
@@ -242,6 +247,7 @@ function formatSessionTime(timeValue: unknown): string {
 
 // --- Init ---
 onMounted(() => {
+	mounted.value = true;
 	loadTherapyNotes();
 });
 
