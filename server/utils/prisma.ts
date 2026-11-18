@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaClient } from "~~/prisma/generated/client";
 
-// Create a singleton instance of PrismaClient
+// Prisma 7 has no native query engine; libsql opens the SQLite file at DATABASE_URL.
 export const prisma = new PrismaClient({
-	datasourceUrl: process.env.DATABASE_URL,
+	adapter: new PrismaLibSql({ url: process.env.DATABASE_URL! }),
 });

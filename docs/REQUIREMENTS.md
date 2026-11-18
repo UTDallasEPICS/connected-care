@@ -66,7 +66,7 @@
 | Meta-framework | Nuxt 4 (Vue 3, server-side rendering + API routes)               |
 | Frontend       | Vue 3 (Composition API), Tailwind CSS 4                          |
 | Backend        | Nuxt server routes (h3), running in the same process             |
-| ORM            | Prisma 6                                                         |
+| ORM            | Prisma 7 (libsql driver adapter)                                 |
 | Database       | SQLite (`prisma/dev.db`) — file-based, no separate server needed |
 | Validation     | Zod                                                              |
 | i18n           | @nuxtjs/i18n (en/es, locale files in `i18n/locales/`)            |
