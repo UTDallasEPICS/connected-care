@@ -1,12 +1,18 @@
 import { z } from "zod";
 import { AccessPermission } from "~/types/permissions";
 
+const requiredText = (message: string) =>
+	z.string({ invalid_type_error: message }).min(1, message).optional();
+
 const therapyNoteUpdateSchema = z.object({
 	therapyTypes: z.array(z.string()).min(1),
-	goalsAchieved: z.string().optional().nullable(),
-	progressNotes: z.string().optional().nullable(),
-	nextSessionObjectives: z.string().optional().nullable(),
-	generalObservations: z.string().optional().nullable(),
+	// Required columns: omit to keep the current value; null/empty is rejected.
+	goalsAchieved: requiredText("Goals Achieved is required"),
+	progressNotes: requiredText("Progress Notes is required"),
+	nextSessionObjectives: requiredText(
+		"Objectives for next session is required"
+	),
+	generalObservations: requiredText("General Observations is required"),
 	...therapyNoteOptionalFields,
 });
 
@@ -61,13 +67,13 @@ export default defineAuthedHandler(
 				groupRecommendationParents:
 					data.groupRecommendationParents ?? null,
 
-				goalsAchieved: data.goalsAchieved ?? null,
+				goalsAchieved: data.goalsAchieved,
 				goalsAchievedDate: parseDateOrNull(data.goalsAchievedDate),
 
-				progressNotes: data.progressNotes ?? null,
+				progressNotes: data.progressNotes,
 				progressNotesDate: parseDateOrNull(data.progressNotesDate),
 
-				nextSessionObjectives: data.nextSessionObjectives ?? null,
+				nextSessionObjectives: data.nextSessionObjectives,
 				nextSessionObjectivesDate: parseDateOrNull(
 					data.nextSessionObjectivesDate
 				),
@@ -75,7 +81,7 @@ export default defineAuthedHandler(
 				incidents: data.incidents ?? null,
 				incidentsDate: parseDateOrNull(data.incidentsDate),
 
-				generalObservations: data.generalObservations ?? null,
+				generalObservations: data.generalObservations,
 				generalObservationsDate: parseDateOrNull(
 					data.generalObservationsDate
 				),

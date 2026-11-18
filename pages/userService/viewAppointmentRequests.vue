@@ -42,7 +42,7 @@ const columns = computed<TableColumn<Row>[]>(() => [
 	{ accessorKey: "email", header: t("assign.colEmail") },
 	{ accessorKey: "phone", header: t("assign.colPhone") },
 	{ accessorKey: "serviceType", header: t("assign.colService") },
-	{ accessorKey: "actions", header: "" },
+	{ id: "actions" },
 ]);
 
 const open = ref(false);
