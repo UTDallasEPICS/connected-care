@@ -51,7 +51,7 @@ the server-side `BETTER_AUTH_URL` needs updating.
 
 ## Workflow
 
-- **Branch off `dev`** (never commit to `dev`/`main`/`stage` directly).
+- **Branch off `dev`** (never commit to `dev`/`stage`/`prod` directly).
 - Keep PRs **small and focused** (one feature/cluster). Open a PR into `dev`.
 - A maintainer reviews before merge; PRs squash-merge into `dev`.
 - Commit messages: `type(scope): summary` (e.g. `feat(ui): …`, `fix(schedule): …`).
