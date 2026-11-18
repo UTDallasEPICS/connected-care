@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "~~/prisma/generated/client";
 
 export function handlePrismaError(e: unknown): never {
 	if (e instanceof Prisma.PrismaClientKnownRequestError) {

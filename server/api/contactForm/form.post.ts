@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Status, InsuranceCompany } from "@prisma/client";
+import { Status, InsuranceCompany } from "~~/prisma/generated/client";
 import { patientBaseSchema } from "~/server/utils/patientSchemas";
 import { computeAge } from "~/server/utils/dateHelpers";
 import { randomUUID } from "node:crypto";
@@ -31,7 +31,7 @@ export default defineAuthedHandler({ access: "PUBLIC" }, async (event) => {
 				update: {},
 				create: { postCode: data.postcode, city: data.city },
 			});
-			
+
 			const patientEmail = isAdult
 				? data.email || ""
 				: `patient-${randomUUID()}@intake.local`;

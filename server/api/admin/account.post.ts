@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ContactType, UserType, Prisma } from "@prisma/client";
+import { ContactType, UserType, Prisma } from "~~/prisma/generated/client";
 import { AccessPermission } from "~/types/permissions";
 
 // Create a staff (employee) account. ADMIN-only. Creates a `User` with a real

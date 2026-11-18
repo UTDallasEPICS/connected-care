@@ -17,6 +17,9 @@ RUN pnpm i --frozen-lockfile
 COPY . ./
 RUN pnpm prisma generate
 RUN pnpm run build
+# libsql picks its native binary with a runtime require(`@libsql/${target}`) that
+# Nitro's tracer misses on musl, so copy the platform package into the output.
+RUN cp -rL node_modules/.pnpm/node_modules/@libsql/linux-*-musl .output/server/node_modules/@libsql/
 
 
 # Deployment container

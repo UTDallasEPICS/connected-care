@@ -1,4 +1,4 @@
-import type { JsonObject } from "@prisma/client/runtime/library";
+import type { JsonObject } from "@prisma/client/runtime/client";
 
 // Helper Interfaces
 
