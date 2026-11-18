@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Gender, ContactType } from "@prisma/client";
+import { Gender, ContactType } from "~~/prisma/generated/client";
 
 /** Fields shared between contact form creation and patient profile update */
 export const patientBaseSchema = z.object({

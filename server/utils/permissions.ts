@@ -1,5 +1,5 @@
-import type { Prisma } from "@prisma/client";
-import { UserType } from "@prisma/client";
+import type { Prisma } from "~~/prisma/generated/client";
+import { UserType } from "~~/prisma/generated/client";
 import { AccessPermission, type AccessVal } from "~/types/permissions";
 
 export type UserWithRelations = Prisma.UserGetPayload<{

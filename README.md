@@ -53,6 +53,9 @@ npm run dev -- -o
 ### Database Setup
 
 ```bash
+# Generate the Prisma client (re-run after every schema change)
+npx prisma generate
+
 # Initialize the database and test data seeding
 npx prisma migrate dev --name init
 

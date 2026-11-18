@@ -12,6 +12,7 @@ before writing UI:
 ```bash
 pnpm install
 cp .env.example .env          # then fill in the values (see below)
+pnpm exec prisma generate         # generate the client into prisma/generated
 pnpm exec prisma migrate deploy   # apply migrations to the SQLite dev DB
 pnpm exec prisma db seed          # seed roles + sample data
 pnpm dev                          # → http://localhost:3000
@@ -19,7 +20,7 @@ pnpm dev                          # → http://localhost:3000
 
 `.env` essentials:
 
-- `DATABASE_URL="file:dev.db"` — local SQLite
+- `DATABASE_URL="file:./prisma/dev.db"` — local SQLite (relative to the repo root)
 - `BETTER_AUTH_SECRET` — any random string for local
 - `BETTER_AUTH_URL="http://localhost:3000"` — **must match the port you run on**
 - SMTP\_\* — only needed to actually send email; in dev, codes print to the
