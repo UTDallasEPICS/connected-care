@@ -52,7 +52,7 @@ const columns = computed<TableColumn<PatientRow>[]>(() => [
 	{ accessorKey: "name", header: t("patients.name") },
 	{ accessorKey: "age", header: t("patients.age") },
 	{ accessorKey: "gender", header: t("patients.gender") },
-	{ accessorKey: "actions", header: "" },
+	{ id: "actions" },
 ]);
 
 const showModal = ref(false);

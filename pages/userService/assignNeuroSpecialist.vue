@@ -48,7 +48,7 @@ const columns = computed<TableColumn<Row>[]>(() => [
 		header: t("assign.colRecommendation"),
 	},
 	{ accessorKey: "submitted", header: t("assign.colSubmittedAt") },
-	{ accessorKey: "actions", header: "" },
+	{ id: "actions" },
 ]);
 
 const open = ref(false);

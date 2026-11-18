@@ -64,16 +64,20 @@ const showContact = computed(() => !can("THERAPIST"));
 function fmtDate(d?: string): string | null {
 	if (!d) return null;
 	const dt = new Date(d);
-	return isNaN(dt.getTime()) ? null : dt.toLocaleDateString();
+	// Date-only values are stored as UTC midnight: format in UTC so the
+	// calendar day is right (and identical on server and client).
+	return isNaN(dt.getTime())
+		? null
+		: dt.toLocaleDateString(undefined, { timeZone: "UTC" });
 }
 function ageFromDob(dob?: string): number | null {
 	if (!dob) return null;
 	const d = new Date(dob);
 	if (isNaN(d.getTime())) return null;
 	const now = new Date();
-	let a = now.getFullYear() - d.getFullYear();
-	const m = now.getMonth() - d.getMonth();
-	if (m < 0 || (m === 0 && now.getDate() < d.getDate())) a--;
+	let a = now.getFullYear() - d.getUTCFullYear();
+	const m = now.getMonth() - d.getUTCMonth();
+	if (m < 0 || (m === 0 && now.getDate() < d.getUTCDate())) a--;
 	return a >= 0 ? a : null;
 }
 const humanize = (v?: string) =>
